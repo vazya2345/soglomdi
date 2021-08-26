@@ -139,8 +139,31 @@ $lav = Users::getMyLav();
                 <li class="nav-item">
                     <?= Html::a('Барча тўловлар', ['/payments/index'], ['class' => 'nav-link']) ?>
                 </li>
+                <li>
+                    <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'dropdown-item']) ?>
+                </li>
         <?php
             }
+            elseif(!Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6)){
+        ?>
+                <li>
+                    <?= Html::a('Қарздорлик', ['/report/qarzreportprev'], ['class' => 'dropdown-item']) ?>
+                </li>
+                <li>
+                    <?= Html::a('Докторлар1', ['/report/doktor1prev'], ['class' => 'dropdown-item']) ?>
+                </li>
+                <li>
+                    <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'dropdown-item']) ?>
+                </li>
+                <li>
+                    <?= Html::a('Рефераллар', ['/referals/index'], ['class' => 'dropdown-item']) ?>
+                </li>
+                <li>
+                    <?= Html::a('Реф жўнатма', ['/ref-sends/index'], ['class' => 'dropdown-item']) ?>
+                </li>
+        <?php
+            }
+        ?>
         ?>
     </ul>
 
