@@ -140,26 +140,26 @@ $lav = Users::getMyLav();
                     <?= Html::a('Барча тўловлар', ['/payments/index'], ['class' => 'nav-link']) ?>
                 </li>
                 <li class="nav-item">
-                    <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'dropdown-item']) ?>
+                    <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'nav-link']) ?>
                 </li>
         <?php
             }
             elseif(!Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==9)){
         ?>
                 <li class="nav-item">
-                    <?= Html::a('Қарздорлик', ['/report/qarzreportprev'], ['class' => 'dropdown-item']) ?>
+                    <?= Html::a('Қарздорлик', ['/report/qarzreportprev'], ['class' => 'nav-link']) ?>
                 </li>
                 <li class="nav-item">
-                    <?= Html::a('Докторлар1', ['/report/doktor1prev'], ['class' => 'dropdown-item']) ?>
+                    <?= Html::a('Докторлар1', ['/report/doktor1prev'], ['class' => 'nav-link']) ?>
                 </li>
                 <li class="nav-item">
-                    <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'dropdown-item']) ?>
+                    <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'nav-link']) ?>
                 </li>
                 <li class="nav-item">
-                    <?= Html::a('Рефераллар', ['/referals/index'], ['class' => 'dropdown-item']) ?>
+                    <?= Html::a('Рефераллар', ['/referals/index'], ['class' => 'nav-link']) ?>
                 </li>
                 <li class="nav-item">
-                    <?= Html::a('Реф жўнатма', ['/ref-sends/index'], ['class' => 'dropdown-item']) ?>
+                    <?= Html::a('Реф жўнатма', ['/ref-sends/index'], ['class' => 'nav-link']) ?>
                 </li>
         <?php
             }
