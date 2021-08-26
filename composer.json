@@ -25,7 +25,6 @@
         "moonlandsoft/yii2-phpexcel": "*",
         "kosoukhov/ldap": "^1.0",
         "aki/yii2-vue": "*",
-        "robregonm/yii2-pdf": "dev-master",
         "xj/yii2-qrcode-widget": "^1.1",
         "irazasyed/telegram-bot-sdk": "^2.0",
         "kartik-v/yii2-widget-select2": "dev-master"

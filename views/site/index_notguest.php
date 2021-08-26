@@ -5,7 +5,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
 ?>
 <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
+        	<div class="col-md-12">
             <!-- Line chart -->
             <div class="card card-primary card-outline">
               <div class="card-header">
@@ -22,9 +22,8 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
                 </div>
               </div>
               <div class="card-body">
-                Тизимга хуш келибсиз!<br>
-                Ишни бошлаш учун тизимга ўз логин ва паролингиз билан киришингиз керак бўлади.<br>
-                <?= Html::a('Тизимга кириш', ['/site/login'], ['class' => 'link']) ?>
+              	Тизимга хуш келибсиз!<br>
+                
               </div>
               <!-- /.card-body-->
             </div>

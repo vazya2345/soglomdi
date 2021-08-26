@@ -16,13 +16,13 @@ $config = [
         '@kartik'   => '@vendor/kartik-v',
     ],
     'components' => [
-        'view' => [
-             'theme' => [
-                 'pathMap' => [
-                    '@app/views' => '@vendor/hail812/yii2-adminlte3/src/views'
-                 ],
-             ],
-        ],
+        // 'view' => [
+        //      // 'theme' => [
+        //      //     'pathMap' => [
+        //      //        '@app/views' => '@vendor/hail812/yii2-adminlte3/src/views'
+        //      //     ],
+        //      // ],
+        // ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'Lh4E6MRoURz74af0PfLdTY_-AKO2wwEn',

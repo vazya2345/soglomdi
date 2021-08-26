@@ -125,6 +125,11 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         }
     }
 
+    public function getMyRole()
+    {
+        return $this->role_id;
+    }
+
     public static function getMyLav()
     {
         $model = self::findOne(Yii::$app->user->id);

@@ -22,6 +22,7 @@ Thumbs.db
 
 #custom files and folders
 /web/upload
+/web/assets
 /web/uploads
 /web/img
 /config/db.php
