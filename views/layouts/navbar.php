@@ -144,7 +144,7 @@ $lav = Users::getMyLav();
                 </li>
         <?php
             }
-            elseif(!Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6)){
+            elseif(!Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==9)){
         ?>
                 <li>
                     <?= Html::a('Қарздорлик', ['/report/qarzreportprev'], ['class' => 'dropdown-item']) ?>
@@ -163,7 +163,6 @@ $lav = Users::getMyLav();
                 </li>
         <?php
             }
-        ?>
         ?>
     </ul>
 
