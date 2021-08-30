@@ -534,7 +534,9 @@ public function actionKassa1prev()
 
 
 
-
+            if($na==0){
+                $na=1;
+            }
             $row=$row+$na;
         }
 
