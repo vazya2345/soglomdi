@@ -909,4 +909,56 @@ class RegistrationController extends Controller
             'groups' => $groups,
         ]);
     }
+
+    public function actionSendsms()
+    {
+        $username = 'soglomtabassum';
+        $password = '9x3A7c7FfS';
+        $address = 'http://91.204.239.44/broker-api/send';
+        $from = 'Soglomdi';
+        $text = 'Test sms from Avaz.';
+        $number = '998974344466';
+        $msg_id = 'soglomdi'.time();
+
+        $body_json = '{
+ "messages":
+ [
+ {
+  "recipient":"'.$number.'",
+  "message-id":"'.$msg_id.'",
+
+     "sms":{
+
+       "originator": "'.$from.'",
+     "content": {
+      "text": "'.$text.'"
+      }
+      }
+         }
+     ]
+}';
+
+echo $body_json;
+echo "<br>";
+
+        // $body_json = json_encode($bodyData, JSON_UNESCAPED_UNICODE);
+        $headers = [
+            'Authorization' => 'Basic ' . base64_encode( $username.':'.$password ),
+            // 'accept: application/json',
+            'content-type: application/json'
+        ];
+        if($curl = curl_init()){
+            curl_setopt($curl, CURLOPT_URL, 'http://91.204.239.44/broker-api/send');
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $body_json);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            $out = curl_exec($curl);
+            var_dump($out);
+            echo "<br>";
+            curl_close($curl);
+            $data = json_decode($out);
+            var_dump($data);die;
+        }
+    }
 }
