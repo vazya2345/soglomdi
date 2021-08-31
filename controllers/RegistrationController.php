@@ -920,33 +920,19 @@ class RegistrationController extends Controller
         $number = '998974344466';
         $msg_id = 'soglomdi'.time();
 
-        $body_json = '{
- "messages":
- [
- {
-  "recipient":"'.$number.'",
-  "message-id":"'.$msg_id.'",
-
-     "sms":{
-
-       "originator": "'.$from.'",
-     "content": {
-      "text": "'.$text.'"
-      }
-      }
-         }
-     ]
-}';
+        $body_json = '{"messages":[{"recipient":"'.$number.'","message-id":"'.$msg_id.'","sms":{"originator": "'.$from.'","content":{"text":"'.$text.'"}}}]}';
 
 echo $body_json;
 echo "<br>";
 
         // $body_json = json_encode($bodyData, JSON_UNESCAPED_UNICODE);
         $headers = [
-            'Authorization' => 'Basic ' . base64_encode( $username.':'.$password ),
+            'Authorization: Basic ' . base64_encode( $username.':'.$password ),
             // 'accept: application/json',
             'content-type: application/json'
         ];
+        var_dump($headers);
+            echo "<br>";
         if($curl = curl_init()){
             curl_setopt($curl, CURLOPT_URL, 'http://91.204.239.44/broker-api/send');
             curl_setopt($curl, CURLOPT_POST, true);
