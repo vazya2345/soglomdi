@@ -26,13 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             // 'id',
-            'reagent_id'=>[
-                'attribute'=>'reagent_id',
-                'filter'=>Reagent::getAll(),
-                'value'=>function($data){
-                    return Reagent::getName($data->reagent_id);
-                }
-            ],
             'analiz_id'=>[
                 'attribute'=>'analiz_id',
                 'filter'=>SAnaliz::getAll(),
@@ -40,6 +33,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     return SAnaliz::getName($data->analiz_id);
                 }
             ],
+            'reagent_id'=>[
+                'attribute'=>'reagent_id',
+                'filter'=>Reagent::getAll(),
+                'value'=>function($data){
+                    return Reagent::getName($data->reagent_id);
+                }
+            ],
+            
             'soni',
 
             ['class' => 'yii\grid\ActionColumn'],

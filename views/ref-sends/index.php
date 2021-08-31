@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Users;
 use app\models\Referals;
+use app\models\Filials;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\RefSendsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -22,10 +23,36 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            // 'id',
+            [
+                'label'=>'Филиал',
+                'value' => function ($data) {
+                    return Filials::getName(Referals::getFilial($data->refnum));
+                }
+            ],
             'refnum'=>[
                 'attribute'=>'refnum',
-                'filter'=>Referals::getAll(),
+                'value' => function ($data) {
+                    return $data->refnum;
+                }
+            ],
+            [
+                'label'=>'ФИШ',
+                'value' => function ($data) {
+                    return Referals::getName($data->refnum);
+                }
+            ],
+            [
+                'label'=>'Шифохона',
+                'value' => function ($data) {
+                    return Referals::getHospital($data->refnum);
+                }
+            ],
+            [
+                'label'=>'Телефон',
+                'value' => function ($data) {
+                    return Referals::getPhone($data->refnum);
+                }
             ],
             'sum',
             'status'=>[

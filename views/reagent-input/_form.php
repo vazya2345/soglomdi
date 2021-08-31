@@ -16,6 +16,15 @@ use app\models\Reagent;
 
     <?= $form->field($model, 'value')->textInput() ?>
 
+    
+
+    <div class="form-group field-reagentinput-value required">
+        <label class="control-label" for="reagentinput-value">Янги нархи</label>
+        <?= Html::input('number','narxyangi','', ['class'=>'form-control', 'id'=>'reagentinput-narx'])?>
+
+        <div class="help-block"></div>
+    </div>
+
     <div class="form-group">
         <?= Html::submitButton('Саклаш', ['class' => 'btn btn-success']) ?>
     </div>

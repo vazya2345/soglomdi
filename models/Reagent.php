@@ -475,6 +475,12 @@ class Reagent extends \yii\db\ActiveRecord
         return $res;
     }
 
+    public static function getUmumSumQoldiq(){
+        $command = Yii::$app->db->createCommand("SELECT sum(qoldiq*price) FROM reagent");
+        $sum = $command->queryScalar();
+        return $sum;
+    }
+
     
 }
 

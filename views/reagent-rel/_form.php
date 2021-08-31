@@ -13,10 +13,10 @@ use app\models\SAnaliz;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'reagent_id')->dropDownList(Reagent::getAll()) ?>
-
     <?= $form->field($model, 'analiz_id')->dropDownList(SAnaliz::getAll()) ?>
-
+    
+    <?= $form->field($model, 'reagent_id')->dropDownList(Reagent::getAll()) ?>
+   
     <?= $form->field($model, 'soni')->textInput() ?>
 
     <div class="form-group">

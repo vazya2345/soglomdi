@@ -76,6 +76,9 @@ class ReagentInputController extends Controller
             if($model->save()){
                 $rmodel = Reagent::findOne($model->reagent_id);
                 $rmodel->qoldiq += $model->value;
+                if(strlen(Yii::$app->request->post('narxyangi'))>0){
+                    $rmodel->price = Yii::$app->request->post('narxyangi');
+                }
                 if($rmodel->save()){
                     $notifs = ReagentNotifications::find()->where(['reagent_id'=>$model->reagent_id])->all();
                     foreach ($notifs as $notif) {

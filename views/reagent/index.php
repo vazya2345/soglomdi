@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use app\models\Reagent;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ReagentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Янги', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Умумий қолдиқ суммада: '.number_format(Reagent::getUmumSumQoldiq()), '#', ['class' => 'btn btn-default']) ?>
     </p>
 
 
@@ -27,8 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'title',
             'qoldiq',
-            'martalik',
+            // 'martalik',
             'price',
+            [
+                'label'=>'Қолдиқ суммада',
+                'value'=>function($data){
+                    return $data->qoldiq*$data->price;
+                }
+            ],
             'notific_count',
             'notific_filial',
 

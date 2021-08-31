@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use app\models\Filials;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ReferalsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -19,6 +19,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            'filial'=>[
+                'attribute'=>'filial',
+                'filter'=>Filials::getAll(),
+                'value' => function ($data) {
+                    return Filials::getName($data->filial);
+                }
+            ],
             'refnum',
             // 'id',
             'fio',
@@ -28,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'info:ntext',
             //'add1',
             'phone',
+
 
             // [
             //     'class' => 'yii\grid\ActionColumn',

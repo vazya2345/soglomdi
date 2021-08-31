@@ -49,7 +49,7 @@ class ReferalsController extends Controller
         $searchModel = new ReferalsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==4||Yii::$app->user->getRole()==6){
+        if(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==4||Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==9){
             return $this->render('index_admin', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
