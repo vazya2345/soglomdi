@@ -179,7 +179,7 @@ class ReferalsController extends Controller
         
     }
 
-    public function actionSend($id)
+    public function actionSend($id,$type)
     {
         $model = $this->findModel($id);
 
@@ -187,6 +187,7 @@ class ReferalsController extends Controller
         $rs_model->refnum = $model->refnum;
         $rs_model->sum = $model->qoldiq_summa;
         $rs_model->status = 1;
+        $rs_model->send_type = $type;
         $rs_model->user_id = Yii::$app->user->id;
         $rs_model->send_date = date("Y-m-d H:i:s");
 

@@ -31,7 +31,7 @@ class FqSends extends \yii\db\ActiveRecord
     {
         return [
             [['fq_id', 'sum', 'status'], 'required'],
-            [['fq_id', 'sum', 'status'], 'integer'],
+            [['fq_id', 'sum', 'status', 'send_type'], 'integer'],
             [['send_date', 'rec_date'], 'safe'],
         ];
     }
@@ -46,6 +46,7 @@ class FqSends extends \yii\db\ActiveRecord
             'fq_id' => 'Касса ИД',
             'sum' => 'Сумма',
             'status' => 'Статус',
+            'send_type' => 'Тури',
             'send_date' => 'Жўнатилган сана',
             'rec_date' => 'Қабул қилинган сана',
         ];

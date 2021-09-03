@@ -554,7 +554,8 @@ class RegistrationController extends Controller
         
         if(Result::isEndedReg($id)){
             $model->status = 4;
-            $model->natija_input = 1;    
+            $model->natija_input = 1;
+            $this->sendReadySms($id);  
         }
         else{
             $model->status = 3;
@@ -581,6 +582,7 @@ class RegistrationController extends Controller
 
         if ($model->load(Yii::$app->request->post())&&$model_client->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->id;
+            $model->kassir_id = Yii::$app->user->id;
             $model->natija_input = '0';
             $model->create_date = date("Y-m-d H:i:s");
             $model->change_time = $model->create_date;
@@ -910,14 +912,14 @@ class RegistrationController extends Controller
         ]);
     }
 
-    public function actionSendsms()
+    private function sendSmsByTemplate($text,$number)
     {
         $username = 'soglomtabassum';
         $password = '9x3A7c7FfS';
         $address = 'http://91.204.239.44/broker-api/send';
-        $from = 'Soglomdi';
-        $text = 'Test sms from Avaz.';
-        $number = '998974344466';
+        $from = '3700';
+        // $text = 'Test sms from Avaz.';
+        // $number = '998974344466';
         $msg_id = 'soglomdi'.time();
 
         $body_json = '{"messages":[{"recipient":"'.$number.'","message-id":"'.$msg_id.'","sms":{"originator": "'.$from.'","content":{"text":"'.$text.'"}}}]}';
@@ -944,7 +946,42 @@ echo "<br>";
             echo "<br>";
             curl_close($curl);
             $data = json_decode($out);
-            var_dump($data);die;
+            // var_dump($data);die;   
         }
+        return true;
     }
+
+    public function actionUpdatelab($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['resultlab', 'id' => $model->id]);
+        }
+
+        return $this->render('updatelab', [
+            'model' => $model,
+        ]);
+    }
+
+    private function sendReadySms($id)
+    {
+        $model = $this->findModel($id);
+
+        $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijangiz tayyorligini ma’lum qilamiz.';
+        $number = Client::getPhonenumforsms($model->client_id);
+        if($number){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
+    }
+
+    public function actionTestphone($id)
+    {
+        var_dump($this->sendReadySms($id));
+        die;
+    }
+    
 }

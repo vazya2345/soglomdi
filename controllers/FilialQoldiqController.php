@@ -155,8 +155,24 @@ class FilialQoldiqController extends Controller
     {
         $sum = 0;
         $model = $this->findModel($id);
-        if($model->id!=8){
-            $regs = Payments::find()->select('sum(IFNULL(cash_sum, 0))+sum(IFNULL(plastik_sum, 0)) AS `s_amount`')->where(['>','create_date',$model->last_change_date])->andWhere(['kassir_id'=>$model->kassir_id])->asArray()->all();
+        if($model->id!=8&&$model->id!=22){
+            if($model->qoldiq_type==1){
+                $regs = Payments::find()
+                ->select('sum(IFNULL(cash_sum, 0)) AS `s_amount`')
+                ->where(['>','create_date',$model->last_change_date])
+                ->andWhere(['kassir_id'=>$model->kassir_id])
+                ->asArray()
+                ->all();
+            }
+            else{
+                $regs = Payments::find()
+                ->select('sum(IFNULL(plastik_sum, 0)) AS `s_amount`')
+                ->where(['>','create_date',$model->last_change_date])
+                ->andWhere(['kassir_id'=>$model->kassir_id])
+                ->asArray()
+                ->all();
+            }
+            
             if($regs[0]['s_amount']){
                 $sum = $regs[0]['s_amount'];
             }
@@ -167,7 +183,14 @@ class FilialQoldiqController extends Controller
 
         }
         else{
-            $regs = FqSends::find()->select('sum(IFNULL(sum, 0)) AS `s_amount`')->where(['>','rec_date',$model->last_change_date])->andWhere(['status'=>2])->andWhere(['<>','fq_id',8])->asArray()->all();
+            $regs = FqSends::find()->select('sum(IFNULL(sum, 0)) AS `s_amount`')
+            ->where(['>','rec_date',$model->last_change_date])
+            ->andWhere(['status'=>2])
+            ->andWhere(['send_type'=>$model->qoldiq_type])
+            ->andWhere(['not in','fq_id',[8,22]])
+            ->asArray()
+            ->all();
+
             if($regs[0]['s_amount']){
                 $sum = $regs[0]['s_amount'];
             }
@@ -196,6 +219,7 @@ class FilialQoldiqController extends Controller
         $fq_model->fq_id = $id;
         $fq_model->sum = $model->qoldiq;
         $fq_model->status = 1;
+        $fq_model->send_type = $model->qoldiq_type;
         $fq_model->send_date = date("Y-m-d H:i:s");
 
         if($fq_model->save()){

@@ -123,6 +123,23 @@ class Client extends \yii\db\ActiveRecord
             return 'Топилмади';
         }
     }
+    public static function getPhonenumforsms($id)
+    {
+        $model = self::findOne($id);
+        if($model){
+            $res = str_replace('+','',$model->add1);
+            $check = substr($res,0,3);
+            if($check=='998'&&strlen($res)==12){
+                return $res;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
 
     public static function getBirthDate($id)
     {

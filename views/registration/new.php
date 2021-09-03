@@ -92,7 +92,7 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 			</div>
 
 			<div class="col-3">
-			    <?= $form->field($model_client, 'add1')->textInput(['type'=>'tel', 'maxlength' => 13, 'value' => '+998', 'pattern' => '+998-[0-9]{3}-[0-9]{2}-[0-9]{2}', 'title' => 'Телефон рақамини +998-99-999-99-99 форматида киритинг', 'class' => 'form-control', 'required'=>true]) ?>
+			    <?= $form->field($model_client, 'add1')->textInput(['type'=>'tel', 'maxlength' => 13, 'value' => '+998', 'pattern' => '+998-[0-9]{3}-[0-9]{2}-[0-9]{2}', 'title' => 'Телефон рақамини +998-99-999-99-99 форматида киритинг', 'class' => 'form-control', 'required'=>'required']) ?>
 			</div>
 
 			<div class="col-3">

@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Мижоз маълумотларини ўзгартириш', ['client/update', 'id'=>$model->client_id], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Танланган маълумотларини ўзгартириш', ['reg-dopinfo/updatereg', 'reg_id'=>$model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Пробирка рақамини ўзгартириш', ['registration/updatelab', 'id'=>$model->id], ['class' => 'btn btn-success']) ?>
     </p>
     <?= DetailView::widget([
         'model' => $model,

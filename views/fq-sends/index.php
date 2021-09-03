@@ -30,6 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'sum',
+            'send_type'=>[
+                'attribute'=>'send_type',
+                'filter'=>[1=>'Нақд',2=>'Пластик'],
+                'value' => function ($data) {
+                    $arr = [1=>'Нақд',2=>'Пластик'];
+                        return $arr[$data->send_type];
+                }
+            ],
             'status'=>[
                 'attribute'=>'status',
                 'filter'=>[1=>'Жунатилди',2=>'Кабул килинди'],

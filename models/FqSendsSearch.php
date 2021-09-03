@@ -17,7 +17,7 @@ class FqSendsSearch extends FqSends
     public function rules()
     {
         return [
-            [['id', 'fq_id', 'sum', 'status'], 'integer'],
+            [['id', 'fq_id', 'sum', 'status', 'send_type'], 'integer'],
             [['send_date', 'rec_date'], 'safe'],
         ];
     }
@@ -62,6 +62,7 @@ class FqSendsSearch extends FqSends
             'fq_id' => $this->fq_id,
             'sum' => $this->sum,
             'status' => $this->status,
+            'send_type' => $this->send_type,
             'send_date' => $this->send_date,
             'rec_date' => $this->rec_date,
         ]);

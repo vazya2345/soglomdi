@@ -7,7 +7,7 @@ use app\models\Users;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\FilialQoldiqSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
+$qoldiq_type_arr = [1=>'Нақд',2=>'Пластик'];
 $this->title = 'Касса';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -32,6 +32,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'=>Users::getAllKassirs(),
                 'value' => function ($data) {
                         return Users::getName($data->kassir_id);
+                }
+            ],
+            'qoldiq_type'=>[
+                'attribute'=>'qoldiq_type',
+                'filter'=>$qoldiq_type_arr,
+                'value' => function ($data) {
+                    $qoldiq_type_arr = [1=>'Нақд',2=>'Пластик'];
+                    return $qoldiq_type_arr[$data->qoldiq_type];
+                    // return $data->qoldiq_type;
                 }
             ],
             'qoldiq',

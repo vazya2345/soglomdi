@@ -17,7 +17,7 @@ class RefSendsSearch extends RefSends
     public function rules()
     {
         return [
-            [['id', 'sum', 'status', 'user_id'], 'integer'],
+            [['id', 'sum', 'status', 'user_id', 'send_type'], 'integer'],
             [['refnum', 'send_date', 'rec_date'], 'safe'],
         ];
     }
@@ -61,6 +61,7 @@ class RefSendsSearch extends RefSends
             'id' => $this->id,
             'sum' => $this->sum,
             'status' => $this->status,
+            'send_type' => $this->send_type,
             'send_date' => $this->send_date,
             'rec_date' => $this->rec_date,
             'user_id' => $this->user_id,

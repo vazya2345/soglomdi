@@ -47,9 +47,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($data) {
                     return Html::a('Хисоб', ['hisob', 'id'=>$data->id])
                     .'<br>'.
-                    	Html::a('Юбориш', ['send', 'id'=>$data->id],[
+                    	Html::a('Нақд', ['send', 'id'=>$data->id, 'type'=>1],[
                             'data' => [
-                                'confirm' => 'Сиз '.$data->qoldiq_summa.' сўм юбормоқчисиз. Ишончингиз комилми?',
+                                'confirm' => 'Сиз '.$data->qoldiq_summa.' сўм НАҚД пул юбормоқчисиз. Ишончингиз комилми?',
+                            ]
+
+                        ])
+                    .'<br>'.
+                        Html::a('Пластик', ['send', 'id'=>$data->id, 'type'=>2],[
+                            'data' => [
+                                'confirm' => 'Сиз '.$data->qoldiq_summa.' сўм ПЛАСТИК орқали юбормоқчисиз. Ишончингиз комилми?',
                             ]
 
                         ]);

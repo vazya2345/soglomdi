@@ -34,7 +34,7 @@ class RefSends extends \yii\db\ActiveRecord
     {
         return [
             [['refnum', 'sum', 'status', 'send_date', 'user_id'], 'required'],
-            [['sum', 'status', 'user_id'], 'integer'],
+            [['sum', 'status', 'user_id', 'send_type'], 'integer'],
             [['send_date', 'rec_date'], 'safe'],
             [['refnum'], 'string', 'max' => 255],
             // [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -52,6 +52,7 @@ class RefSends extends \yii\db\ActiveRecord
             'sum' => 'Сумма',
             'status' => 'Статус',
             'send_date' => 'Жўнатиш сана',
+            'send_type' => 'Тури',
             'rec_date' => 'Қабул қилган сана',
             'user_id' => 'Юборган ходим',
         ];

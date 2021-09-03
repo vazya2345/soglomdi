@@ -31,7 +31,7 @@ class FilialQoldiq extends \yii\db\ActiveRecord
     {
         return [
             [['filial_id'], 'required'],
-            [['filial_id', 'kassir_id', 'qoldiq'], 'integer'],
+            [['filial_id', 'kassir_id', 'qoldiq', 'qoldiq_type'], 'integer'],
             [['last_change_date'], 'safe'],
         ];
     }
@@ -46,6 +46,7 @@ class FilialQoldiq extends \yii\db\ActiveRecord
             'filial_id' => 'Филиал',
             'kassir_id' => 'Кассир',
             'qoldiq' => 'Қолдиқ',
+            'qoldiq_type' => 'Тури',
             'last_change_date' => 'Охирги ўзгарган сана',
         ];
     }
@@ -65,7 +66,7 @@ class FilialQoldiq extends \yii\db\ActiveRecord
     {
         $model = self::findOne($id);
         if($model)
-            return Filials::getName($model->filial_id).' - '.$model->kassir_id;
+            return Filials::getName($model->filial_id).' - '.$model->kassir_id.' - '.$model->qoldiq_type;
         else
             return 'Топилмади';
     }
