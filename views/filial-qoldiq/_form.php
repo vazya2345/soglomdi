@@ -19,6 +19,8 @@ use app\models\Users;
 
     <?= $form->field($model, 'qoldiq')->textInput() ?>
 
+     <?= $form->field($model, 'qoldiq_type')->dropDownList([1=>'Нақд',2=>'Пластик']) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Саклаш', ['class' => 'btn btn-success']) ?> 
     </div>
