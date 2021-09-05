@@ -17,7 +17,7 @@ class FilialQoldiqSearch extends FilialQoldiq
     public function rules()
     {
         return [
-            [['id', 'filial_id', 'kassir_id', 'qoldiq'], 'integer'],
+            [['id', 'filial_id', 'kassir_id', 'qoldiq', 'qoldiq_type'], 'integer'],
             [['last_change_date'], 'safe'],
         ];
     }
@@ -62,6 +62,7 @@ class FilialQoldiqSearch extends FilialQoldiq
             'filial_id' => $this->filial_id,
             'kassir_id' => $this->kassir_id,
             'qoldiq' => $this->qoldiq,
+            'qoldiq_type' => $this->qoldiq_type,
             'last_change_date' => $this->last_change_date,
         ]);
 

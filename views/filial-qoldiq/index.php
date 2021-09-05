@@ -44,6 +44,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'qoldiq',
+            'qoldiq_type'=>[
+                'attribute'=>'qoldiq_type',
+                'filter'=>[1=>'Нақд',2=>'Пластик'],
+                'value' => function ($data) {
+                    $qoldiq_type_arr = [1=>'Нақд',2=>'Пластик'];
+                    return $qoldiq_type_arr[$data->qoldiq_type];
+                    // return $data->qoldiq_type;
+                }
+            ],
             'last_change_date',
 
             ['class' => 'yii\grid\ActionColumn'],
