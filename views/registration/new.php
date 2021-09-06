@@ -92,7 +92,7 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 			</div>
 
 			<div class="col-3">
-			    <?= $form->field($model_client, 'add1')->textInput(['type'=>'tel', 'maxlength' => 13, 'value' => '+998', 'pattern' => '+998-[0-9]{3}-[0-9]{2}-[0-9]{2}', 'title' => 'Телефон рақамини +998-99-999-99-99 форматида киритинг', 'class' => 'form-control', 'required'=>'required']) ?>
+			    <?= $form->field($model_client, 'add1')->textInput(['type'=>'tel', 'maxlength' => 13, 'value' => '+998', 'title' => 'Телефон рақамини +998999999999 форматида киритинг', 'class' => 'form-control', 'required'=>'required', 'oninput'=>'telcheck()']) ?>
 			</div>
 
 			<div class="col-3">
@@ -209,11 +209,12 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 		<?= $form->field($model, 'skidka_reg')->textInput(['maxlength' => true,'type'=>'number','oninput'=>'setSkidkaSum(this)']) ?>
 
 	    <div class="form-group">
-	        <?= Html::submitButton('Саклаш', ['id'=>'savebutton_1','class' => 'btn btn-success',
+	        <?= Html::submitButton('Саклаш', ['id'=>'savebutton_1','class' => 'btn btn-success', 'disabled'=>true,
 	        'data' => [
                 'confirm' => 'Ишончингиз комилми?',
                 'method' => 'post',
             ],]) ?>
+            <span id='telerror'>Тел рақамини тўғри киритинг</span>
 	    </div>
 	</div>
 </div>    
@@ -406,6 +407,14 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
     function myfuncplus(id){
     	var obj1 = document.getElementById('myreaginp'+id);
     	obj1.value++;
+    }
+    function telcheck(){
+    	var a = $('#client-add1').val();
+    	let res = a.match(/^(\+998)?\d{9}$/);
+    	if(res!==null){
+    		$('#telerror').html('');
+    		$('#savebutton_1').prop('disabled', false);
+    	}
     }
 </script>
 

@@ -91,6 +91,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $arr[$data->status];
                 }
             ],
+            [
+                'header' => 'Қарз', 
+                'format' => 'raw',
+                'contentOptions' => function ($data) {
+                    $qarz = $data->sum_amount-($data->sum_cash+$data->sum_plastik+$data->skidka_reg+$data->skidka_kassa);
+                    if($qarz>0){
+                        return  ['class'=>'bg-danger'];    
+                    }
+                    else{
+                        return  ['class'=>'bg-success'];   
+                    }
+                },
+                'value' => function ($data) {
+                        $qarz = $data->sum_amount-($data->sum_cash+$data->sum_plastik+$data->skidka_reg+$data->skidka_kassa);
+                        return $qarz;
+                }
+            ],
             'user_id'=>[
                 'attribute'=>'user_id',
                 'filter'=>Users::getAllKassirs(),
@@ -99,6 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             //'change_time',
+            
             [
                 'header' => 'Натижа', 
                 'format' => 'raw',

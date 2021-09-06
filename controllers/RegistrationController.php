@@ -22,6 +22,7 @@ use app\models\FinishPayments;
 use app\models\Payments;
 use app\models\Reagent;
 use app\models\Referals;
+use app\models\SmsTemplates;
 /**
  * RegistrationController implements the CRUD actions for Registration model.
  */
@@ -967,8 +968,13 @@ echo "<br>";
     private function sendReadySms($id)
     {
         $model = $this->findModel($id);
-
-        $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijangiz tayyorligini ma’lum qilamiz.';
+        $model = SmsTemplates::find()->where(['code'=>'ready'])->one();
+        if($model){
+            $text = $model->sms_text;
+        }
+        else{
+            $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijangiz tayyorligini ma’lum qilamiz.';    
+        }
         $number = Client::getPhonenumforsms($model->client_id);
         if($number){
             $this->sendSmsByTemplate($text,$number);

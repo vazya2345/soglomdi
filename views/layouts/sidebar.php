@@ -68,12 +68,7 @@ $name = Users::getMyname();
                     ['label' => 'Регистрациялар', 'url' => ['/registration/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==8)],
                     ['label' => 'Жўнатмалар', 'url' => ['/ref-sends/indexref'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==8)],
 
-
-                    
-                    ['label' => 'Дастур хакида', 'header' => true],
-                    ['label' => 'Асосий маълумот', 'iconStyle' => 'far', 'iconClassAdded' => 'text-danger'],
-                    ['label' => 'Карши курсатмалар', 'iconClass' => 'nav-icon far fa-circle text-warning'],
-                    ['label' => 'Алока', 'iconStyle' => 'far', 'iconClassAdded' => 'text-info'],
+                    ['label' => 'СМС шаблон', 'url' => ['/sms-templates/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                 ],
             ]);
             ?>
