@@ -39,8 +39,8 @@ class SmsTemplates extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => 'Code',
-            'sms_text' => 'Sms Text',
+            'code' => 'Код',
+            'sms_text' => 'СМС матни',
         ];
     }
 }
