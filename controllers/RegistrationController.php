@@ -23,6 +23,7 @@ use app\models\Payments;
 use app\models\Reagent;
 use app\models\Referals;
 use app\models\SmsTemplates;
+use app\models\SendSms;
 /**
  * RegistrationController implements the CRUD actions for Registration model.
  */
@@ -947,6 +948,12 @@ echo "<br>";
             echo "<br>";
             curl_close($curl);
             $data = json_decode($out);
+
+            $sms_model = new SendSms();
+            $sms_model->number = $number;
+            $sms_model->sms_text = $text;
+            $sms_model->send_date = date('Y-m-d H:i:s');
+            $sms_model->save(false);
             // var_dump($data);die;   
         }
         return true;
@@ -976,7 +983,7 @@ echo "<br>";
             $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijangiz tayyorligini ma’lum qilamiz.';    
         }
         $number = Client::getPhonenumforsms($model->client_id);
-        if($number&&$number!='+998000000000'){
+        if($number&&$number!='998000000000'){
             $this->sendSmsByTemplate($text,$number);
         }
         else{
