@@ -74,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'rec_date',
             'user_id'=>[
                 'attribute'=>'user_id',
+                'filter'=>Users::getAll(),
                 'value' => function ($data) {
                     return Users::getNameAndFil($data->user_id);
                 }

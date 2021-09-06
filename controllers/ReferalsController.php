@@ -147,22 +147,33 @@ class ReferalsController extends Controller
 
     public function actionHisob($id)
     {
-        $sum = 0;
         $model = $this->findModel($id);
+        $sum = 0;
+        
 
         if($model->id!=131){
             if(strlen($model->last_change_date)==0){
                 $model->last_change_date = "2021-01-01 00:00:01";
             }
-            $regs = Registration::find()->select('sum(IFNULL(sum_amount, 0))-sum(IFNULL(skidka_reg, 0))-sum(IFNULL(skidka_kassa, 0)) AS `s_amount`')->where(['>','create_date',$model->last_change_date])->andWhere(['ref_code'=>$model->refnum])->asArray()->all();
-            // var_dump($regs);die;
-
-            if($regs[0]['s_amount']){
-                $sum = $regs[0]['s_amount']*(int)$model->add1/100;
+            if($model->add1>0){
+                $regs = Registration::find()->select('sum(IFNULL(sum_cash, 0))+sum(IFNULL(sum_plastik, 0)) AS `s_amount`')->where(['>','create_date',$model->last_change_date])->andWhere(['ref_code'=>$model->refnum])->asArray()->all();
+                if($regs[0]['s_amount']){
+                    $sum = $regs[0]['s_amount']*(int)$model->add1/100;
+                }
+                else{
+                    $sum = 0;
+                }
             }
             else{
-                $sum = 0;    
+                $regs = Registration::find()
+                    ->where(['>','create_date',$model->last_change_date])
+                    ->andWhere(['ref_code'=>$model->refnum])
+                    ->andWhere(['OR',['>','sum_cash',0],['>','sum_plastik',0]])
+                    ->asArray()
+                    ->count();
+                $sum = (int)$regs*$model->fix_sum;
             }
+            
             $model->qoldiq_summa = (int)$model->qoldiq_summa + (int)$sum;
 
         }

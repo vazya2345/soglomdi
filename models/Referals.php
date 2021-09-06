@@ -34,7 +34,7 @@ class Referals extends \yii\db\ActiveRecord
     {
         return [
             [['fio','refnum'], 'required'],
-            [['user_id','avans_sum','filial'], 'integer'],
+            [['user_id','avans_sum','filial','fix_sum'], 'integer'],
             [['refnum'], 'unique'],
             [['info'], 'string'],
             [['fio', 'phone', 'desc', 'add1', 'refnum'], 'string', 'max' => 255],
@@ -63,6 +63,7 @@ class Referals extends \yii\db\ActiveRecord
             'qoldiq_summa' => 'Қолдиқ сумма',
             'last_change_date' => 'Охирги узгарган сана',
             'filial' => 'Филиал',
+            'fix_sum' => 'Фикс сумма',
         ];
     }
 
