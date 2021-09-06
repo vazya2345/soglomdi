@@ -968,9 +968,9 @@ echo "<br>";
     private function sendReadySms($id)
     {
         $model = $this->findModel($id);
-        $model = SmsTemplates::find()->where(['code'=>'ready'])->one();
-        if($model){
-            $text = $model->sms_text;
+        $template = SmsTemplates::find()->where(['code'=>'ready'])->one();
+        if($template){
+            $text = $template->sms_text;
         }
         else{
             $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijangiz tayyorligini ma’lum qilamiz.';    

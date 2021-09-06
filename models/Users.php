@@ -159,6 +159,13 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $result;
     }
 
+    public static function getAllIchkiNazorat()
+    {
+        $array = self::find()->where(['role_id'=>9])->all();
+        $result = ArrayHelper::map($array, 'id', 'name');
+        return $result;
+    }
+
     public static function getAll()
     {
         $array = self::find()->all();

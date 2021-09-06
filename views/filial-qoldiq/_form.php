@@ -15,7 +15,7 @@ use app\models\Users;
 
     <?= $form->field($model, 'filial_id')->dropDownList(Filials::getAll()) ?>
 
-    <?= $form->field($model, 'kassir_id')->dropDownList([''=>'Танланг...']+Users::getAllKassirs()) ?>
+    <?= $form->field($model, 'kassir_id')->dropDownList([''=>'Танланг...']+Users::getAllKassirs()+Users::getAllIchkiNazorat()) ?>
 
     <?= $form->field($model, 'qoldiq')->textInput() ?>
 
