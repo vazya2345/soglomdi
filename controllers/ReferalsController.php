@@ -156,7 +156,13 @@ class ReferalsController extends Controller
                 $model->last_change_date = "2021-01-01 00:00:01";
             }
             if($model->add1>0){
-                $regs = Registration::find()->select('sum(IFNULL(sum_cash, 0))+sum(IFNULL(sum_plastik, 0)) AS `s_amount`')->where(['>','create_date',$model->last_change_date])->andWhere(['ref_code'=>$model->refnum])->asArray()->all();
+                $regs = Registration::find()
+                ->select('sum(IFNULL(sum_cash, 0))+sum(IFNULL(sum_plastik, 0)) AS `s_amount`')
+                ->where(['>','create_date',$model->last_change_date])
+                ->andWhere(['ref_code'=>$model->refnum])
+                ->andWhere(['skidka_reg'=>null])
+                ->asArray()
+                ->all();
                 if($regs[0]['s_amount']){
                     $sum = $regs[0]['s_amount']*(int)$model->add1/100;
                 }

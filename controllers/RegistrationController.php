@@ -976,7 +976,7 @@ echo "<br>";
             $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijangiz tayyorligini ma’lum qilamiz.';    
         }
         $number = Client::getPhonenumforsms($model->client_id);
-        if($number){
+        if($number&&$number!='+998000000000'){
             $this->sendSmsByTemplate($text,$number);
         }
         else{

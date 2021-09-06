@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'kassir_id'=>[
                 'attribute'=>'kassir_id',
-                'filter'=>Users::getAllKassirs(),
+                'filter'=>Users::getAllKassirs()+Users::getAllIchkiNazorat(),
                 'value' => function ($data) {
                         return Users::getName($data->kassir_id);
                 }
