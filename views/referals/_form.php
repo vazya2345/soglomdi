@@ -23,8 +23,14 @@ use app\models\Filials;
     <?= $form->field($model, 'desc')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'info')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'add1')->textInput(['maxlength' => true]) ?>
+    <div class="row">
+        <div class="col-6">
+            <?= $form->field($model, 'add1')->textInput(['maxlength' => true, 'oninput'=>'clearfunc(1)']) ?>
+        </div>
+        <div class="col-6">
+            <?= $form->field($model, 'fix_sum')->textInput(['maxlength' => true, 'oninput'=>'clearfunc(2)']) ?>
+        </div>
+    </div>
 
     <?= $form->field($model, 'avans_sum')->textInput(['type'=>'number']) ?>
 
@@ -48,3 +54,14 @@ use app\models\Filials;
         display: none;
     }
 </style>
+
+<script type="text/javascript">
+    function clearfunc(a){
+        if(a==1){
+            $("#referals-fix_sum").val('');
+        }
+        else{
+            $("#referals-add1").val('');
+        }
+    }
+</script>
