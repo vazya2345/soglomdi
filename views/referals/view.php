@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\models\Filials;
+use app\models\Users;
 /* @var $this yii\web\View */
 /* @var $model app\models\Referals */
 
@@ -10,6 +11,7 @@ $this->title = $model->fio;
 $this->params['breadcrumbs'][] = ['label' => 'Руйхат', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$umodel = Users::find()->where(['other'=>$model->refnum])->one();
 ?>
 <div class="referals-view card">
     <div class="card-body">
@@ -52,5 +54,33 @@ $this->params['breadcrumbs'][] = $this->title;
             'last_change_date',
         ],
     ]) ?>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+    <?php
+        if($umodel){
+            echo 
+                DetailView::widget([
+                    'model' => $umodel,
+                    'attributes' => [
+                        'login',
+                        'password',
+                        'mobile',
+                        'add1'=>[
+                            'attribute'=>'add1',
+                            'value'=>function ($data) {
+                                return Filials::getName($model->add1);
+                            }
+                        ],
+                    ],
+                ]);
+        }
+        else{
+            echo '<p>Ушбу рефералга тизим фойдаланувчиси яратилмаган. '.Html::a('Яратиш', ['users/create'], ['class' => 'btn btn-primary']).'</p>';
+        }
+    ?>
+
     </div>
 </div>
