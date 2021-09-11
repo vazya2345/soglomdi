@@ -4,6 +4,7 @@ use app\models\Users;
 use app\models\ReagentNotifications;
 use app\models\Reagent;
 use app\models\Filials;
+use app\models\Eslatma;
 $name = Users::getMyname();
 $lav = Users::getMyLav();
 
@@ -88,6 +89,9 @@ $lav = Users::getMyLav();
                 </li>
                 <li>
                     <?= Html::a('Натижалар', ['/result/index'], ['class' => 'dropdown-item']) ?>
+                </li>
+                <li>
+                    <?= Html::a('Эслатмалар', ['/eslatma/index'], ['class' => 'dropdown-item']) ?>
                 </li>
             </ul>
         </li>
@@ -206,22 +210,28 @@ $count = count($notifications);
             </div>
           </li>
         <!-- Notifications Dropdown Menu -->
+<?php
+    $eslatmalar = Eslatma::find()->orderBy(['id'=>SORT_DESC])->all();
+    $esl_count = count($eslatmalar);
+?>
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-comments"></i>
                 <span class="badge badge-warning navbar-badge">2</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-header">2 эслатма</span>
+                <span class="dropdown-header"><?=$esl_count?> эслатма</span>
                 <div class="dropdown-divider"></div>
+<?php
+foreach ($eslatmalar as $eslatma) {
+    echo '
                 <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i>COVID-TEST энди 190.000 сум
+                    <div class="eslatma_text">'.$eslatma->eslatma_text.'</div>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-users mr-2"></i> Бугун соат 18:00да йигилиш
-                </a>
-                <div class="dropdown-divider"></div>
+    ';
+}
+?>
             </div>
         </li>
         <li class="nav-item">
@@ -277,3 +287,9 @@ $count = count($notifications);
         </li>
     </ul>
 </nav>
+
+<style type="text/css">
+    .eslatma_text{
+        white-space: break-spaces;
+    }
+</style>

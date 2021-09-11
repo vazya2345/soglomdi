@@ -1,0 +1,87 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "rasxod".
+ *
+ * @property int $id
+ * @property int|null $filial_id
+ * @property int|null $user_id
+ * @property int $summa
+ * @property int|null $sum_type
+ * @property int|null $rasxod_type
+ * @property string $rasxod_desc
+ * @property string|null $rasxod_period
+ * @property int|null $status
+ * @property int $send_user
+ *
+ * @property Filials $filial
+ * @property User $user
+ */
+class Rasxod extends \yii\db\ActiveRecord
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'rasxod';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['filial_id', 'user_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user'], 'integer'],
+            [['summa', 'rasxod_desc', 'send_user'], 'required'],
+            [['rasxod_desc'], 'string'],
+            [['rasxod_period'], 'safe'],
+            [['filial_id'], 'exist', 'skipOnError' => true, 'targetClass' => Filials::className(), 'targetAttribute' => ['filial_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'filial_id' => 'Filial ID',
+            'user_id' => 'User ID',
+            'summa' => 'Summa',
+            'sum_type' => 'Sum Type',
+            'rasxod_type' => 'Rasxod Type',
+            'rasxod_desc' => 'Rasxod Desc',
+            'rasxod_period' => 'Rasxod Period',
+            'status' => 'Status',
+            'send_user' => 'Send User',
+        ];
+    }
+
+    /**
+     * Gets query for [[Filial]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFilial()
+    {
+        return $this->hasOne(Filials::className(), ['id' => 'filial_id']);
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+}

@@ -27,21 +27,35 @@ $name = Users::getMyname();
                     //ADMIN
                     ['label' => 'Регистрациялар', 'url' => ['/registration/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                     ['label' => 'Мижозлар', 'url' => ['/client/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    
-                    ['label' => 'Тахлил', 'url' => ['/s-analiz/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    ['label' => 'Гурух', 'url' => ['/s-groups/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    ['label' => 'Кўрсаткич', 'url' => ['/s-pokazatel/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
 
-                    ['label' => 'Қўшимча маълумот', 'url' => ['/reg-dopinfo/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    ['label' => 'Натижалар', 'url' => ['/result/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    ['label' => 'Анализлар турлари', 'url' => ['/vid-analiz/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    ['label' => 'Кўрсаткичлар чегараси', 'url' => ['/pokaz-limits/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    ['label' => 'Лаб маълумот турлари', 'url' => ['/inp-types/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    ['label' => 'Лаб маълумот справ', 'url' => ['/inp-text/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    ['label' => 'Роль', 'url' => ['/role/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    ['label' => 'Фойдаланувчи', 'url' => ['/users/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                    
-                    
+                    [
+                        'label' => 'Справочник',
+                        'url' => '#',
+                        'icon' => 'dot-circle',
+                        'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1),
+                        'items' => [
+                            ['label' => 'Тахлил', 'url' => ['/s-analiz/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Гурух', 'url' => ['/s-groups/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Кўрсаткич', 'url' => ['/s-pokazatel/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Қўшимча маълумот', 'url' => ['/reg-dopinfo/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Натижалар', 'url' => ['/result/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Анализлар турлари', 'url' => ['/vid-analiz/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Кўрсаткичлар чегараси', 'url' => ['/pokaz-limits/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Лаб маълумот турлари', 'url' => ['/inp-types/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Лаб маълумот справ', 'url' => ['/inp-text/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                                ],
+                    ],
+                    [
+                        'label' => 'Юзер',
+                        'url' => '#',
+                        'icon' => 'dot-circle',
+                        'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1),
+                        'items' => [
+                            ['label' => 'Роль', 'url' => ['/role/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Фойдаланувчи', 'url' => ['/users/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Рефераллар', 'url' => ['/referals/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&Yii::$app->user->getRole()==1],
+                        ],
+                    ],
                     ///REG
                     ['label' => 'Регистрациялар', 'url' => ['/registration/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==2)],
 
@@ -61,7 +75,7 @@ $name = Users::getMyname();
 
 
 
-                    ['label' => 'Рефераллар', 'url' => ['/referals/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==4)],
+                    ['label' => 'Рефераллар', 'url' => ['/referals/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==4)],
 
 
                     ///REFERAL
@@ -69,6 +83,17 @@ $name = Users::getMyname();
                     ['label' => 'Жўнатмалар', 'url' => ['/ref-sends/indexref'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==8)],
 
                     ['label' => 'СМС шаблон', 'url' => ['/sms-templates/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+
+                    [
+                        'label' => 'Чиқимлар',
+                        'url' => '#',
+                        'icon' => 'dot-circle',
+                        'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1),
+                        'items' => [
+                            ['label' => 'Чиқим турлари', 'url' => ['/s-rasxod-types/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Чиқимлар', 'url' => ['/rasxod/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                        ],
+                    ],
                 ],
             ]);
             ?>

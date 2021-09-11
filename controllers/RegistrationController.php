@@ -554,7 +554,7 @@ class RegistrationController extends Controller
         }
         $model = $this->findModel($id);
         
-        if(Result::isEndedReg($id)){
+        if(Result::isEndedReg($id)){ 
             $model->status = 4;
             $model->natija_input = 1;
             $this->sendReadySms($id);  
@@ -789,6 +789,7 @@ class RegistrationController extends Controller
         $model = $this->findModel($id);
         $model->status = 3;
         if($model->save()){
+            $this->sendRtimeSms($id);
             return $this->redirect(['indexlab']);
         }
         else{
@@ -991,9 +992,30 @@ echo "<br>";
         }        
     }
 
+    private function sendRtimeSms($id)
+    {
+        $model = $this->findModel($id);
+        $template = SmsTemplates::find()->where(['code'=>'rtime'])->one();
+        if($template){
+            $text = $template->sms_text;
+        }
+        else{
+            $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijalaringiz soat {rtime}da tayyor bo’ladi. Sizga hizmat ko’rsatayotganimizdan hursandmiz.';    
+        }
+        $text = str_replace('{rtime}', date('H:i d.m.Y',strtotime($model->lab_vaqt)), $text);
+
+        $number = Client::getPhonenumforsms($model->client_id);
+        if($number&&$number!='998000000000'){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
+    }
+
     public function actionTestphone($id)
     {
-        var_dump($this->sendReadySms($id));
+        var_dump($this->sendRtimeSms($id));
         die;
     }
     
