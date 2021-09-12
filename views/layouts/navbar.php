@@ -217,7 +217,7 @@ $count = count($notifications);
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-comments"></i>
-                <span class="badge badge-warning navbar-badge">2</span>
+                <span class="badge badge-warning navbar-badge"><?=$esl_count?></span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <span class="dropdown-header"><?=$esl_count?> эслатма</span>
