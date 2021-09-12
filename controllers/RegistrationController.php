@@ -804,6 +804,7 @@ class RegistrationController extends Controller
         }
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->sendRtimeSms($id);
             return $this->redirect(['indexlab']);
         }
 
