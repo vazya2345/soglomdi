@@ -484,20 +484,37 @@ class RegistrationController extends Controller
         $model = $this->findModel($reg_id);
 
         $analizs = RegAnalizs::getAnalizsByGroup($group,$reg_id);
+        $check_chegara = 0;
         foreach ($analizs as $key => $value){
             Result::checkPokazs($reg_id,$value);
+            if($value==252){
+                $check_chegara=1;
+            }
         }
             $searchModel = new ResultSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['main_id'=>$reg_id])->andWhere(['in','analiz_id',$analizs]);
             $dataProvider->pagination = ['pageSize' => 100];
-        return $this->render('print_group', [
-            'model' => $model,
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'analizs' => $analizs,
-            'group' => $group,
-        ]);
+        // var_dump($group);die;
+        if($group=='ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА'&&$check_chegara==1){
+            return $this->render('print_group_chegara', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'analizs' => $analizs,
+                'group' => $group,
+            ]);
+        }
+        else{
+            return $this->render('print_group', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'analizs' => $analizs,
+                'group' => $group,
+            ]);
+        }
+        
         
     }
 
@@ -823,20 +840,37 @@ class RegistrationController extends Controller
         $model = $this->findModel($reg_id);
 
         $analizs = RegAnalizs::getAnalizsByGroup($group,$reg_id);
+        $check_chegara = 0;
         foreach ($analizs as $key => $value){
             Result::checkPokazs($reg_id,$value);
+            if($value==252){
+                $check_chegara=1;
+            }
         }
             $searchModel = new ResultSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['main_id'=>$reg_id])->andWhere(['in','analiz_id',$analizs]);
             $dataProvider->pagination = ['pageSize' => 100];
-        return $this->render('test', [
-            'model' => $model,
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'analizs' => $analizs,
-            'group' => $group,
-        ]);
+        
+        if($group=='ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА'&&$check_chegara==1){
+            return $this->render('print_group_chegara', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'analizs' => $analizs,
+                'group' => $group,
+            ]);
+        }
+        else{
+            return $this->render('test_chegara', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'analizs' => $analizs,
+                'group' => $group,
+            ]);
+        }
+        
     }
 
 
