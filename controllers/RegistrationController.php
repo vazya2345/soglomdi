@@ -226,6 +226,8 @@ class RegistrationController extends Controller
             $model->kassir_id = Yii::$app->user->id;
             $model->sum_debt = (int)$model->sum_amount-((int)$model->sum_cash+(int)$model->sum_plastik+(int)$model->skidka_reg+(int)$model->skidka_kassa);
             if($model->save()){
+
+                $this->sendKassaSms($id);
                 $s1 = (int)$model->sum_amount;
                 $s2 = (int)$model->sum_cash+(int)$model->sum_plastik+(int)$model->skidka_reg+(int)$model->skidka_kassa;
 
@@ -1038,6 +1040,41 @@ echo "<br>";
             $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijalaringiz soat {rtime}da tayyor bo’ladi. Sizga hizmat ko’rsatayotganimizdan hursandmiz.';    
         }
         $text = str_replace('{rtime}', date('H:i d.m.Y',strtotime($model->lab_vaqt)), $text);
+
+        $number = Client::getPhonenumforsms($model->client_id);
+        if($number&&$number!='998000000000'){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
+    }
+
+    private function sendKassaSms($id)
+    {
+        $model = $this->findModel($id);
+        $template = SmsTemplates::find()->where(['code'=>'kassa'])->one();
+        if($template){
+            $text = $template->sms_text;
+        }
+        else{
+            $text = 'Assalomu alaykum Hurmatli mijoz, Sog’lom diagnostikaga tibbiy tahlil uchun {summa} to’ladingiz. {qarz}Bizni tanlaganingiz uchun rahmat.';   
+        }
+        if($model){
+            $sum = $model->sum_cash+$model->sum_plastik;
+            $summa = $sum.' so’m';
+            
+
+            if($model->sum_debt!=NULL&&$model->sum_debt!=0){
+                $qarz = 'Qarzingiz: '.$model->sum_debt.' so’m. ';
+            }
+            else{
+                $qarz = '';
+            }
+        }
+
+        $text = str_replace('{summa}', $summa, $text);
+        $text = str_replace('{qarz}', $qarz, $text);
 
         $number = Client::getPhonenumforsms($model->client_id);
         if($number&&$number!='998000000000'){
