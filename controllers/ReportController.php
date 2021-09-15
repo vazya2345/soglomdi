@@ -13,6 +13,9 @@ use app\models\Referals;
 use app\models\Filials;
 use app\models\RegAnalizs;
 use app\models\SAnaliz;
+use app\models\SPokazatel;
+use app\models\RegDopinfo;
+use app\models\PokazLimits;
 
 
 
@@ -555,6 +558,188 @@ public function actionKassa1prev()
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="kassa1_'.date("Y-m-d").'.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+
+
+
+/////////////////////////////////////////////////////// LAB /////////////////////////////////////////////////////////////////////////////////////////
+    public function actionLab1prev()
+    {
+        if(Yii::$app->request->post('date1')){
+            if(strlen(Yii::$app->request->post('date1'))==0){
+                $date1 = date("Y-m-d");
+            }
+            else{
+                $date1 = Yii::$app->request->post('date1');
+            }
+
+            if(strlen(Yii::$app->request->post('date2'))==0){
+                $date2 = date("Y-m-d");
+            }
+            else{
+                $date2 = Yii::$app->request->post('date2');
+            }
+
+            if(strlen(Yii::$app->request->post('filial'))==0){
+                $filial = 'all';
+            }
+            else{
+                $filial = Yii::$app->request->post('filial');
+            }
+
+            if(strlen(Yii::$app->request->post('analiz'))==0){
+                $analiz = 'all';
+            }
+            else{
+                $analiz = Yii::$app->request->post('analiz');
+            }
+
+            if(strlen(Yii::$app->request->post('referal'))==0){
+                $referal = 'all';
+            }
+            else{
+                $referal = Yii::$app->request->post('referal');
+            }
+
+            $kunlar = Yii::$app->request->post('kunlar');
+            $this->lab1Report($date1,$date2,$filial,$referal,$analiz);
+        }
+        return $this->render('lab1');
+    }
+
+    private function lab1Report($date1,$date2,$filial,$referal,$analiz)
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(20 * 60);
+
+        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+
+        $objPHPExcel = new \PHPExcel;
+        
+        $url = './excel/lab1.xlsx';
+        $objPHPExcel = \PHPExcel_IOFactory::load($url);
+        $sheet = 0;
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+        $activeSheet->setCellValueExplicit('E1', $date1, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('F1', $date2, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('G1', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('H1', $referal, \PHPExcel_Cell_DataType::TYPE_STRING);
+        // $date
+
+        $models = Registration::find()->where(['between','create_date',$date1,$date2]);
+        // var_dump($models);die;
+        if($filial!='all'){
+            $models->andWhere(['in','user_id',Users::getFilUsers($filial)]);
+        }
+        if($referal!='all'){
+            $models->andWhere(['ref_code'=>$referal]);
+        }
+        if($analiz!='all'){
+            $models->andWhere(['in','id',RegAnalizs::getRegIds($analiz)]);
+        }
+        $res = $models->orderBy(['ref_code' => SORT_ASC])->all();
+        // var_dump($res);die;
+        $row = 5;
+        $n=1;
+        foreach ($res as $reg) {
+            $reg_analizs = RegAnalizs::find()->where(['reg_id'=>$reg->id])->all();
+            $client = Client::findOne($reg->client_id);
+            foreach ($reg_analizs as $key) {
+                if($analiz=='all'||$key->analiz_id==$analiz){
+                    $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $activeSheet->setCellValueExplicit('B'.$row, SAnaliz::getName($key->analiz_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('C'.$row, date("d.m.Y", strtotime($reg->create_date)), \PHPExcel_Cell_DataType::TYPE_STRING);
+
+                    ////
+                    
+
+                    $activeSheet->setCellValueExplicit('E'.$row, $reg->other, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $results = Result::find()->where(['main_id'=>$reg->id,'analiz_id'=>$key->analiz_id])->all();
+                    foreach ($results as $result) {
+                        $activeSheet->setCellValueExplicit('F'.$row, SPokazatel::getName($result->pokaz_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+
+                        $regdopinfo = RegDopinfo::find()->where(['reg_id'=>$reg->id,'indikator_id'=>$result->pokaz_id])->one();
+                        if($regdopinfo){
+                            $pokaz_limit = PokazLimits::findOne($regdopinfo->value);
+                            if($pokaz_limit){
+                                $activeSheet->setCellValueExplicit('G'.$row, SPokazatel::getAdd1UlchBirligi($result->pokaz_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+                                $activeSheet->setCellValueExplicit('H'.$row, $pokaz_limit->norma, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            }
+                            else{
+                                $activeSheet->setCellValueExplicit('H'.$row, 'Норма топилмади', \PHPExcel_Cell_DataType::TYPE_STRING);
+                            }   
+                        }
+                        else{
+                            $pokaz_limit = PokazLimits::find()->where(['pokaz_id'=>$result->pokaz_id])->one();
+                            if($pokaz_limit){
+                                $activeSheet->setCellValueExplicit('G'.$row, SPokazatel::getAdd1UlchBirligi($result->pokaz_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+                                $activeSheet->setCellValueExplicit('H'.$row, $pokaz_limit->norma, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            }
+                            else{
+                                $activeSheet->setCellValueExplicit('H'.$row, 'Норма топилмади', \PHPExcel_Cell_DataType::TYPE_STRING);
+                            }
+                        }
+                        $activeSheet->setCellValueExplicit('I'.$row, $result->reslut_value, \PHPExcel_Cell_DataType::TYPE_STRING);
+                        $activeSheet->setCellValueExplicit('D'.$row, date("d.m.Y", strtotime($result->create_date)), \PHPExcel_Cell_DataType::TYPE_STRING);
+
+                        $rang = PokazLimits::getClassByValue($reg->id,$result->pokaz_id,$result->reslut_value);   
+                        if($rang['class']=='bg-success'){
+                            $activeSheet->getStyle('J'.$row)->applyFromArray(
+                                [
+                                    'fill' => [
+                                        'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                                        'color' => array('rgb' => '71d567')
+                                    ]
+                                ]
+                            );
+                        }
+                        elseif($rang['class']=='bg-success'){
+                            $activeSheet->getStyle('J'.$row)->applyFromArray(
+                                [
+                                    'fill' => [
+                                        'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                                        'color' => array('rgb' => 'fab861')
+                                    ]
+                                ]
+                            );
+                        }
+                        else{
+                            $activeSheet->getStyle('J'.$row)->applyFromArray(
+                                [
+                                    'fill' => [
+                                        'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                                        'color' => array('rgb' => 'FF0000')
+                                    ]
+                                ]
+                            );
+                        }
+                        if($client){
+                            $activeSheet->setCellValueExplicit('K'.$row, $client->lname.' '.$client->fname.' '.$client->mname, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            $activeSheet->setCellValueExplicit('L'.$row, $client->birthdate, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            $activeSheet->setCellValueExplicit('M'.$row, $client->sex, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            $activeSheet->setCellValueExplicit('N'.$row, $client->address_tuman, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            $activeSheet->setCellValueExplicit('O'.$row, $client->address_text, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            $activeSheet->setCellValueExplicit('P'.$row, $client->add1, \PHPExcel_Cell_DataType::TYPE_STRING);
+                        }
+                        
+                        $row++;
+                        
+                    }
+                    
+                }
+            }
+        }
+
+        
+ 
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="laborator_'.date("Y-m-d").'.xlsx"');
         header('Cache-Control: max-age=0');
         $objWriter->save('php://output');
         exit;

@@ -137,4 +137,34 @@ class Registration extends \yii\db\ActiveRecord
         return $res;
     }
 
+    public static function getQarzSum()
+    {
+        if(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==9){
+            $amount = self::find()->sum('sum_amount');
+            $cash = self::find()->sum('sum_cash');
+            $plastik = self::find()->sum('sum_plastik');
+            $debt = self::find()->sum('sum_debt');
+            $kassa = self::find()->sum('skidka_kassa');
+            $reg = self::find()->sum('skidka_reg');
+            $res = $amount-$kassa-$reg-$cash-$plastik;
+            return $res;
+        }
+        else{
+            $amount = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('sum_amount');
+            $cash = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('sum_cash');
+            $plastik = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('sum_plastik');
+            $debt = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('sum_debt');
+            $kassa = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('skidka_kassa');
+            $reg = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('skidka_reg');
+            $res = $amount-$kassa-$reg-$cash-$plastik;
+            return $res;
+        }
+        if($model){
+            return number_format($model);
+        }
+        else{
+            return 0;
+        }
+    }
+
 }

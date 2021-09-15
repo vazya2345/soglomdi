@@ -5,8 +5,10 @@ use app\models\ReagentNotifications;
 use app\models\Reagent;
 use app\models\Filials;
 use app\models\Eslatma;
+use app\models\Registration;
 $name = Users::getMyname();
 $lav = Users::getMyLav();
+
 
 // Yii::$app->user->logout();die;
 // var_dump(Users::getMyRole());die;
@@ -126,7 +128,7 @@ $lav = Users::getMyLav();
                     <?= Html::a('Докторлар1', ['/report/doktor1prev'], ['class' => 'dropdown-item']) ?>
                 </li>
                 <li>
-                    <?= Html::a('2', ['/report/index2'], ['class' => 'dropdown-item']) ?>
+                    <?= Html::a('Лаборатор', ['/report/lab1prev'], ['class' => 'dropdown-item']) ?>
                 </li>
             </ul>
         </li>
@@ -150,21 +152,26 @@ $lav = Users::getMyLav();
             }
             elseif(!Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==9)){
         ?>
-                <li class="nav-item">
-                    <?= Html::a('Қарздорлик', ['/report/qarzreportprev'], ['class' => 'nav-link']) ?>
-                </li>
-                <li class="nav-item">
-                    <?= Html::a('Докторлар1', ['/report/doktor1prev'], ['class' => 'nav-link']) ?>
-                </li>
-                <li class="nav-item">
-                    <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'nav-link']) ?>
-                </li>
-                <li class="nav-item">
-                    <?= Html::a('Рефераллар', ['/referals/index'], ['class' => 'nav-link']) ?>
-                </li>
-                <li class="nav-item">
-                    <?= Html::a('Реф жўнатма', ['/ref-sends/index'], ['class' => 'nav-link']) ?>
-                </li>
+            <li class="nav-item dropdown">
+                <?= Html::a('Справочники', '#', ['class' => 'nav-link dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-expanded'=>true]) ?>
+                <ul class="dropdown-menu shadow">
+                    <li>
+                        <?= Html::a('Қарздорлик', ['/report/qarzreportprev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Докторлар1', ['/report/doktor1prev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Рефераллар', ['/referals/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Реф жўнатма', ['/ref-sends/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                </ul>
+            </li>
         <?php
             }
         ?>
@@ -174,6 +181,16 @@ $lav = Users::getMyLav();
 
  <ul class="navbar-nav ml-auto">
 <?php
+if(!Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==9)){
+    echo '<li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+            <p class="text-danger" style="display:inline-block;">
+              <i class="fa fa-exclamation-triangle"></i>
+            </p>
+              Qarz: '.number_format(Registration::getQarzSum()).' so’m
+            </a>
+        </li>';
+}
 if(!Yii::$app->user->isGuest&&Yii::$app->user->getRole()!=8){
 //REAGENT NOTIFICATIONS
 $notifications = ReagentNotifications::find()->limit(5)->orderBy(['id'=>SORT_DESC])->all();
@@ -277,7 +294,7 @@ foreach ($eslatmalar as $eslatma) {
                     <?= Html::a('Тизимдан чикиш', ['site/logout'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat float-right']) ?>
                 </li>
             </ul>
-        </li>
+    </li>
 <?php
     }
 ?>

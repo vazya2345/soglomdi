@@ -68,21 +68,9 @@ class RegistrationController extends Controller
         if(Yii::$app->user->isGuest){
             return $this->redirect(['site/index']);
         }
-        if(Yii::$app->user->getRole()==4||Yii::$app->user->getRole()==5){
+        if(Yii::$app->user->getRole()==4||Yii::$app->user->getRole()==5||Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9){
             return $this->redirect(['indexlab']);
         }
-        elseif(Yii::$app->user->getRole()==1){
-            $searchModel = new RegistrationSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->setSort([
-                'defaultOrder' => ['id'=>SORT_DESC],
-            ]);
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-        }
-
         elseif(Yii::$app->user->getRole()==7){
             $myfil_users_arr = Users::getMyFilUsers();
             $searchModel = new RegistrationSearch();
@@ -178,7 +166,7 @@ class RegistrationController extends Controller
 
     public function actionIndexlab()
     {
-        if(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==2){
+        if(Yii::$app->user->getRole()==2){
             return $this->redirect(['index']);
         }
         elseif(Yii::$app->user->getRole()==3){
@@ -192,7 +180,7 @@ class RegistrationController extends Controller
 	            'defaultOrder' => ['id'=>SORT_DESC],
 	        ]);
         }
-        elseif(Yii::$app->user->getRole()==5){
+        elseif(Yii::$app->user->getRole()==5||Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9){
             $searchModel = new RegistrationSearch();
 	        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 	        $dataProvider->setSort([
@@ -522,7 +510,7 @@ class RegistrationController extends Controller
 
     public function actionResultlab($id)
     {
-        if(Yii::$app->user->getRole()!=4&&Yii::$app->user->getRole()!=7&&Yii::$app->user->getRole()!=3){
+        if(Yii::$app->user->getRole()!=4&&Yii::$app->user->getRole()!=7&&Yii::$app->user->getRole()!=3&&Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9){
             return $this->redirect(['index']);
         }
         $model = $this->findModel($id);

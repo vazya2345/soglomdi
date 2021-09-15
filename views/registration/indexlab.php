@@ -121,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => 'Натижа', 
                 'format' => 'raw',
                 'value' => function ($data) {
-                        if($data->status==1){
+                        if($data->status==1&&(Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9)){
                         	$str = Html::a('Натижа', ['resultlab', 'id' => $data->id]);
                         	$str .= "<br>".Html::a('Қабул қилиш', ['labqabul', 'id' => $data->id]);
                         	$str .= "<br>".Html::a('Рад этиш', ['labrad', 'id' => $data->id], [
