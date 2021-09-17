@@ -642,7 +642,7 @@ public function actionKassa1prev()
         if($analiz!='all'){
             $models->andWhere(['in','id',RegAnalizs::getRegIds($analiz)]);
         }
-        $res = $models->orderBy(['ref_code' => SORT_ASC])->all();
+        $res = $models->orderBy(['id' => SORT_DESC])->all();
         // var_dump($res);die;
         $row = 5;
         $n=1;
