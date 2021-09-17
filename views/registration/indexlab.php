@@ -121,20 +121,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => 'Натижа', 
                 'format' => 'raw',
                 'value' => function ($data) {
-                        if($data->status==1&&(Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9)){
-                        	$str = Html::a('Натижа', ['resultlab', 'id' => $data->id]);
-                        	$str .= "<br>".Html::a('Қабул қилиш', ['labqabul', 'id' => $data->id]);
-                        	$str .= "<br>".Html::a('Рад этиш', ['labrad', 'id' => $data->id], [
-					            'data' => [
-					                'confirm' => 'Янги вақт киритишингиз керак бўлади. Розимисиз?',
-					                'method' => 'post',
-					            ],
-					        ]);
+                        if(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9){
+                            $str = Html::a('Натижа', ['result', 'id' => $data->id]);
+                        }
+                        elseif($data->status==1){
+                            $str = Html::a('Натижа', ['resultlab', 'id' => $data->id]);
+                            $str .= "<br>".Html::a('Қабул қилиш', ['labqabul', 'id' => $data->id]);
+                            $str .= "<br>".Html::a('Рад этиш', ['labrad', 'id' => $data->id], [
+                                'data' => [
+                                    'confirm' => 'Янги вақт киритишингиз керак бўлади. Розимисиз?',
+                                    'method' => 'post',
+                                ],
+                            ]);
                         }
                         else{
-                        	$str = Html::a('Натижа', ['result', 'id' => $data->id]);
+                        	$str = Html::a('Натижа', ['resultlab', 'id' => $data->id]);
                         }
-                        // $str = Html::a('Натижа', ['resultlab', 'id' => $data->id]);
+                        
                         return $str;
                 }
             ],
