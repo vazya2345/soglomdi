@@ -132,7 +132,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					        ]);
                         }
                         else{
-                        	$str = Html::a('Натижа', ['resultlab', 'id' => $data->id]);
+                        	$str = Html::a('Натижа', ['result', 'id' => $data->id]);
                         }
                         // $str = Html::a('Натижа', ['resultlab', 'id' => $data->id]);
                         return $str;

@@ -212,8 +212,10 @@ $count = count($notifications);
                           <div class="media-body">
                             <p class="text-sm">'.Filials::getName($key->filial_id).'да</p>
                             <h3 class="dropdown-item-title">
-                              <b>'.Reagent::getName($key->reagent_id).'</b> оз қолди.
-                              <span class="float-right text-sm text-danger"><i class="fas fa-exclamation-circle"></i></span>
+                              <div class="notif_text">
+                                <b>'.Reagent::getName($key->reagent_id).'</b> оз қолди.
+                                <span class="float-right text-sm text-danger"><i class="fas fa-exclamation-circle"></i></span>
+                              </div>
                             </h3>
                             <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i>'.$key->create_date.'</p>
                           </div>
@@ -306,7 +308,7 @@ foreach ($eslatmalar as $eslatma) {
 </nav>
 
 <style type="text/css">
-    .eslatma_text{
+    .eslatma_text, .notif_text b{
         white-space: break-spaces;
     }
 </style>

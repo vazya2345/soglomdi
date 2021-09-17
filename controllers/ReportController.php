@@ -668,7 +668,12 @@ public function actionKassa1prev()
                             $pokaz_limit = PokazLimits::findOne($regdopinfo->value);
                             if($pokaz_limit){
                                 $activeSheet->setCellValueExplicit('G'.$row, SPokazatel::getAdd1UlchBirligi($result->pokaz_id), \PHPExcel_Cell_DataType::TYPE_STRING);
-                                $activeSheet->setCellValueExplicit('H'.$row, $pokaz_limit->norma, \PHPExcel_Cell_DataType::TYPE_STRING);
+                                if(strlen($pokaz_limit->norma)>0){
+                                    $activeSheet->setCellValueExplicit('H'.$row, $pokaz_limit->norma, \PHPExcel_Cell_DataType::TYPE_STRING);
+                                }
+                                else{
+                                    $activeSheet->setCellValueExplicit('H'.$row, $pokaz_limit->down_limit.'<->'.$pokaz_limit->up_limit, \PHPExcel_Cell_DataType::TYPE_STRING);
+                                }
                             }
                             else{
                                 $activeSheet->setCellValueExplicit('H'.$row, 'Норма топилмади', \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -678,7 +683,13 @@ public function actionKassa1prev()
                             $pokaz_limit = PokazLimits::find()->where(['pokaz_id'=>$result->pokaz_id])->one();
                             if($pokaz_limit){
                                 $activeSheet->setCellValueExplicit('G'.$row, SPokazatel::getAdd1UlchBirligi($result->pokaz_id), \PHPExcel_Cell_DataType::TYPE_STRING);
-                                $activeSheet->setCellValueExplicit('H'.$row, $pokaz_limit->norma, \PHPExcel_Cell_DataType::TYPE_STRING);
+                                if(strlen($pokaz_limit->norma)>0){
+                                    $activeSheet->setCellValueExplicit('H'.$row, $pokaz_limit->norma, \PHPExcel_Cell_DataType::TYPE_STRING);
+                                }
+                                else{
+                                    $activeSheet->setCellValueExplicit('H'.$row, $pokaz_limit->down_limit.'<->'.$pokaz_limit->up_limit, \PHPExcel_Cell_DataType::TYPE_STRING);
+                                }
+                                
                             }
                             else{
                                 $activeSheet->setCellValueExplicit('H'.$row, 'Норма топилмади', \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -687,41 +698,57 @@ public function actionKassa1prev()
                         $activeSheet->setCellValueExplicit('I'.$row, $result->reslut_value, \PHPExcel_Cell_DataType::TYPE_STRING);
                         $activeSheet->setCellValueExplicit('D'.$row, date("d.m.Y", strtotime($result->create_date)), \PHPExcel_Cell_DataType::TYPE_STRING);
 
-                        $rang = PokazLimits::getClassByValue($reg->id,$result->pokaz_id,$result->reslut_value);   
-                        if($rang['class']=='bg-success'){
-                            $activeSheet->getStyle('J'.$row)->applyFromArray(
-                                [
-                                    'fill' => [
-                                        'type' => \PHPExcel_Style_Fill::FILL_SOLID,
-                                        'color' => array('rgb' => '71d567')
+                        if(strlen($result->reslut_value)>0){
+                            $rang = PokazLimits::getClassByValue($reg->id,$result->pokaz_id,$result->reslut_value);   
+                            if($rang['class']=='bg-success'){
+                                $activeSheet->getStyle('J'.$row)->applyFromArray(
+                                    [
+                                        'fill' => [
+                                            'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                                            'color' => array('rgb' => '71d567')
+                                        ]
                                     ]
-                                ]
-                            );
-                        }
-                        elseif($rang['class']=='bg-success'){
-                            $activeSheet->getStyle('J'.$row)->applyFromArray(
-                                [
-                                    'fill' => [
-                                        'type' => \PHPExcel_Style_Fill::FILL_SOLID,
-                                        'color' => array('rgb' => 'fab861')
+                                );
+                            }
+                            elseif($rang['class']=='bg-success'){
+                                $activeSheet->getStyle('J'.$row)->applyFromArray(
+                                    [
+                                        'fill' => [
+                                            'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                                            'color' => array('rgb' => 'fab861')
+                                        ]
                                     ]
-                                ]
-                            );
-                        }
-                        else{
-                            $activeSheet->getStyle('J'.$row)->applyFromArray(
-                                [
-                                    'fill' => [
-                                        'type' => \PHPExcel_Style_Fill::FILL_SOLID,
-                                        'color' => array('rgb' => 'FF0000')
+                                );
+                            }
+                            else{
+                                $activeSheet->getStyle('J'.$row)->applyFromArray(
+                                    [
+                                        'fill' => [
+                                            'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                                            'color' => array('rgb' => 'FF0000')
+                                        ]
                                     ]
-                                ]
-                            );
+                                );
+                            }
                         }
+
+                        
                         if($client){
                             $activeSheet->setCellValueExplicit('K'.$row, $client->lname.' '.$client->fname.' '.$client->mname, \PHPExcel_Cell_DataType::TYPE_STRING);
                             $activeSheet->setCellValueExplicit('L'.$row, $client->birthdate, \PHPExcel_Cell_DataType::TYPE_STRING);
-                            $activeSheet->setCellValueExplicit('M'.$row, $client->sex, \PHPExcel_Cell_DataType::TYPE_STRING);
+
+                            if($client->sex=='F'){
+                                $activeSheet->setCellValueExplicit('M'.$row, 'Аёл', \PHPExcel_Cell_DataType::TYPE_STRING);
+                            }
+                            elseif($client->sex=='M'){
+                                $activeSheet->setCellValueExplicit('M'.$row, 'Эркак', \PHPExcel_Cell_DataType::TYPE_STRING);
+                            }
+                            else{
+                                $activeSheet->setCellValueExplicit('M'.$row, 'Киритилмаган', \PHPExcel_Cell_DataType::TYPE_STRING);
+                            }
+                            
+                            
+
                             $activeSheet->setCellValueExplicit('N'.$row, $client->address_tuman, \PHPExcel_Cell_DataType::TYPE_STRING);
                             $activeSheet->setCellValueExplicit('O'.$row, $client->address_text, \PHPExcel_Cell_DataType::TYPE_STRING);
                             $activeSheet->setCellValueExplicit('P'.$row, $client->add1, \PHPExcel_Cell_DataType::TYPE_STRING);

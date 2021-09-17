@@ -246,6 +246,17 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         }
     }
 
+    public static function getFilial($id)
+    {
+        $model = self::findOne($id);
+        if($model){
+            return $model->add1;
+        }
+        else{
+            return false;
+        }
+    }
+
     
 }
 

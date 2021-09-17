@@ -81,6 +81,6 @@ class Filials extends \yii\db\ActiveRecord
         if($model)
             return $model->phone;
         else
-            return 'Топилмади';
+            return '95-204-01-50';
     }
 }

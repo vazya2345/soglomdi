@@ -94,6 +94,9 @@ $name = Users::getMyname();
                             ['label' => 'Чиқимлар', 'url' => ['/rasxod/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                         ],
                     ],
+
+                    ['label' => 'Регистрациялар', 'url' => ['/registration/indexlab'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==5)],
+                    ['label' => 'Лаборатор хисобот', 'url' => ['/report/lab1prev'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==5)],
                 ],
             ]);
             ?>

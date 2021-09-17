@@ -24,6 +24,7 @@ use app\models\Reagent;
 use app\models\Referals;
 use app\models\SmsTemplates;
 use app\models\SendSms;
+use app\models\Filials;
 /**
  * RegistrationController implements the CRUD actions for Registration model.
  */
@@ -180,12 +181,19 @@ class RegistrationController extends Controller
 	            'defaultOrder' => ['id'=>SORT_DESC],
 	        ]);
         }
-        elseif(Yii::$app->user->getRole()==5||Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9){
+        elseif(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9){
             $searchModel = new RegistrationSearch();
 	        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 	        $dataProvider->setSort([
 	            'defaultOrder' => ['id'=>SORT_DESC],
 	        ]);
+        }
+        elseif(Yii::$app->user->getRole()==5){
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
         }
         else{
         	$searchModel = new RegistrationSearch();
@@ -215,7 +223,7 @@ class RegistrationController extends Controller
             $model->sum_debt = (int)$model->sum_amount-((int)$model->sum_cash+(int)$model->sum_plastik+(int)$model->skidka_reg+(int)$model->skidka_kassa);
             if($model->save()){
 
-                $this->sendKassaSms($id);
+                
                 $s1 = (int)$model->sum_amount;
                 $s2 = (int)$model->sum_cash+(int)$model->sum_plastik+(int)$model->skidka_reg+(int)$model->skidka_kassa;
 
@@ -234,6 +242,7 @@ class RegistrationController extends Controller
                             $fmodel->time = date("Y-m-d H:i:s");
                             $fmodel->user_id = Yii::$app->user->id;
                             if($fmodel->save()){
+                                $this->sendKassaSms($id);
                                 return $this->redirect(['indexkassa']);
                             }
                             else{
@@ -510,7 +519,7 @@ class RegistrationController extends Controller
 
     public function actionResultlab($id)
     {
-        if(Yii::$app->user->getRole()!=4&&Yii::$app->user->getRole()!=7&&Yii::$app->user->getRole()!=3&&Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9){
+        if(Yii::$app->user->getRole()!=4&&Yii::$app->user->getRole()!=5&&Yii::$app->user->getRole()!=7&&Yii::$app->user->getRole()!=3&&Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9){
             return $this->redirect(['index']);
         }
         $model = $this->findModel($id);
@@ -1060,9 +1069,18 @@ echo "<br>";
                 $qarz = '';
             }
         }
+        $filial_id = Users::getFilial($model->user_id);
+        if($filial_id){
+            $filtel = Filials::getPhone($filial_id);    
+        }
+        else{
+            $filtel = '';
+        }
+        
 
         $text = str_replace('{summa}', $summa, $text);
         $text = str_replace('{qarz}', $qarz, $text);
+        $text = str_replace('{filtel}', $filtel, $text);
 
         $number = Client::getPhonenumforsms($model->client_id);
         if($number&&$number!='998000000000'){
@@ -1075,7 +1093,7 @@ echo "<br>";
 
     public function actionTestphone($id)
     {
-        var_dump($this->sendRtimeSms($id));
+        var_dump($this->sendKassaSms($id));
         die;
     }
     
