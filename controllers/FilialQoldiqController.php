@@ -155,7 +155,7 @@ class FilialQoldiqController extends Controller
     {
         $sum = 0;
         $model = $this->findModel($id);
-        if($model->id!=8&&$model->id!=28&&$model->id!=44&&$model->id!=45&&$model->id!=46&&$model->id!=47){
+        if($model->id!=8&&$model->id!=28&&$model->id!=44&&$model->id!=45){
             if($model->qoldiq_type==1){
                 $regs = Payments::find()
                 ->select('sum(IFNULL(cash_sum, 0)) AS `s_amount`')
@@ -188,7 +188,7 @@ class FilialQoldiqController extends Controller
                 ->where(['>','rec_date',$model->last_change_date])
                 ->andWhere(['status'=>2])
                 ->andWhere(['send_type'=>$model->qoldiq_type])
-                ->andWhere(['not in','fq_id',[8,28,44,45,46,47]])
+                ->andWhere(['not in','fq_id',[8,28,44,45]])
                 ->asArray()
                 ->all();
 
