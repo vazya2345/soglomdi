@@ -50,7 +50,7 @@ $client_model = Client::findOne($model->client_id);
 <div class="client-index card">
     <div class="card-body">
     <?= DetailView::widget([
-        'model' => $$client_model,
+        'model' => $client_model,
         'attributes' => [
             'doc_seria',
             'doc_number',
