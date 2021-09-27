@@ -839,7 +839,7 @@ class RegistrationController extends Controller
 
         $model = $this->findModel($reg_id);
 
-        $analizs = RegAnalizs::getAnalizsByGroup($group,$reg_id);
+        $analizs = RegAnalizs::getAnalizIdsByRegId($reg_id);
         $check_chegara = 0;
         foreach ($analizs as $key => $value){
             Result::checkPokazs($reg_id,$value);
