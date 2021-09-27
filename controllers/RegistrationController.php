@@ -863,7 +863,7 @@ class RegistrationController extends Controller
             ]);
         }
         else{
-            return $this->render('test_chegara', [
+            return $this->render('print_group', [
                 'model' => $model,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
