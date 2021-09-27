@@ -72,7 +72,7 @@ $qr = Text::widget([
             <tr>
                 <td>1.</td>
                 <td>Full name<br>Фамилия, исм, шариф<br>Фамилия, имя, отечество</td>
-                <td class="text_bottom"><?=$client->lname.' '.$client->fname.' '.$client->mname;?></td>
+                <td class="text_bottom" style="font-size:12px;"><?=$client->lname.' '.$client->fname.' '.$client->mname;?></td>
                 <td rowspan="7"><img class="covid_img" src="./img/covid.jpg"></td> 
             </tr>
             <tr>
@@ -125,8 +125,11 @@ $qr = Text::widget([
                         if($resmodel->reslut_value=='Положительный'){
                             echo 'Positive<br>Положительный<br>Musbat';
                         }
-                        else{
+                        elseif($resmodel->reslut_value=='Отрицательный'){
                             echo 'Negative<br>Отрицательный<br>Manfiy';
+                        }
+                        else{
+                            echo 'Natija kiritilmagan';
                         }
                     ?>
                 </td>

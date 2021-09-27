@@ -14,6 +14,8 @@ use app\models\Users;
 $this->title = 'Натижа киритиш';
 $this->params['breadcrumbs'][] = ['label' => 'Руйхат', 'url' => ['indexlab']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$client_model = Client::findOne($model->client_id);
 ?>
 <div class="registration-index card">
     <div class="card-body">
@@ -40,6 +42,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'lab_vaqt',
+        ],
+    ]) ?>
+    </div>
+</div>
+
+<div class="client-index card">
+    <div class="card-body">
+    <?= DetailView::widget([
+        'model' => $$client_model,
+        'attributes' => [
+            'doc_seria',
+            'doc_number',
+            'fname',
+            'lname',
+            'mname',
+            'birthdate',
+            'sex',
+            'add1',
+            'address_tuman',
+            'address_text',
         ],
     ]) ?>
     </div>
