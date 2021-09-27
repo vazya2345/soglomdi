@@ -231,9 +231,9 @@ $qr = Text::widget([
 }
 .imzo{
     font-size: 10px;
-    text-align: center;
+    /*text-align: center;*/
     vertical-align: top;
-    padding-left: 80px;
+    padding-left: 120px;
 }
 </style>
 
