@@ -488,6 +488,7 @@ class RegistrationController extends Controller
             Result::checkPokazs($reg_id,$value);
             if($value==252||$value==253||$value==134||$value==261||$value==250||$value==249){
                 $check_chegara=1;
+                $group = 'КОВИД';
             }
         }
             $searchModel = new ResultSearch();
@@ -495,7 +496,7 @@ class RegistrationController extends Controller
             $dataProvider->query->andWhere(['main_id'=>$reg_id])->andWhere(['in','analiz_id',$analizs]);
             $dataProvider->pagination = ['pageSize' => 100];
         // var_dump($group);die;
-        if($group=='ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА'||$check_chegara==1){
+        if($check_chegara==1){
             return $this->render('print_group_chegara', [
                 'model' => $model,
                 'searchModel' => $searchModel,
