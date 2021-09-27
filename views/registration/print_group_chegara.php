@@ -31,7 +31,7 @@ $qr = Text::widget([
     'outputDir' => '@webroot/upload/qrcode',
     'outputDirWeb' => '@web/upload/qrcode',
     'ecLevel' => QRcode::QR_ECLEVEL_L,
-    'text' => 'https://soglom-diagnostika.uz/?r=registration%2Fviewqr&group='.$_GET['group'].'&reg_id='.$_GET['reg_id'],
+    'text' => 'https://soglom-diagnostika.uz/?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
     'size' => 3,
 ]);
 ?>
