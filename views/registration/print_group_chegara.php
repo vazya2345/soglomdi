@@ -107,7 +107,15 @@ $qr = Text::widget([
             <tr>
                 <td>6.</td>
                 <td>Research method<br>Текширув усули<br>Метод исследования</td>
-                <td class="text_bottom">SARS-CoV-2 (ПЦР мазок)</td>
+                <?php
+                    if($group=='ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА'){
+                        echo '<td class="text_bottom">SARS-CoV-2 (ПЦР мазок)</td>';
+                    }
+                    else{
+                        echo '<td class="text_bottom">PCR Real-time<br>PZR<br>ПЦР в реальном времени</td>';
+                    }
+                ?>
+                
             </tr>
             <tr>
                 <td>7.</td>
@@ -142,7 +150,7 @@ $qr = Text::widget([
             </tr>
         </table>
     </div>
-    <span>м.ў/м.п</span>
+    <!-- <span>м.ў/м.п</span> -->
     
   <br>
     
