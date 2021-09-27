@@ -233,7 +233,7 @@ $qr = Text::widget([
     font-size: 10px;
     text-align: center;
     vertical-align: top;
-    padding-left: 120px;
+    padding-left: 80px;
 }
 </style>
 
