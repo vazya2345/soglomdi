@@ -284,6 +284,7 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 					$("#client-mname").val(data.mname); 
 					$("#client-birthdate").val(data.birthdate);
 					$("#client-sex").val(data.sex);
+					telcheck();
 				}
 			});
 		}
@@ -309,6 +310,8 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 
 					$("#client-address_tuman").val(data.address_tuman);
 					$("#client-address_text").val(data.address_text);
+
+					telcheck();
 				}
 			});
 		}

@@ -53,15 +53,15 @@ class Rasxod extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'filial_id' => 'Filial ID',
-            'user_id' => 'User ID',
-            'summa' => 'Summa',
-            'sum_type' => 'Sum Type',
-            'rasxod_type' => 'Rasxod Type',
-            'rasxod_desc' => 'Rasxod Desc',
-            'rasxod_period' => 'Rasxod Period',
-            'status' => 'Status',
-            'send_user' => 'Send User',
+            'filial_id' => 'Филиал',
+            'user_id' => 'Юборган ходим',
+            'summa' => 'Сумма',
+            'sum_type' => 'Нақд/Пластик',
+            'rasxod_type' => 'Чиқим тури',
+            'rasxod_desc' => 'Қўшимча маълумот',
+            'rasxod_period' => 'Сана',
+            'status' => 'Статус',
+            'send_user' => 'Юборилган ходим',
         ];
     }
 

@@ -180,7 +180,7 @@ foreach ($analizs as $analiz) {
 		var debt = Number($('#debtsum').val());
 		var all;
 		all = cash+plastik+debt;
-		if(all==tsum){
+		if(all==tsum&&(cash>=0&&plastik>=0&&debt>=0)){
 			$('#tulovbutton').prop('disabled', false);
 		}
 		else{
@@ -194,7 +194,7 @@ foreach ($analizs as $analiz) {
 		var plastik = Number($('#plastikqarz').val());
 		var all;
 		all = cash+plastik;
-		if(all==tsum){
+		if(all==tsum&&(cash>=0&&plastik>=0)){
 			$('#qarzbutton').prop('disabled', false);
 		}
 		else{

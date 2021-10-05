@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "s_rasxod_types".
  *
@@ -40,8 +40,26 @@ class SRasxodTypes extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'desc' => 'Desc',
+            'title' => 'Номи',
+            'desc' => 'Маълумот',
         ];
+    }
+
+    public static function getAll()
+    {
+        $array = self::find()->all();
+        $result = ArrayHelper::map($array, 'id', 'title');
+        return $result;
+    }
+
+    public static function getName($id)
+    {
+        $model = self::findOne($id);
+        if($model){
+            return $model->title;
+        }
+        else{
+            return '';
+        }
     }
 }

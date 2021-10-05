@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\SRasxodTypesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'S Rasxod Types';
+$this->title = 'Чиқим турлари';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="srasxod-types-index card">
