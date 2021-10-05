@@ -34,6 +34,7 @@ $qr = Text::widget([
     'text' => 'https://soglom-diagnostika.uz/?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
     'size' => 3,
 ]);
+$qr = str_replace('/web', './', $qr);
 ?>
 
 <div class="header">
