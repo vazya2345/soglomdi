@@ -122,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($data) {
                         if(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9){
-                            $str = Html::a('Натижа', ['result', 'id' => $data->id]);
+                            $str = Html::a('Натижа', ['resultlab', 'id' => $data->id]);
                         }
                         elseif($data->status==1){
                             $str = Html::a('Натижа', ['resultlab', 'id' => $data->id]);

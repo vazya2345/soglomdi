@@ -366,7 +366,7 @@ class RegistrationController extends Controller
 
     public function actionResult($id)
     {
-        if(Registration::getIsPay($id)&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==6)){
+        if(Registration::getIsPay($id)&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==9)){
             $model = $this->findModel($id);
             $analizs = RegAnalizs::find()->where(['reg_id'=>$id])->all();
             $i = 0;
