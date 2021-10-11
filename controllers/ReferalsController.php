@@ -11,6 +11,8 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\Registration;
 use app\models\RefSends;
+use app\models\Rasxod;
+use app\models\Users;
 /**
  * ReferalsController implements the CRUD actions for Referals model.
  */
@@ -210,16 +212,43 @@ class ReferalsController extends Controller
         $rs_model->send_date = date("Y-m-d H:i:s");
 
         if($rs_model->save()){
-            $model->qoldiq_summa = 0;
-            if($model->save()){
-                return $this->redirect(['index', 'ReferalsSearch[refnum]'=>$model->refnum]);
+            $rasxod_model = new Rasxod();
+            $rasxod_model->filial_id = $model->filial;
+            $rasxod_model->user_id = $rs_model->user_id;
+            $rasxod_model->summa = $rs_model->sum;
+            $rasxod_model->sum_type = $rs_model->send_type;
+            $rasxod_model->rasxod_type = 1; //referallarga tolovlar
+            $rasxod_model->rasxod_desc = $rs_model->refnum.' referalga avtomatik yaratilgan to\'lov.';
+            $rasxod_model->rasxod_period = date('Y-m').'-01';
+            $rasxod_model->status = 1; // yuborildi
+
+
+            $user = Users::find()->where(['add1'=>$model->filial,'role_id'=>3])->one();
+            // var_dump($user);die;
+            if($user){
+                $rasxod_model->send_user = $user->id; //qaysi hodim javobgar
             }
             else{
-                var_dump($model->errors);;
+                $rasxod_model->send_user = 1; //qaysi hodim javobgar    
+            }
+            
+            $rasxod_model->referal_id = $rs_model->refnum;
+
+            if($rasxod_model->save()){
+                $model->qoldiq_summa = 0;
+                if($model->save()){
+                    return $this->redirect(['index', 'ReferalsSearch[refnum]'=>$model->refnum]);
+                }
+                else{
+                    var_dump($model->errors);
+                }
+            }
+            else{
+                var_dump($rasxod_model->errors);die;
             }
         }
         else{
-            var_dump($rs_model->errors);;
+            var_dump($rs_model->errors);
         }
     }
 }

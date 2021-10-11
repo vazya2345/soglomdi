@@ -17,7 +17,7 @@ class RasxodSearch extends Rasxod
     public function rules()
     {
         return [
-            [['id', 'filial_id', 'user_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user'], 'integer'],
+            [['id', 'filial_id', 'user_id', 'referal_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user'], 'integer'],
             [['rasxod_desc', 'rasxod_period'], 'safe'],
         ];
     }
@@ -61,6 +61,7 @@ class RasxodSearch extends Rasxod
             'id' => $this->id,
             'filial_id' => $this->filial_id,
             'user_id' => $this->user_id,
+            'referal_id' => $this->referal_id,
             'summa' => $this->summa,
             'sum_type' => $this->sum_type,
             'rasxod_type' => $this->rasxod_type,

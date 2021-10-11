@@ -122,6 +122,17 @@ class Referals extends \yii\db\ActiveRecord
         }
     }
 
+    public static function getFilialByRefnum($refnum)
+    {
+        $model = self::find()->where(['refnum'=>$refnum])->one();
+        if($model){
+            return $model->filial;
+        }
+        else{
+            return 'Топилмади';
+        }
+    }
+
     public static function getNameByRefnum($refcode)
     {
         $model = self::find()->where(['refnum'=>$refcode])->one();

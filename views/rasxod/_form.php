@@ -15,13 +15,21 @@ $m = date('m');
 $per_arr = [];
 for ($i=1; $i <= 12; $i++) {
     if($i<10){
-        $per_arr[$i] = '01.0'.$i.'.'.$y;
+        $n = $y . '-0'.$i. '-' .  '01';
+        $per_arr[$n] = $n;
+        if($m==$i){
+            $now = $n;
+        }
     }
     else{
-        $per_arr[$i] = '01.'.$i.'.'.$y;    
+        $n = $y . '-'.$i. '-' .  '01';
+        $per_arr[$n] = $n;
+        if($m==$i){
+            $now = $n;
+        }
     }
 }
-$model->rasxod_period = $m;
+$model->rasxod_period = $now;
 ?>
 
 <div class="rasxod-form">

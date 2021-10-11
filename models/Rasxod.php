@@ -42,7 +42,7 @@ class Rasxod extends \yii\db\ActiveRecord
             [['rasxod_desc'], 'string'],
             [['rasxod_period'], 'safe'],
             [['filial_id'], 'exist', 'skipOnError' => true, 'targetClass' => Filials::className(), 'targetAttribute' => ['filial_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -62,6 +62,7 @@ class Rasxod extends \yii\db\ActiveRecord
             'rasxod_period' => 'Сана',
             'status' => 'Статус',
             'send_user' => 'Юборилган ходим',
+            'referal_id' => 'Реферал',
         ];
     }
 
