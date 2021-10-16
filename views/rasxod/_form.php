@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use app\models\Filials;
 use app\models\Users;
 use app\models\SRasxodTypes;
+use app\models\Referals;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Rasxod */
@@ -38,7 +39,7 @@ $model->rasxod_period = $now;
 
     <?= $form->field($model, 'filial_id')->dropDownList(Filials::getAll()) ?>
 
-    <?= $form->field($model, 'summa')->textInput() ?>
+    <?= $form->field($model, 'summa')->textInput(['type'=>'number', 'max' => $mybalance]) ?>
 
     <?= $form->field($model, 'sum_type')->dropDownList(['1'=>'Нақд','2'=>'Пластик']) ?>
 
@@ -48,9 +49,11 @@ $model->rasxod_period = $now;
 
     <?= $form->field($model, 'rasxod_period')->dropDownList($per_arr,['prompt'=>'Период танланг...']) ?>
 
-    <?= $form->field($model, 'status')->dropDownList(['1'=>'Юборилди','2'=>'Қабул қилинди']) ?>
+    <?= $form->field($model, 'status')->dropDownList(['1'=>'Юборилди']) ?>
 
-    <?= $form->field($model, 'send_user')->dropDownList(Users::getAll()) ?>
+    <?= $form->field($model, 'send_user')->dropDownList(Users::getAll(),['prompt'=>'Агар ходим оркали юбораётган бўлсангиз, ходимни танланг...']) ?>
+
+    <?= $form->field($model, 'referal_id')->dropDownList(Referals::getAllId(),['prompt'=>'Агар агенга юбораётган бўлсангиз, агентни танланг...']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Саклаш', ['class' => 'btn btn-success']) ?>

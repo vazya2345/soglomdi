@@ -9,6 +9,7 @@ use app\models\QarzQaytar;
 use app\models\FqSends;
 use app\models\Payments;
 use app\models\FilialQoldiqSearch;
+use app\models\MoneySend;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -207,7 +208,7 @@ class FilialQoldiqController extends Controller
             return $this->redirect(['index', 'FilialQoldiqSearch[filial_id]'=>$model->filial_id, 'FilialQoldiqSearch[qoldiq_type]'=>$model->qoldiq_type]);
         }
         else{
-            var_dump($model->errors);;
+            var_dump($model->errors);
         }
 
         
@@ -230,11 +231,53 @@ class FilialQoldiqController extends Controller
                 return $this->redirect(['index']);
             }
             else{
-                var_dump($model->errors);;
+                var_dump($model->errors);
             }
         }
         else{
-            var_dump($fq_model->errors);;
+            var_dump($fq_model->errors);
         }        
+    }
+
+    public function actionSendmoney()
+    {
+        if(Yii::$app->user->getRole()!=6&&Yii::$app->user->getRole()!=9&&Yii::$app->user->getRole()!=3&&Yii::$app->user->getRole()!=1){
+            return $this->redirect(['site/index']);
+        }
+        else{
+            return $this->render('sendmoney');    
+        }
+        
+    }
+
+    public function actionSendmoneyact()
+    {
+        if(Yii::$app->user->getRole()!=6&&Yii::$app->user->getRole()!=9){
+            return $this->redirect(['site/index']);
+        }
+        else{
+            if(Yii::$app->request->post('filial_qoldiq_id')){
+                $fq_model = FilialQoldiq::findOne(Yii::$app->request->post('filial_qoldiq_id'));
+                if($fq_model){
+                    $model = new MoneySend();
+                    $model->send_user = Yii::$app->user->getId();
+                    $model->rec_fq_id = $fq_model->id;
+                    $model->rec_user = $fq_model->kassir_id;
+                    $model->amount = Yii::$app->request->post('send_money_sum');
+                    $model->status = 1;
+                    $model->send_type = Yii::$app->request->post('send_type');
+                    $model->send_date = date("Y-m-d H:i:s");
+                    $model->desc = Yii::$app->request->post('send_desc');
+                    if($model->save()){
+                        return $this->redirect(['money-send/index']);
+                    }
+                    else{
+                        var_dump($model->errors);die;
+                    }
+                }
+            }
+            return $this->render('sendmoney');    
+        }
+        
     }
 }

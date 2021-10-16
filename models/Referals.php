@@ -77,6 +77,16 @@ class Referals extends \yii\db\ActiveRecord
         return $res;
     }
 
+    public static function getAllId()
+    {
+        $array = self::find()->all();
+        $res = [];
+        foreach ($array as $key) {
+            $res[$key->id] = $key->refnum.' - '.$key->fio;
+        }
+        return $res;
+    }
+
 
     public static function getByRefnum($refnum)
     {

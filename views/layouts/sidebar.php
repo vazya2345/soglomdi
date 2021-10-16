@@ -97,6 +97,55 @@ $name = Users::getMyname();
 
                     ['label' => 'Регистрациялар', 'url' => ['/registration/indexlab'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==5)],
                     ['label' => 'Лаборатор хисобот', 'url' => ['/report/lab1prev'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==5)],
+
+
+                    /// ZAVKASSA
+
+                    ['label' => 'Касса', 'url' => ['/filial-qoldiq/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6)],
+                    ['label' => 'Жўнатмалар', 'url' => ['/fq-sends/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6)],
+                    ['label' => 'Барча тўловлар', 'url' => ['/payments/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6)],
+                    ['label' => 'Реагент филиал', 'url' => ['/reagent-filial/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6)],
+                    
+
+                    [
+                        'label' => 'Пул юбориш',
+                        'url' => ['#'],
+                        'icon' => 'dot-circle',
+                        'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9),
+                        'items' => [
+                            [
+                                'label' => 'Юборилган пул',
+                                'url' => ['/money-send/index'],
+                                'icon' => 'circle',
+                                'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9),
+                            ],
+                            [
+                                'label' => 'Пул юбориш',
+                                'url' => ['/filial-qoldiq/sendmoney'],
+                                'icon' => 'circle',
+                                'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9),
+                            ],
+                            [
+                                'label' => 'Чиқимлар',
+                                'url' => ['/rasxod/index'],
+                                'icon' => 'circle',
+                                'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==9),
+                            ],
+                            [
+                                'label' => 'Чиқим қилиш',
+                                'url' => ['/rasxod/create'],
+                                'icon' => 'circle',
+                                'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==9),
+                            ],
+                        ],
+                    ],
+
+                    
+
+
+                    /// END ZAVKASSA
+
+                    
                 ],
             ]);
             ?>

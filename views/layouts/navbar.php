@@ -148,6 +148,9 @@ $lav = Users::getMyLav();
                 <li class="nav-item">
                     <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'nav-link']) ?>
                 </li>
+                <li class="nav-item">
+                    <?= Html::a('Пул юбориш', ['/filial-qoldiq/sendmoney'], ['class' => 'nav-link']) ?>
+                </li>
         <?php
             }
             elseif(!Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==9)){

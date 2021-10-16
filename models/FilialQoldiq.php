@@ -70,4 +70,27 @@ class FilialQoldiq extends \yii\db\ActiveRecord
         else
             return 'Топилмади';
     }
+
+    public static function getListForSendMoney()
+    {
+        $array = self::find()->where(['not in','kassir_id',[4]])->orderBy(['filial_id'=>SORT_ASC])->all();
+
+        $res1 = [];
+        $arr = [1=>'Нақд',2=>'Пластик'];
+        foreach ($array as $key) {
+            $res1[$key->id]=Filials::getName($key->filial_id).' - '.Users::getName($key->kassir_id).' - '.$arr[$key->qoldiq_type];
+        }
+        return $res1;
+    }
+
+    public static function getMyBalance()
+    {
+        $sum = 0;
+        $models = self::find()->where(['kassir_id'=>Yii::$app->user->getId()])->all();
+        // var_dump($models);die;
+        foreach ($models as $model) {
+            $sum+=$model->qoldiq;
+        }
+        return $sum;
+    }
 }

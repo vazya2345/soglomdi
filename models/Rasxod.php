@@ -37,8 +37,8 @@ class Rasxod extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['filial_id', 'user_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user'], 'integer'],
-            [['summa', 'rasxod_desc', 'send_user'], 'required'],
+            [['filial_id', 'user_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user', 'referal_id'], 'integer'],
+            [['summa'], 'required'],
             [['rasxod_desc'], 'string'],
             [['rasxod_period'], 'safe'],
             [['filial_id'], 'exist', 'skipOnError' => true, 'targetClass' => Filials::className(), 'targetAttribute' => ['filial_id' => 'id']],

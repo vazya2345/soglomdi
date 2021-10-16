@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Rasxod */
+/* @var $model app\models\MoneySend */
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Руйхат', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="rasxod-view card">
+<div class="money-send-view card">
     <div class="card-body">
 
     <p>
@@ -29,16 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'filial_id',
-            'user_id',
-            'summa',
-            'sum_type',
-            'rasxod_type',
-            'rasxod_desc:ntext',
-            'rasxod_period',
-            'status',
             'send_user',
-            'referal_id',
+            'rec_user',
+            'amount',
+            'status',
+            'send_date',
+            'rec_date',
+            'desc',
+            'send_type',
         ],
     ]) ?>
     </div>
