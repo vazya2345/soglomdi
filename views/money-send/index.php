@@ -80,7 +80,7 @@ $mybalance = FilialQoldiq::getMyBalance();
                                             'confirm' => $data->amount.' сўм пулни қабул қилмоқдасиз. Ишончингиз комилми?',
                                             'method' => 'post',
                                         ],
-                                    ], 
+                                    ] 
                                     
                                 ).
                                 "<br>".
@@ -93,7 +93,7 @@ $mybalance = FilialQoldiq::getMyBalance();
                                             'confirm' => $data->amount.' сўм пулни рад қилмоқдасиз. Ишончингиз комилми?',
                                             'method' => 'post',
                                         ],
-                                    ],
+                                    ]
                                     
                                 );
                     }
