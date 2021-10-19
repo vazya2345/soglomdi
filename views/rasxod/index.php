@@ -5,6 +5,7 @@ use yii\grid\GridView;
 
 use app\models\Filials;
 use app\models\Users;
+use app\models\Referals;
 use app\models\SRasxodTypes;
 
 /* @var $this yii\web\View */
@@ -106,7 +107,55 @@ for ($i=1; $i <= 12; $i++) {
                 }
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            'referal_id'=>[
+                'attribute'=>'referal_id',
+                'filter'=> Referals::getAll(),
+                'value' => function ($data) {
+                        return Referals::getName($data->referal_id);                    
+                }
+            ],
+
+
+            [
+                'label'=>'Харакат',
+                'format'=>'raw',
+                'value' => function ($data) {
+                    if($data->status==1&&Yii::$app->user->getRole()==9){
+                        return  Html::a(
+                                    'Қабул', 
+                                    ['rasxod/qabul', 'id' => $data->id], 
+                                    [
+                                        'class' => 'profile-link',
+                                        'data' => [
+                                            'confirm' => 'Ишончингиз комилми?',
+                                            'method' => 'post',
+                                        ],
+                                    ] 
+                                    
+                                ).
+                                "<br>".
+                                Html::a(
+                                    'Рад', 
+                                    ['rasxod/rad', 'id' => $data->id], 
+                                    [
+                                        'class' => 'profile-link',
+                                        'data' => [
+                                            'confirm' => 'Ишончингиз комилми?',
+                                            'method' => 'post',
+                                        ],
+                                    ]
+                                    
+                                );
+                    }
+                    else{
+                        return '';
+                    }
+                }
+            ]
+
+            
+
+            // ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 

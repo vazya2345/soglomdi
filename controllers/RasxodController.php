@@ -38,7 +38,7 @@ class RasxodController extends Controller
     {
         $searchModel = new RasxodSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        if(Yii::$app->user->getRole()!=1){
+        if(Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9){
             $dataProvider->query
             ->andWhere(['user_id'=>Yii::$app->user->id])
             ->orderBy(['id'=>SORT_DESC]);
@@ -74,17 +74,7 @@ class RasxodController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->id;
             if($model->save()){
-                $fq_model = FilialQoldiq::find()->where(['kassir_id'=>Yii::$app->user->id,'qoldiq_type'=>$model->sum_type])->one();
-
-                $fq_model->qoldiq -= $model->summa;
-                $fq_model->last_change_date = date("Y-m-d H:i:s");
-
-                if($fq_model->save()){
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
-                else{
-                    var_dump($fq_model->errors);die;
-                }    
+                return $this->redirect(['view', 'id' => $model->id]);    
             }
             
 
@@ -145,5 +135,41 @@ class RasxodController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionQabul($id)
+    {
+        $model = $this->findModel($id);
+        // var_dump($model);die;
+        $fq_model = FilialQoldiq::find()->where(['kassir_id'=>$model->user_id,'qoldiq_type'=>$model->sum_type])->one();
+        // var_dump($fq_model);die;
+
+        $fq_model->qoldiq -= $model->summa;
+        $fq_model->last_change_date = date("Y-m-d H:i:s");
+        
+        $model->status = 2;
+
+        if($fq_model->save()&&$model->save()){
+            return $this->redirect(['index']);
+        }
+        else{
+            var_dump($fq_model->errors);
+            var_dump($model->errors);
+        }         
+    }
+
+
+    public function actionRad($id)
+    {
+        $model = $this->findModel($id);
+        
+        $model->status = 3;
+
+        if($model->save()){
+            return $this->redirect(['index']);
+        }
+        else{
+            var_dump($model->errors);
+        }        
     }
 }
