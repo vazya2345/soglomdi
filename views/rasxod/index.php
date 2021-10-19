@@ -111,10 +111,10 @@ for ($i=1; $i <= 12; $i++) {
                 'attribute'=>'referal_id',
                 'filter'=> Referals::getAll(),
                 'value' => function ($data) {
-                        return Referals::getName($data->referal_id);                    
+                        return Referals::getNameByRefnum($data->referal_id);                    
                 }
             ],
-
+            // 'referal_id',
 
             [
                 'label'=>'Харакат',

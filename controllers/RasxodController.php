@@ -43,6 +43,10 @@ class RasxodController extends Controller
             ->andWhere(['user_id'=>Yii::$app->user->id])
             ->orderBy(['id'=>SORT_DESC]);
         }
+        else{
+            $dataProvider->query
+            ->orderBy(['id'=>SORT_DESC]);
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

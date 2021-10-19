@@ -53,7 +53,7 @@ $model->rasxod_period = $now;
 
     <?= $form->field($model, 'send_user')->dropDownList(Users::getAll(),['prompt'=>'Агар ходим оркали юбораётган бўлсангиз, ходимни танланг...']) ?>
 
-    <?= $form->field($model, 'referal_id')->dropDownList(Referals::getAllId(),['prompt'=>'Агар агенга юбораётган бўлсангиз, агентни танланг...']) ?>
+    <?= $form->field($model, 'referal_id')->dropDownList(Referals::getAll(),['prompt'=>'Агар агенга юбораётган бўлсангиз, агентни танланг...']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Саклаш', ['class' => 'btn btn-success']) ?>
