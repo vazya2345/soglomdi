@@ -220,6 +220,7 @@ class ReferalsController extends Controller
             $rasxod_model->rasxod_type = 1; //referallarga tolovlar
             $rasxod_model->rasxod_desc = $rs_model->refnum.' referalga avtomatik yaratilgan to\'lov.';
             $rasxod_model->rasxod_period = date('Y-m').'-01';
+            $rasxod_model->create_date = date('Y-m-d H:i:s');
             $rasxod_model->status = 1; // yuborildi
 
 

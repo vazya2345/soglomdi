@@ -63,6 +63,7 @@ class Rasxod extends \yii\db\ActiveRecord
             'status' => 'Статус',
             'send_user' => 'Юборилган ходим',
             'referal_id' => 'Реферал',
+            'create_date' => 'Яратилган сана',
         ];
     }
 

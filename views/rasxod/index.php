@@ -114,13 +114,13 @@ for ($i=1; $i <= 12; $i++) {
                         return Referals::getNameByRefnum($data->referal_id);                    
                 }
             ],
-            // 'referal_id',
+            'create_date',
 
             [
                 'label'=>'Харакат',
                 'format'=>'raw',
                 'value' => function ($data) {
-                    if($data->status==1&&Yii::$app->user->getRole()==9){
+                    if($data->status==1&&(Yii::$app->user->getRole()==9||Yii::$app->user->getRole()==1)){
                         return  Html::a(
                                     'Қабул', 
                                     ['rasxod/qabul', 'id' => $data->id], 

@@ -104,8 +104,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header'=>'Хисоб',
                 'format'=>'raw',
                 'value' => function ($data) {
-                    if(Yii::$app->user->getRole()==6&&$data->id==8){
-                        $str = '<br>'.Html::a('Пулни юбориш', ['send', 'id'=>$data->id]);
+                    if(Yii::$app->user->getRole()==6&&($data->id==8||$data->id==28)){
+                        $str = '<br>'.Html::a('Юбориш', ['send', 'id'=>$data->id]);
                     }
                     else{
                         $str = '';

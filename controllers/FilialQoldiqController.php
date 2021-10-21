@@ -180,7 +180,7 @@ class FilialQoldiqController extends Controller
             else{
                 $sum = 0;    
             }
-            $model->qoldiq = (int)$model->qoldiq + (int)$sum;
+            $model->qoldiq = (int)abs($model->qoldiq) + (int)$sum;
 
         }
         else{

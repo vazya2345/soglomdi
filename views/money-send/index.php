@@ -61,8 +61,8 @@ $mybalance = FilialQoldiq::getMyBalance();
                     return $status_arr[$data->status];
                 }
             ],
-            //'send_date',
-            //'rec_date',
+            'send_date',
+            'rec_date',
             //'desc',
             [
                 'label'=>'Харакат',

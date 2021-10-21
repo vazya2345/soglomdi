@@ -36,28 +36,35 @@ $model->rasxod_period = $now;
 <div class="rasxod-form">
 
     <?php $form = ActiveForm::begin(); ?>
+<?php
+    if($mybalance<10000){
 
-    <?= $form->field($model, 'filial_id')->dropDownList(Filials::getAll()) ?>
+    
 
-    <?= $form->field($model, 'summa')->textInput(['type'=>'number', 'max' => $mybalance]) ?>
+    echo $form->field($model, 'summa')->textInput(['type'=>'text', 'disabled'=>true, 'value'=>'Балансингизда юбориш учун маблағ етарли эмас.']);
 
-    <?= $form->field($model, 'sum_type')->dropDownList(['1'=>'Нақд','2'=>'Пластик']) ?>
-
-    <?= $form->field($model, 'rasxod_type')->dropDownList(SRasxodTypes::getAll()) ?>
-
-    <?= $form->field($model, 'rasxod_desc')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'rasxod_period')->dropDownList($per_arr,['prompt'=>'Период танланг...']) ?>
-
-    <?= $form->field($model, 'status')->dropDownList(['1'=>'Юборилди']) ?>
-
-    <?= $form->field($model, 'send_user')->dropDownList(Users::getAll(),['prompt'=>'Агар ходим оркали юбораётган бўлсангиз, ходимни танланг...']) ?>
-
-    <?= $form->field($model, 'referal_id')->dropDownList(Referals::getAll(),['prompt'=>'Агар агенга юбораётган бўлсангиз, агентни танланг...']) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Саклаш', ['class' => 'btn btn-success']) ?>
-    </div>
+    }
+    else{
+        if(Users::getMyFil()==1){
+            echo $form->field($model, 'filial_id')->dropDownList(Filials::getAll());
+        }
+        else{
+            echo $form->field($model, 'filial_id')->hiddenInput(['value'=>Users::getMyFil()])->label(false);
+        }
+        
+        echo $form->field($model, 'summa')->textInput(['type'=>'number', 'min' => 10000, 'max' => $mybalance]);
+        echo $form->field($model, 'sum_type')->dropDownList(['1'=>'Нақд','2'=>'Пластик']);
+        echo $form->field($model, 'rasxod_type')->dropDownList(SRasxodTypes::getAll());
+        echo $form->field($model, 'rasxod_desc')->textarea(['rows' => 6]);
+        echo $form->field($model, 'rasxod_period')->dropDownList($per_arr,['prompt'=>'Период танланг...']);
+        echo $form->field($model, 'status')->hiddenInput(['value'=>'1'])->label(false);
+        echo $form->field($model, 'send_user')->dropDownList(Users::getAll(),['prompt'=>'Агар ходим оркали юбораётган бўлсангиз, ходимни танланг...']);
+        echo $form->field($model, 'referal_id')->dropDownList(Referals::getAll(),['prompt'=>'Агар агенга юбораётган бўлсангиз, агентни танланг...']);
+        echo '<div class="form-group">';
+        echo Html::submitButton('Саклаш', ['class' => 'btn btn-success']);
+        echo '</div>';
+    }
+?>
 
     <?php ActiveForm::end(); ?>
 

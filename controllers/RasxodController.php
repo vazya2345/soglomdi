@@ -77,6 +77,7 @@ class RasxodController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->id;
+            $model->create_date = date("Y-m-d H:i:s");
             if($model->save()){
                 return $this->redirect(['view', 'id' => $model->id]);    
             }
