@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = 'Узгартириш';
 <div class="rasxod-update card">
 	<div class="card-body">
 
-    <?= $this->render('_form', [
+    <?= $this->render('_form1', [
         'model' => $model,
     ]) ?>
 

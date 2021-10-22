@@ -148,6 +148,13 @@ for ($i=1; $i <= 12; $i++) {
                                     ]
                                     
                                 );
+                            if(Yii::$app->user->getRole()==1){
+                                $str .= "<br>".
+                                Html::a(
+                                    'Ўзгартириш', 
+                                    ['rasxod/update', 'id' => $data->id]
+                                );
+                            }
                         }
                         else{
                             $str = "<span class='lined'>Кабул</span>".
@@ -164,12 +171,28 @@ for ($i=1; $i <= 12; $i++) {
                                     ]
                                     
                                 );
+                            if(Yii::$app->user->getRole()==1){
+                                $str .= "<br>".
+                                Html::a(
+                                    'Ўзгартириш', 
+                                    ['rasxod/update', 'id' => $data->id]
+                                );
+                            }
                         }
                         
                         return  $str;
                     }
                     else{
-                        return '';
+                        if(Yii::$app->user->getRole()==1){
+                                $str = Html::a(
+                                    'Ўзгартириш', 
+                                    ['rasxod/update', 'id' => $data->id]
+                                );
+                                return $str;
+                        }
+                        else{
+                            return '';    
+                        }
                     }
                 }
             ]
