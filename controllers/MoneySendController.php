@@ -139,24 +139,31 @@ class MoneySendController extends Controller
         $sender_fq_model = FilialQoldiq::find()->where(['kassir_id'=>$model->send_user,'qoldiq_type'=>$model->send_type])->one();
 
 
-        $model->status = 2;
-        $model->rec_date = date("Y-m-d H:i:s");
+        if($sender_fq_model->qoldiq>=$model->amount){
+            $model->status = 2;
+            $model->rec_date = date("Y-m-d H:i:s");
 
-        $fq_model->qoldiq += $model->amount;
-        $fq_model->last_change_date = $model->rec_date;
+            $fq_model->qoldiq += $model->amount;
+            $fq_model->last_change_date = $model->rec_date;
 
 
-        $sender_fq_model->qoldiq -= $model->amount;
-        $sender_fq_model->last_change_date = $model->rec_date;
+            $sender_fq_model->qoldiq -= $model->amount;
+            $sender_fq_model->last_change_date = $model->rec_date;
 
-        if($fq_model->save()&&$model->save()&&$sender_fq_model->save()){
-            return $this->redirect(['index']);
+            if($fq_model->save()&&$model->save()&&$sender_fq_model->save()){
+                return $this->redirect(['index']);
+            }
+            else{
+                var_dump($fq_model->errors);
+                var_dump($model->errors);
+                var_dump($sender_fq_model->errors);
+            }        
         }
         else{
-            var_dump($fq_model->errors);
-            var_dump($model->errors);
-            var_dump($sender_fq_model->errors);
-        }        
+            echo "Кассада етарли маблағ мавжуд эмас.";die;
+        }
+
+        
     }
 
 

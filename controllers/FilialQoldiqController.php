@@ -252,7 +252,7 @@ class FilialQoldiqController extends Controller
 
     public function actionSendmoneyact()
     {
-        if(Yii::$app->user->getRole()!=6&&Yii::$app->user->getRole()!=9){
+        if(Yii::$app->user->getRole()!=6&&Yii::$app->user->getRole()!=9&&Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=3){
             return $this->redirect(['site/index']);
         }
         else{

@@ -69,9 +69,8 @@ $mybalance = FilialQoldiq::getMyBalance();
                 'format'=>'raw',
                 'value' => function ($data) {
                     if($data->status==1&&$data->rec_user==Yii::$app->user->id){
-
-
-                        return  Html::a(
+                        if(FilialQoldiq::checkBalance($data->send_user,$data->send_type)>=$data->amount){
+                            return  Html::a(
                                     'Қабул', 
                                     ['money-send/qabul', 'id' => $data->id], 
                                     [
@@ -96,6 +95,24 @@ $mybalance = FilialQoldiq::getMyBalance();
                                     ]
                                     
                                 );
+                        }
+                        else{
+                            return  "<span class='lined'>Кабул</span>".
+                                "<br>".Html::a(
+                                    'Рад', 
+                                    ['money-send/rad', 'id' => $data->id], 
+                                    [
+                                        'class' => 'profile-link',
+                                        'data' => [
+                                            'confirm' => $data->amount.' сўм пулни рад қилмоқдасиз. Ишончингиз комилми?',
+                                            'method' => 'post',
+                                        ],
+                                    ]
+                                    
+                                );
+                        }
+
+                        
                     }
                     else{
                         return '';
@@ -109,3 +126,8 @@ $mybalance = FilialQoldiq::getMyBalance();
 
     </div>
 </div>
+<style type="text/css">
+    .lined{
+        text-decoration: line-through;
+    }
+</style>

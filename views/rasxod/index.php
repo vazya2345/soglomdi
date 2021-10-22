@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 use app\models\Filials;
+use app\models\FilialQoldiq;
 use app\models\Users;
 use app\models\Referals;
 use app\models\SRasxodTypes;
@@ -121,7 +122,8 @@ for ($i=1; $i <= 12; $i++) {
                 'format'=>'raw',
                 'value' => function ($data) {
                     if($data->status==1&&(Yii::$app->user->getRole()==9||Yii::$app->user->getRole()==1)){
-                        return  Html::a(
+                        if(FilialQoldiq::checkBalance($data->user_id,$data->sum_type)>=$data->summa){
+                            $str = Html::a(
                                     'Қабул', 
                                     ['rasxod/qabul', 'id' => $data->id], 
                                     [
@@ -146,6 +148,25 @@ for ($i=1; $i <= 12; $i++) {
                                     ]
                                     
                                 );
+                        }
+                        else{
+                            $str = "<span class='lined'>Кабул</span>".
+                                "<br>".
+                                Html::a(
+                                    'Рад', 
+                                    ['rasxod/rad', 'id' => $data->id], 
+                                    [
+                                        'class' => 'profile-link',
+                                        'data' => [
+                                            'confirm' => 'Ишончингиз комилми?',
+                                            'method' => 'post',
+                                        ],
+                                    ]
+                                    
+                                );
+                        }
+                        
+                        return  $str;
                     }
                     else{
                         return '';
@@ -161,3 +182,10 @@ for ($i=1; $i <= 12; $i++) {
 
     </div>
 </div>
+
+
+<style type="text/css">
+    .lined{
+        text-decoration: line-through;
+    }
+</style>

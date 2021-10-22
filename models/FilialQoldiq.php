@@ -93,4 +93,15 @@ class FilialQoldiq extends \yii\db\ActiveRecord
         }
         return $sum;
     }
+
+    public static function checkBalance($kassir_id,$type)
+    {
+        $model = self::find()->where(['kassir_id'=>$kassir_id,'qoldiq_type'=>$type])->one();
+        if($model){
+            return $model->qoldiq;
+        }
+        else{
+            return 0;
+        }
+    }
 }
