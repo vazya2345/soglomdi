@@ -144,11 +144,11 @@ class MoneySendController extends Controller
             $model->rec_date = date("Y-m-d H:i:s");
 
             $fq_model->qoldiq += $model->amount;
-            $fq_model->last_change_date = $model->rec_date;
+            // $fq_model->last_change_date = $model->rec_date;
 
 
             $sender_fq_model->qoldiq -= $model->amount;
-            $sender_fq_model->last_change_date = $model->rec_date;
+            // $sender_fq_model->last_change_date = $model->rec_date;
 
             if($fq_model->save()&&$model->save()&&$sender_fq_model->save()){
                 return $this->redirect(['index']);

@@ -148,23 +148,29 @@ class RasxodController extends Controller
         // var_dump($model);die;
         $fq_model = FilialQoldiq::find()->where(['kassir_id'=>$model->user_id,'qoldiq_type'=>$model->sum_type])->one();
         // var_dump($fq_model);die;
-        if($fq_model->qoldiq>=$model->summa){
-            $fq_model->qoldiq -= $model->summa;
-            $fq_model->last_change_date = date("Y-m-d H:i:s");
-            
-            $model->status = 2;
+        if($fq_model){
+            if($fq_model->qoldiq>=$model->summa){
+                $fq_model->qoldiq -= $model->summa;
+                // $fq_model->last_change_date = date("Y-m-d H:i:s");
+                
+                $model->status = 2;
 
-            if($fq_model->save()&&$model->save()){
-                return $this->redirect(['index']);
+                if($fq_model->save()&&$model->save()){
+                    return $this->redirect(['index']);
+                }
+                else{
+                    var_dump($fq_model->errors);
+                    var_dump($model->errors);
+                }     
             }
             else{
-                var_dump($fq_model->errors);
-                var_dump($model->errors);
-            }     
+                echo "Кассада етарли маблағ мавжуд эмас.";die;
+            }
         }
         else{
-            echo "Кассада етарли маблағ мавжуд эмас.";die;
+            echo "Касса топилмади.";die;
         }
+        
 
             
     }
