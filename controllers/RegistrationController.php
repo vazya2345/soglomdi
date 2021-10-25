@@ -475,7 +475,7 @@ class RegistrationController extends Controller
         if(!Registration::getIsPay($reg_id)){
             return $this->render('not_pay');  
         }
-        Yii::$app->response->format = 'pdf';
+        // Yii::$app->response->format = 'pdf';
         $this->layout = '//print';
         
 
@@ -491,6 +491,7 @@ class RegistrationController extends Controller
                 $group = 'КОВИД';
             }
         }
+        // var_dump($group);die;
             $searchModel = new ResultSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['main_id'=>$reg_id])->andWhere(['in','analiz_id',$analizs]);
