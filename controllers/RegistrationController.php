@@ -475,7 +475,7 @@ class RegistrationController extends Controller
         if(!Registration::getIsPay($reg_id)){
             return $this->render('not_pay');  
         }
-        // Yii::$app->response->format = 'pdf';
+        Yii::$app->response->format = 'pdf';
         $this->layout = '//print';
         
 
@@ -486,17 +486,19 @@ class RegistrationController extends Controller
         $check_chegara = 0;
         foreach ($analizs as $key => $value){
             Result::checkPokazs($reg_id,$value);
-            if($value==252||$value==253||$value==134||$value==261||$value==250||$value==249){
+            if($value==253||$value==134||$value==261||$value==250||$value==249){
                 $check_chegara=1;
                 $group = 'КОВИД';
             }
+            elseif($value==252){
+                $check_chegara=1;
+                $group = 'КОВИД1';
+            }
         }
-        // var_dump($group);die;
             $searchModel = new ResultSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['main_id'=>$reg_id])->andWhere(['in','analiz_id',$analizs]);
             $dataProvider->pagination = ['pageSize' => 100];
-        // var_dump($group);die;
         if($check_chegara==1){
             return $this->render('print_group_chegara', [
                 'model' => $model,

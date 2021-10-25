@@ -143,7 +143,7 @@ class Registration extends \yii\db\ActiveRecord
             $amount = self::find()->sum('sum_amount');
             $cash = self::find()->sum('sum_cash');
             $plastik = self::find()->sum('sum_plastik');
-            $debt = self::find()->sum('sum_debt');
+            // $debt = self::find()->sum('sum_debt');
             $kassa = self::find()->sum('skidka_kassa');
             $reg = self::find()->sum('skidka_reg');
             $res = $amount-$kassa-$reg-$cash-$plastik;
@@ -153,18 +153,15 @@ class Registration extends \yii\db\ActiveRecord
             $amount = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('sum_amount');
             $cash = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('sum_cash');
             $plastik = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('sum_plastik');
-            $debt = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('sum_debt');
+            // $debt = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('sum_debt');
             $kassa = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('skidka_kassa');
             $reg = self::find()->where(['user_id'=>Yii::$app->user->id])->sum('skidka_reg');
             $res = $amount-$kassa-$reg-$cash-$plastik;
             return $res;
         }
-        if($model){
-            return number_format($model);
-        }
-        else{
-            return 0;
-        }
+        
+        return 0;
+        
     }
 
 }

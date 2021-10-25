@@ -108,11 +108,14 @@ $qr = str_replace('/web', './', $qr);
                 <td>6.</td>
                 <td>Research method<br>Текширув усули<br>Метод исследования</td>
                 <?php
-                    if($group=='ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА'||$group=='КОВИД'){
+                    if($group=='ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА'){
+                        echo '<td class="text_bottom">PCR Real-time<br>PZR<br>ПЦР в реальном времени</td>';
+                    }
+                    elseif($group=='КОВИД1'){
                         echo '<td class="text_bottom">SARS-CoV-2 (ПЦР мазок)</td>';
                     }
                     else{
-                        echo '<td class="text_bottom">AVAZ`PCR Real-time<br>PZR<br>ПЦР в реальном времени</td>';
+                        echo '<td class="text_bottom">PCR Real-time<br>PZR<br>ПЦР в реальном времени</td>';
                     }
                 ?>
                 
