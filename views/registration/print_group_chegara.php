@@ -22,7 +22,6 @@ $resmodel = Result::find()->where(['main_id'=>$reg_id])->andWhere(['is not','mai
 // var_dump($resmodel);die;
 $name = $client->lname.' '.date("Y-m-d",strtotime($resmodel->create_date));
 header('Content-disposition: inline; filename="' . $name . '.pdf"'); 
-
 ?>
 
 <?php 
@@ -110,6 +109,9 @@ $qr = str_replace('/web', './', $qr);
                 <td>Research method<br>Текширув усули<br>Метод исследования</td>
                 <?php
                     if($group=='ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА'){
+                        echo '<td class="text_bottom">PCR Real-time<br>PZR<br>ПЦР в реальном времени</td>';
+                    }
+                    elseif($group=='КОВИД1'){
                         echo '<td class="text_bottom">SARS-CoV-2 (ПЦР мазок)</td>';
                     }
                     else{
@@ -117,7 +119,7 @@ $qr = str_replace('/web', './', $qr);
                     }
                 ?>
                 
-            </tr>
+            </tr> 
             <tr>
                 <td>7.</td>
                 <td>The result of laboratory analysis<br>Лаборатор таҳлил натижаси<br>Результат лабораторного анализа</td>
