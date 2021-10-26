@@ -23,15 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'refnum',
-            // 'id',
-            'fio',
-            // 
-            // 'user_id',
-            'desc',
-            //'info:ntext',
-            
-            'phone',
             'filial'=>[
                 'attribute'=>'filial',
                 'filter'=>Filials::getAll(),
@@ -39,6 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Filials::getName($data->filial);
                 }
             ],
+            'info:ntext',
+            'refnum',
+            // 'id',
+            'fio',
+            // 
+            // 'user_id',
+            'desc',
+            'phone',
+            
             'qoldiq_summa',
             'last_change_date',
             [

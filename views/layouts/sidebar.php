@@ -53,6 +53,8 @@ $name = Users::getMyname();
                         'items' => [
                             ['label' => 'Роль', 'url' => ['/role/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                             ['label' => 'Фойдаланувчи', 'url' => ['/users/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+
+                            ['label' => 'Реф юзер', 'url' => ['/users/indexref'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                             ['label' => 'Рефераллар', 'url' => ['/referals/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&Yii::$app->user->getRole()==1],
                         ],
                     ],
