@@ -499,8 +499,8 @@ public function actionKassa1prev()
         $activeSheet = $objPHPExcel->getActiveSheet();
         $activeSheet->setCellValueExplicit('C2', $date1, \PHPExcel_Cell_DataType::TYPE_STRING);
         $activeSheet->setCellValueExplicit('D2', $date2, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('H2', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('K2', $referal, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('H2', Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('K2', Referals::getByRefnum($referal), \PHPExcel_Cell_DataType::TYPE_STRING);
 
         $models = Registration::find()->where(['between','create_date',$date1,$date2]);
         if($filial!='all'){
@@ -537,20 +537,36 @@ public function actionKassa1prev()
                 $activeSheet->setCellValueExplicit('G'.$ra, $key->summa, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                 $na++;
             }
+
+            
+
             $activeSheet->setCellValueExplicit('H'.$row, $reg->sum_amount, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $activeSheet->setCellValueExplicit('I'.$row, $reg->skidka_reg+$reg->skidka_kassa, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $activeSheet->setCellValueExplicit('J'.$row, $reg->sum_amount-($reg->skidka_reg+$reg->skidka_kassa), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            
-            $activeSheet->setCellValueExplicit('K'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
-            $activeSheet->setCellValueExplicit('L'.$row, $reg->sum_amount-($reg->skidka_reg+$reg->skidka_kassa+$reg->sum_cash+$reg->sum_plastik), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('M'.$row, Users::getNameAndFil($reg->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('N'.$row, $reg->ref_code, \PHPExcel_Cell_DataType::TYPE_STRING);
+            if($reg->sum_cash>0){
+                $k_str = 'Нақд';
+            }
+            else{
+                if($reg->sum_plastik>0){
+                    $k_str = 'Пластик';    
+                }
+                else{
+                    $k_str = 'Хабар';
+                }   
+            }
+            $activeSheet->setCellValueExplicit('K'.$row, $k_str, \PHPExcel_Cell_DataType::TYPE_STRING);
+
+            $activeSheet->setCellValueExplicit('L'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+            $activeSheet->setCellValueExplicit('M'.$row, $reg->sum_amount-($reg->skidka_reg+$reg->skidka_kassa+$reg->sum_cash+$reg->sum_plastik), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('N'.$row, Users::getNameAndFil($reg->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('O'.$row, $reg->ref_code, \PHPExcel_Cell_DataType::TYPE_STRING);
 
             $referal = Referals::getByRefnum($reg->ref_code);
-            $activeSheet->setCellValueExplicit('O'.$row, $referal->desc, \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('P'.$row, $referal->fio, \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('Q'.$row, $referal->phone, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('P'.$row, $referal->desc, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('Q'.$row, $referal->fio, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('R'.$row, $referal->phone, \PHPExcel_Cell_DataType::TYPE_STRING);
             // $activeSheet->setCellValueExplicit('Q'.$row, $referal->add1, \PHPExcel_Cell_DataType::TYPE_STRING);
             // $activeSheet->setCellValueExplicit('R'.$row, $referal->avans_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             // $foiz = (int)$referal->add1;
