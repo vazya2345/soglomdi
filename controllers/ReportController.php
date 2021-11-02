@@ -318,7 +318,7 @@ class ReportController extends Controller
                     $activeSheet->setCellValueExplicit('U'.$row, ($reg->sum_amount-($reg->skidka_reg+$skidka_kassa))*$foiz/100, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                 }
                 else{
-                    $activeSheet->setCellValueExplicit('U'.$row, $referal->fix_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $activeSheet->setCellValueExplicit('V'.$row, $referal->fix_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                 }
                     
             }
