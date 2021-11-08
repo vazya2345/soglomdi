@@ -154,6 +154,7 @@ class RasxodController extends Controller
                 // $fq_model->last_change_date = date("Y-m-d H:i:s");
                 
                 $model->status = 2;
+                $model->mod_date = date("Y-m-d H:i:s");
 
                 if($fq_model->save()&&$model->save()){
                     return $this->redirect(['index']);
@@ -181,6 +182,7 @@ class RasxodController extends Controller
         $model = $this->findModel($id);
         
         $model->status = 3;
+        $model->mod_date = date("Y-m-d H:i:s");
 
         if($model->save()){
             return $this->redirect(['index']);

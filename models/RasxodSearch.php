@@ -18,7 +18,7 @@ class RasxodSearch extends Rasxod
     {
         return [
             [['id', 'filial_id', 'user_id', 'referal_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user'], 'integer'],
-            [['rasxod_desc', 'rasxod_period', 'create_date'], 'safe'],
+            [['rasxod_desc', 'rasxod_period', 'create_date', 'mod_date'], 'safe'],
         ];
     }
 
@@ -72,6 +72,7 @@ class RasxodSearch extends Rasxod
 
         $query->andFilterWhere(['like', 'rasxod_desc', $this->rasxod_desc]);
         $query->andFilterWhere(['like', 'create_date', $this->create_date]);
+        $query->andFilterWhere(['like', 'mod_date', $this->mod_date]);
 
         return $dataProvider;
     }
