@@ -314,7 +314,13 @@ class ReportController extends Controller
         	$activeSheet->setCellValueExplicit('T'.$row, $referal->avans_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
         	$foiz = (int)$referal->add1;
             if($reg->sum_amount==($reg->sum_cash+$reg->sum_plastik)){
-                $activeSheet->setCellValueExplicit('U'.$row, ($reg->sum_amount-($reg->skidka_reg+$skidka_kassa))*$foiz/100, \PHPExcel_Cell_DataType::TYPE_NUMERIC);    
+                if($foiz>0){
+                    $activeSheet->setCellValueExplicit('U'.$row, ($reg->sum_amount-($reg->skidka_reg+$skidka_kassa))*$foiz/100, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                }
+                else{
+                    $activeSheet->setCellValueExplicit('V'.$row, $referal->fix_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                }
+                    
             }
         	
 
