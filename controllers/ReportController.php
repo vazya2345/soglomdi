@@ -908,6 +908,7 @@ public function actionKassa1prev()
                     $activeSheet->setCellValueExplicit('I'.$row, $reg->send_date, \PHPExcel_Cell_DataType::TYPE_STRING);
                     $activeSheet->setCellValueExplicit('J'.$row, $reg->rec_date, \PHPExcel_Cell_DataType::TYPE_STRING);
                     
+                    $row++;
         }
 
         
