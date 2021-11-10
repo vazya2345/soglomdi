@@ -21,19 +21,19 @@ $this->title = 'Юборилган пул хисоботи';
 </div>
 <div class="row">
     <div class="form-group">
-        <label>Филиал</label>
-        <?= Html::dropDownList('sendtype', '', [''=>'Барчаси',1=>'Нақд',2=>'Пластик'], ['class' => 'form-control', 'prompt'=>'Барчаси']) ?>
+        <label>Ўтказма тури</label>
+        <?= Html::dropDownList('sendtype', '', [1=>'Нақд',2=>'Пластик'], ['class' => 'form-control', 'prompt'=>'Барчаси']) ?>
     </div>
 </div>
 <div class="row">
     <div class="form-group">
-        <label>Врач</label>
+        <label>Юборган ходим</label>
         <?= Html::dropDownList('sender', '', Users::getAll(), ['class' => 'form-control', 'prompt'=>'Барчаси']) ?>
     </div>
 </div>
 <div class="row">
     <div class="form-group">
-        <label>Анализ</label>
+        <label>Қабул қилган ходим</label>
         <?= Html::dropDownList('receiver', '', Users::getAll(), ['class' => 'form-control', 'prompt'=>'Барчаси']) ?>
     </div>
 </div>
