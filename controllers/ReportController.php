@@ -877,7 +877,7 @@ public function actionKassa1prev()
             $models->andWhere(['send_user'=>$sender]);
         }
         if($receiver!='all'){
-            $models->andWhere(['receiver'=>$receiver]);
+            $models->andWhere(['rec_user'=>$receiver]);
         }
         if($sendtype!='all'){
             $models->andWhere(['send_type'=>$sendtype]);
@@ -891,10 +891,10 @@ public function actionKassa1prev()
         foreach ($res as $reg) {
             
                     $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                    $activeSheet->setCellValueExplicit('B'.$row, Filials::getName(Users::getFilial($reg->sender)), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $activeSheet->setCellValueExplicit('C'.$row, Users::getName($reg->sender), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $activeSheet->setCellValueExplicit('D'.$row, Filials::getName(Users::getFilial($reg->receiver)), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $activeSheet->setCellValueExplicit('E'.$row, Users::getName($reg->receiver), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('B'.$row, Filials::getName(Users::getFilial($reg->send_user)), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('C'.$row, Users::getName($reg->send_user), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('D'.$row, Filials::getName(Users::getFilial($reg->rec_user)), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('E'.$row, Users::getName($reg->rec_user), \PHPExcel_Cell_DataType::TYPE_STRING);
 
                     ////
 
