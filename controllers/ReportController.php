@@ -16,6 +16,8 @@ use app\models\SAnaliz;
 use app\models\SPokazatel;
 use app\models\RegDopinfo;
 use app\models\PokazLimits;
+use app\models\MoneySend;
+
 
 
 
@@ -806,5 +808,115 @@ public function actionKassa1prev()
         exit;
     }
 
+    /////////////////////////////////////////////////////// MONEY SEND /////////////////////////////////////////////////////////////////////////////////////////
+    public function actionMoneysendprev()
+    {
+        if(Yii::$app->request->post('date1')){
+            if(strlen(Yii::$app->request->post('date1'))==0){
+                $date1 = date("Y-m-d");
+            }
+            else{
+                $date1 = Yii::$app->request->post('date1');
+            }
 
+            if(strlen(Yii::$app->request->post('date2'))==0){
+                $date2 = date("Y-m-d");
+            }
+            else{
+                $date2 = Yii::$app->request->post('date2');
+            }
+
+            if(strlen(Yii::$app->request->post('sendtype'))==0){
+                $sendtype = 'all';
+            }
+            else{
+                $sendtype = Yii::$app->request->post('sendtype');
+            }
+
+            if(strlen(Yii::$app->request->post('sender'))==0){
+                $sender = 'all';
+            }
+            else{
+                $sender = Yii::$app->request->post('sender');
+            }
+
+            if(strlen(Yii::$app->request->post('receiver'))==0){
+                $receiver = 'all';
+            }
+            else{
+                $receiver = Yii::$app->request->post('receiver');
+            }
+            $this->moneysendReport($date1,$date2,$sendtype,$sender,$receiver);
+        }
+        return $this->render('moneysend');
+    }
+
+    private function moneysendReport($date1,$date2,$sendtype,$sender,$receiver)
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(20 * 60);
+
+        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+
+        $objPHPExcel = new \PHPExcel;
+        
+        $url = './excel/moneysend.xlsx';
+        $objPHPExcel = \PHPExcel_IOFactory::load($url);
+        $sheet = 0;
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+        $activeSheet->setCellValueExplicit('C2', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('E2', $sender, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('G2', $receiver, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('I2', $sendtype, \PHPExcel_Cell_DataType::TYPE_STRING);
+        // $date
+
+        $models = MoneySend::find()->where(['between','send_date',$date1,$date2]);
+        // var_dump($models);die;
+        if($sender!='all'){
+            $models->andWhere(['send_user'=>$sender]);
+        }
+        if($receiver!='all'){
+            $models->andWhere(['receiver'=>$receiver]);
+        }
+        if($sendtype!='all'){
+            $models->andWhere(['send_type'=>$sendtype]);
+        }
+        $res = $models->orderBy(['id' => SORT_DESC])->all();
+        // var_dump($res);die;
+        $row = 5;
+        $n=0;
+        $arr_type = [1=>'Нақд', 2=>'Пластик'];
+        $arr_status = [1=>'Юборилди', 2=>'Қабул қилинди', 3=>'Рад этилди'];
+        foreach ($res as $reg) {
+            
+                    $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $activeSheet->setCellValueExplicit('B'.$row, Filials::getName(Users::getFilial($reg->sender)), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('C'.$row, Users::getName($reg->sender), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('D'.$row, Filials::getName(Users::getFilial($reg->receiver)), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('E'.$row, Users::getName($reg->receiver), \PHPExcel_Cell_DataType::TYPE_STRING);
+
+                    ////
+
+                    $activeSheet->setCellValueExplicit('F'.$row, $arr_type[$reg->send_type], \PHPExcel_Cell_DataType::TYPE_STRING);
+
+                    $activeSheet->setCellValueExplicit('G'.$row, $reg->amount, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+                    $activeSheet->setCellValueExplicit('H'.$row, $arr_status[$reg->status], \PHPExcel_Cell_DataType::TYPE_STRING);
+
+
+                    $activeSheet->setCellValueExplicit('I'.$row, $reg->send_date, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('J'.$row, $reg->rec_date, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    
+        }
+
+        
+ 
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="laborator_'.date("Y-m-d").'.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+        exit;
+    }
 }

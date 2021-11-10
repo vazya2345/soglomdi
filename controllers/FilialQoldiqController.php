@@ -156,7 +156,7 @@ class FilialQoldiqController extends Controller
     {
         $sum = 0;
         $model = $this->findModel($id);
-        if($model->id!=8&&$model->id!=28&&$model->id!=44&&$model->id!=45){
+        if($model->kassir_id!=17&&$model->kassir_id!=1){
             if($model->qoldiq_type==1){
                 $regs = Payments::find()
                 ->select('sum(IFNULL(cash_sum, 0)) AS `s_amount`')
@@ -184,7 +184,7 @@ class FilialQoldiqController extends Controller
 
         }
         else{
-            if($model->id==8||$model->id==28){
+            if($model->kassir_id==17){
                 $regs = FqSends::find()->select('sum(IFNULL(sum, 0)) AS `s_amount`')
                 ->where(['>','rec_date',$model->last_change_date])
                 ->andWhere(['status'=>2])
@@ -201,11 +201,29 @@ class FilialQoldiqController extends Controller
                 }
                 $model->qoldiq = (int)$model->qoldiq + (int)$sum;
             }
+            elseif($model->kassir_id==1){
+                // var_dump($model);die;
+                $regs = FqSends::find()->select('sum(IFNULL(sum, 0)) AS `s_amount`')
+                ->where(['>','rec_date',$model->last_change_date])
+                ->andWhere(['status'=>2])
+                ->andWhere(['send_type'=>$model->qoldiq_type])
+                ->andWhere(['in','fq_id',[8,28]])
+                ->asArray()
+                ->all();
+
+                if($regs[0]['s_amount']){
+                    $sum = $regs[0]['s_amount'];
+                }
+                else{
+                    $sum = 0;    
+                }
+                $model->qoldiq = (int)$model->qoldiq + (int)$sum;
+            }
         }
 
         $model->last_change_date = date("Y-m-d H:i:s");
         if($model->save()){
-            return $this->redirect(['index', 'FilialQoldiqSearch[filial_id]'=>$model->filial_id, 'FilialQoldiqSearch[qoldiq_type]'=>$model->qoldiq_type]);
+            return $this->redirect(['index', 'FilialQoldiqSearch[filial_id]'=>$model->filial_id, 'FilialQoldiqSearch[kassir_id]'=>$model->kassir_id, 'FilialQoldiqSearch[qoldiq_type]'=>$model->qoldiq_type]);
         }
         else{
             var_dump($model->errors);

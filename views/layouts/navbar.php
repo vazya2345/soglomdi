@@ -130,6 +130,10 @@ $lav = Users::getMyLav();
                 <li>
                     <?= Html::a('Лаборатор', ['/report/lab1prev'], ['class' => 'dropdown-item']) ?>
                 </li>
+
+                <li>
+                    <?= Html::a('Юборилган пул', ['/report/moneysendprev'], ['class' => 'dropdown-item']) ?>
+                </li>
             </ul>
         </li>
         <?php        

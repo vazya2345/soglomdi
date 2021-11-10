@@ -53,11 +53,11 @@ class FilialQoldiq extends \yii\db\ActiveRecord
 
     public static function getAll()
     {
-        $array = self::find()->where(['not in','kassir_id',[4]])->all();
+        $array = self::find()->where(['not in','kassir_id',[4]])->orderBy(['kassir_id'=>SORT_ASC])->all();
 
         $res1 = [];
         foreach ($array as $key) {
-            $res1[$key->id]=Filials::getName($key->filial_id).' - '.$key->kassir_id;
+            $res1[$key->id]=Filials::getName($key->filial_id).'-'.Users::getName($key->kassir_id).'-'.$key->qoldiq_type;
         }
         return $res1;
     }
@@ -66,7 +66,7 @@ class FilialQoldiq extends \yii\db\ActiveRecord
     {
         $model = self::findOne($id);
         if($model)
-            return Filials::getName($model->filial_id).' - '.$model->kassir_id.' - '.$model->qoldiq_type;
+            return Filials::getName($model->filial_id).' - '.Users::getName($model->kassir_id).' - '.$model->qoldiq_type;
         else
             return 'Топилмади';
     }

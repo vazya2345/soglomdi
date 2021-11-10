@@ -38,12 +38,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'kassir_id'=>[
                 'attribute'=>'kassir_id',
-                'filter'=>Users::getAllKassirs()+Users::getAllIchkiNazorat(),
+                'filter'=>Users::getAllKassirs()+Users::getAllIchkiNazorat()+[1=>'Админ'],
                 'value' => function ($data) {
                         return Users::getName($data->kassir_id);
                 }
             ],
-            'qoldiq',
+            'qoldiq'=>[
+                'attribute'=>'qoldiq',
+                'value' => function ($data) {
+                        return number_format($data->qoldiq);
+                }
+            ],
             'qoldiq_type'=>[
                 'attribute'=>'qoldiq_type',
                 'filter'=>[1=>'Нақд',2=>'Пластик'],
@@ -121,3 +126,4 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
     </div>
 </div>
+ 
