@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=>'raw',
                 'value' => function ($data) {
                     if(Yii::$app->user->getRole()==1){
-                        if($data->fq_id==8){
+                        if($data->fq_id==8||$data->fq_id==28){
                             if($data->status==1){
                                 return Html::a('Кабул килиш', ['qabul', 'id'=>$data->id]);
                             }
@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         }                        
                     }
-                    elseif(Yii::$app->user->getRole()==6&&$data->fq_id!=8){
+                    elseif(Yii::$app->user->getRole()==6&&($data->fq_id!=8&&$data->fq_id!=28)){
                         if($data->status==1){
                             return Html::a('Кабул килиш', ['qabul', 'id'=>$data->id]);
                         }

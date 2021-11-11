@@ -69,7 +69,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         return  ['class'=>'bg-default'];    
                     }
                     elseif($data->status==2){
-                        return  ['class'=>'bg-warning'];
+                         if(((int)strtotime($data->lab_vaqt)-time())<0){
+                            return  ['class'=>'bg-danger'];
+                        }
+                        else{
+                            return  ['class'=>'bg-warning'];
+                        }
                     }
                     elseif($data->status==3){
                         if(((int)strtotime($data->lab_vaqt)-time())<0){

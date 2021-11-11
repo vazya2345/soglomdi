@@ -43,8 +43,16 @@ class FilialQoldiqController extends Controller
         if(Yii::$app->user->getRole()==3){
             return $this->redirect(['indexkassa']);
         }
+
+
         $searchModel = new FilialQoldiqSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if(Yii::$app->user->getRole()!=1){
+            $dataProvider->query->andWhere(['not in','kassir_id',1]);
+        }
+
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,

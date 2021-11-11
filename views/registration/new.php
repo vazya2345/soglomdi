@@ -88,7 +88,27 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 			    <?= $form->field($model_client, 'sex')->dropDownList(['M' =>'Эркак', 'F' =>'Аёл']) ?>
 			</div>
 			<div class="col-3">
-			    <?= $form->field($model, 'ref_code')->dropDownList(['' => 'Кодни киритинг...']+Referals::getAll()) ?>
+			    
+				<div class="row" style="margin-bottom: 10px;">
+					<div class="col-12">
+						<label class="control-label" for="myRefsearch">Реферал</label>
+					</div>
+					<div class="col-12">
+						<?= Select2::widget([
+							'theme' => Select2::THEME_KRAJEE_BS4,
+						    'name' => 'Registration[ref_code]',
+						    'data' => Referals::getAll(),
+						    'options' => [
+						    	'placeholder' => 'Рефералнинг фамилиясини киритинг...',
+						        'id'=>'myRefsearch',
+						        'class'=>'form-control'
+						    ],
+						    'pluginOptions' => [
+						        'allowClear' => true,
+						    ],
+						])?>
+					</div>
+				</div>
 			</div>
 
 			<div class="col-3">

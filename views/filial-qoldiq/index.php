@@ -94,7 +94,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Users::getName($data->kassir_id);
                 }
             ],
-            'qoldiq',
+            'qoldiq'=>[
+                'attribute'=>'qoldiq',
+                'value' => function ($data) {
+                        return number_format($data->qoldiq);
+                }
+            ],
             'qoldiq_type'=>[
                 'attribute'=>'qoldiq_type',
                 'filter'=>[1=>'Нақд',2=>'Пластик'],

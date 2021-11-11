@@ -253,26 +253,25 @@ class Reagent extends \yii\db\ActiveRecord
                         $regreagent_model->soni = $count;
                         $regreagent_model->filial_id = $myfil;
                         if($regreagent_model->save()){
-                            $a=1;
+                            if($model->qoldiq<=$reagent->notific_filial&&!ReagentNotifications::isReagent($id, $myfil)){
+                                $notif_model = new ReagentNotifications();
+                                $notif_model->reagent_id = $id;
+                                $notif_model->create_date = date("Y-m-d H:i:s");
+                                $notif_model->filial_id = $myfil; //// FILIAL
+                                if($notif_model->save()){
+                                    return true;
+                                }
+                                else{
+                                    var_dump($notif_model);die;
+                                }
+                            }
+                            else{
+                                return true;
+                            }
                         }
                         else{
                             var_dump($regreagent_model->errors);
                             echo "REGREAGENTERROR!!!";die;
-                        }
-                        if($model->qoldiq<=$reagent->notific_filial&&!ReagentNotifications::isReagent($id, $myfil)){
-                            $notif_model = new ReagentNotifications();
-                            $notif_model->reagent_id = $id;
-                            $notif_model->create_date = date("Y-m-d H:i:s");
-                            $notif_model->filial_id = $myfil; //// FILIAL
-                            if($notif_model->save()){
-                                return true;
-                            }
-                            else{
-                                var_dump($notif_model);die;
-                            }
-                        }
-                        else{
-                            return true;
                         }
                     }
                     else{

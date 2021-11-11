@@ -625,7 +625,21 @@ class RegistrationController extends Controller
                 $model->client_id = $model_client->id;
             }
 
+            $check_regmodel = Registration::find()
+                ->where([
+                            'user_id'=>$model->user_id,
+                            'sum_amount'=>$model->sum_amount,
+                            'ref_code'=>$model->ref_code,
+                            'other'=>$model->other
+                        ])
+                ->andWhere(['between','create_date', date("Y-m-d H:i:s", strtotime("now - 2 minutes")), $model->create_date])
+                ->one();
+            if($check_regmodel){
+                return $this->redirect(['indexkassa']);
+            }
+
             if($model->save()){
+                // die;
                 $client_id = $model->client_id;
                 if(Yii::$app->request->post('pokaz')!==null){
                     foreach (Yii::$app->request->post('pokaz')[0] as $key => $value) {
