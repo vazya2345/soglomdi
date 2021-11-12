@@ -364,6 +364,28 @@ class RegistrationController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionQarzdorlar()
+    {
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['site/index']);
+        }
+        if(Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9){
+            return $this->redirect(['index']);
+        }
+        else{
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['>','sum_debt',0]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+            return $this->render('qarzdorlar', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+    }
+
     public function actionResult($id)
     {
         if(Registration::getIsPay($id)&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==9)){
@@ -1110,10 +1132,77 @@ echo "<br>";
         }        
     }
 
+    public function actionSendqarzsmsact($id)
+    {
+        if($this->sendQarzSms($id)){
+            return $this->redirect(['registration/qarzdorlar']);
+        }
+        else{
+            return 404;
+        }
+
+        
+    }
+
+    private function sendQarzSms($id)
+    {
+        $model = $this->findModel($id);
+        $template = SmsTemplates::find()->where(['code'=>'qarz'])->one();
+        if($template){
+            $text = $template->sms_text;
+        }
+        else{
+            $text = 'Assalomu alaykum, hurmatli mijoz. Sizning Sog\'lom diagnostikadan qarzingiz {QARZSUM} so\'mni tashkil qiladi. Iltimos qarzdorlikni to\'lab qo\'ying. Tel: 95-2040150';    
+        }
+        $text = str_replace('{QARZSUM}', $model->sum_debt, $text);
+
+        $number = Client::getPhonenumforsms($model->client_id);
+        if($number&&$number!='998000000000'){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
+    }
+
     public function actionTestphone($id)
     {
         var_dump($this->sendKassaSms($id));
         die;
     }
     
+
+    public function actionRefsendsmsact($ref_phonenum,$ref_sum)
+    {
+
+        if($this->sendRefsendSms($ref_phonenum,$ref_sum)){
+            return $this->redirect(['rasxod/index']);
+        }
+        else{
+            return 404;
+        }
+        die;
+    }
+
+    private function sendRefsendSms($ref_phonenum,$ref_sum)
+    {
+        $template = SmsTemplates::find()->where(['code'=>'referal'])->one();
+        if($template){
+            $text = $template->sms_text;
+        }
+        else{
+            $text = 'Assalomu alaykum. Sizga {refsum} so\'m yuborildi.';    
+        }
+        $text = str_replace('{refsum}', $ref_sum, $text);
+
+        // var_dump($ref_phonenum);die;
+
+        $number = $ref_phonenum;
+        if($number&&$number!='998000000000'){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
+    }
 }

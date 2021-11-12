@@ -187,5 +187,26 @@ class Referals extends \yii\db\ActiveRecord
         }
     }
 
+    public static function getPhonenumByRefnum($refnum)
+    {
+        $model = self::find()->where(['refnum'=>$refnum])->one();
+        
+        if($model){
+            if(strlen($model->phone)>=12){
+                $res = str_replace('+','',$model->phone);
+                $res = str_replace('-','',$res);
+                $res = str_replace('(','',$res);
+                $res = str_replace(')','',$res);
+                return $res;
+            }
+            else{
+                return '998000000000';
+            }
+        }
+        else{
+            return '998000000000';
+        }
+    }
+
 
 }

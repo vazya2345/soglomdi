@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Rasxod;
 use app\models\FilialQoldiq;
+use app\models\Referals;
 use app\models\RasxodSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -157,6 +158,11 @@ class RasxodController extends Controller
                 $model->mod_date = date("Y-m-d H:i:s");
 
                 if($fq_model->save()&&$model->save()){
+                    if($model->rasxod_type==1){
+                        $ref_phonenum = Referals::getPhonenumByRefnum($model->referal_id);
+                        // var_dump($ref_phonenum);die;
+                        return $this->redirect(['registration/refsendsmsact', 'ref_phonenum'=>$ref_phonenum, 'ref_sum'=>$model->summa]);
+                    }
                     return $this->redirect(['index']);
                 }
                 else{
@@ -191,4 +197,7 @@ class RasxodController extends Controller
             var_dump($model->errors);
         }        
     }
+
+
+
 }

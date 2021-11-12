@@ -177,7 +177,13 @@ $lav = Users::getMyLav();
                     <li>
                         <?= Html::a('Реф жўнатма', ['/ref-sends/index'], ['class' => 'dropdown-item']) ?>
                     </li>
+                    <li>
+                        <?= Html::a('Юборилган пул', ['/report/moneysendprev'], ['class' => 'dropdown-item']) ?>
+                    </li>
                 </ul>
+            </li>
+            <li class="nav-item">
+                <?= Html::a('Қарздорлар', ['registration/qarzdorlar'], ['class' => 'nav-link']) ?>
             </li>
         <?php
             }

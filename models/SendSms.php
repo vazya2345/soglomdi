@@ -50,4 +50,13 @@ class SendSms extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+
+    public static function getLastDateForQarzByPhonenum($phone)
+    {
+        $model = self::find()->where(['number'=>$phone])->andWhere(['like', 'sms_text', '%qarz%', false])->orderBy(['id'=>SORT_DESC])->one();
+        if($model)
+            return $model->send_date;
+        else
+            return '';
+    }
 }

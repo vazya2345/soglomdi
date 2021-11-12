@@ -147,6 +147,9 @@ $name = Users::getMyname();
 
                     /// END ZAVKASSA
 
+
+                    ['label' => 'Пароль ўзгартириш', 'url' => ['/users/updatepas'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest],
+
                     
                 ],
             ]);
