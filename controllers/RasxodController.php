@@ -151,20 +151,29 @@ class RasxodController extends Controller
         // var_dump($fq_model);die;
         if($fq_model){
             if($fq_model->qoldiq>=$model->summa){
-                $fq_model->qoldiq -= $model->summa;
-                // $fq_model->last_change_date = date("Y-m-d H:i:s");
-                
-                $model->status = 2;
-                $model->mod_date = date("Y-m-d H:i:s");
 
-                if($fq_model->save()&&$model->save()){
-                    if($model->rasxod_type==1){
-                        $ref_phonenum = Referals::getPhonenumByRefnum($model->referal_id);
-                        // var_dump($ref_phonenum);die;
-                        return $this->redirect(['registration/refsendsmsact', 'ref_phonenum'=>$ref_phonenum, 'ref_sum'=>$model->summa]);
+                if($model->status==1){
+                    $fq_model->qoldiq -= $model->summa;
+                    $model->status = 2;
+                    $model->mod_date = date("Y-m-d H:i:s");
+                    if($fq_model->save()&&$model->save()){
+                        if($model->rasxod_type==1){
+                            $ref_phonenum = Referals::getPhonenumByRefnum($model->referal_id);
+                            // var_dump($ref_phonenum);die;
+                            return $this->redirect(['registration/refsendsmsact', 'ref_phonenum'=>$ref_phonenum, 'ref_sum'=>$model->summa]);
+                        }
+                        return $this->redirect(['index']);
                     }
+                }
+                else{
                     return $this->redirect(['index']);
                 }
+                
+                // $fq_model->last_change_date = date("Y-m-d H:i:s");
+                
+                
+
+                
                 else{
                     var_dump($fq_model->errors);
                     var_dump($model->errors);
