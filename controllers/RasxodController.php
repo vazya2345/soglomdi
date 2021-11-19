@@ -164,6 +164,10 @@ class RasxodController extends Controller
                         }
                         return $this->redirect(['index']);
                     }
+                    else{
+                        var_dump($fq_model->errors);
+                        var_dump($model->errors);
+                    }  
                 }
                 else{
                     return $this->redirect(['index']);
@@ -174,10 +178,7 @@ class RasxodController extends Controller
                 
 
                 
-                else{
-                    var_dump($fq_model->errors);
-                    var_dump($model->errors);
-                }     
+                  
             }
             else{
                 echo "Кассада етарли маблағ мавжуд эмас.";die;
