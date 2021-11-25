@@ -220,7 +220,21 @@ class RegistrationController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->kassir_id = Yii::$app->user->id;
+            if((int)$model->sum_amount<(int)$model->sum_cash){
+                $model->sum_cash = (int)$model->sum_amount;
+            }
+            if((int)$model->sum_amount<(int)$model->sum_plastik){
+                $model->sum_plastik = (int)$model->sum_amount;
+            }
+            if((int)$model->sum_amount<((int)$model->sum_plastik+(int)$model->sum_cash)){
+                $model->sum_cash = (int)$model->sum_amount;
+                $model->sum_plastik = 0;
+            }
+
             $model->sum_debt = (int)$model->sum_amount-((int)$model->sum_cash+(int)$model->sum_plastik+(int)$model->skidka_reg+(int)$model->skidka_kassa);
+            if($model->sum_debt<0){
+                $model->sum_debt = 0;
+            }
             if($model->save()){
 
                 
@@ -602,7 +616,7 @@ class RegistrationController extends Controller
             $this->sendReadySms($id);  
         }
         else{
-            $model->status = 3;
+            $model->status = 3; 
             $model->natija_input = 0;
         }
         
@@ -654,7 +668,7 @@ class RegistrationController extends Controller
                             'ref_code'=>$model->ref_code,
                             'other'=>$model->other
                         ])
-                ->andWhere(['between','create_date', date("Y-m-d H:i:s", strtotime("now - 2 minutes")), $model->create_date])
+                ->andWhere(['between','create_date', date("Y-m-d H:i:s", strtotime("now - 10 minutes")), $model->create_date])
                 ->one();
             if($check_regmodel){
                 return $this->redirect(['indexkassa']);

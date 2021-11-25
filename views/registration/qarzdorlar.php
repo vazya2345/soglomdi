@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Registration;
 use app\models\Client;
+use app\models\Users;
+use app\models\Filials;
 use app\models\SendSms;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\RegistrationSearch */
@@ -30,6 +32,15 @@ $this->params['breadcrumbs'][] = $this->title;
             //     'attribute' => 'other',
             //     'headerOptions' => ['style' => 'width:6%'],
             // ],
+            [
+                'attribute'=>'user_id',
+                'header'=>'Филиал',
+                'headerOptions' => ['style' => 'width:5%'],
+                'filter' => Filials::getAll(),
+                'value' => function ($data) {
+                        return Filials::getName(Users::getFilial($data->user_id));                    
+                }
+            ],
             'client_id'=>[
                 'attribute'=>'client_id',
                 'headerOptions' => ['style' => 'width:25%'],
@@ -37,10 +48,25 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Client::getName($data->client_id);                    
                 }
             ],
+            [
+                'header'=>'Тел рақами',
+                'headerOptions' => ['style' => 'width:5%'],
+                'value' => function ($data) {
+                        return Client::getPhonenumforsms($data->client_id);                    
+                }
+            ],
             // 'user_id',
             'sum_amount'=>[
                 'attribute'=>'sum_amount',
                 'headerOptions' => ['style' => 'width:6%'],
+                'value' => function ($data) {
+                    if($data->sum_amount>0){
+                        return number_format($data->sum_amount);                    
+                    }
+                    else{
+                        return 0;
+                    }
+                }
             ],
             
             'sum_cash'=>[
