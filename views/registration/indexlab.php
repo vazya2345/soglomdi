@@ -113,11 +113,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $qarz;
                 }
             ],
-            'user_id'=>[
-                'attribute'=>'user_id',
+            'kassir_id'=>[
+                'attribute'=>'kassir_id',
                 'filter'=>Users::getAllKassirs(),
                 'value' => function ($data) {
-                        return Users::getNameAndFil($data->user_id);                    
+                        return Users::getNameAndFil($data->kassir_id);                     
                 }
             ],
             //'change_time',
