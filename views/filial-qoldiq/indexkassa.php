@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Filials;
+use app\models\FilialQoldiq;
 use app\models\Users;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\FilialQoldiqSearch */
@@ -56,12 +57,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header'=>'Пулни юбориш',
                 'format'=>'raw',
                 'value' => function ($data) {
+                    if(FilialQoldiq::checkOperationsByMoney($data->kassir_id)){
                         return Html::a('Пулни юбориш', ['send', 'id'=>$data->id],[
                             'data' => [
                                 'confirm' => 'Сиз '.$data->qoldiq.' сўм юбормоқчисиз. Ишончингиз комилми?',
                             ]
-
                         ]);
+                    }
+                    else{
+                        return "Сизда якунланмаган жўнатмалар мавжуд. Якунлаб қайта уриниб кўринг.";
+                    }
+                        
                 }
             ]
         ],

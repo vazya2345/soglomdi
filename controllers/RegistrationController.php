@@ -25,6 +25,7 @@ use app\models\Referals;
 use app\models\SmsTemplates;
 use app\models\SendSms;
 use app\models\Filials;
+use app\models\FilialQoldiq;
 /**
  * RegistrationController implements the CRUD actions for Registration model.
  */
@@ -233,16 +234,17 @@ class RegistrationController extends Controller
                 $payment_model->cash_sum = (int)$model->sum_cash;
                 $payment_model->plastik_sum = (int)$model->sum_plastik;
                 $payment_model->create_date = date("Y-m-d H:i:s");
-                $cp_model = Payments::find()->where(['main_id'=>$id])->andWhere(['between', 'create_date', date("Y-m-d H:i:s", strtotime($payment_model->create_date)-60), date("Y-m-d H:i:s", strtotime($payment_model->create_date)+60)])->one();
+                $cp_model = Payments::find()->where(['main_id'=>$id])->andWhere(['between', 'create_date', date("Y-m-d H:i:s", strtotime($payment_model->create_date)-120), date("Y-m-d H:i:s", strtotime($payment_model->create_date)+120)])->one();
                 if(!$cp_model){
                     if($payment_model->save()){
+                        FilialQoldiq::hisobAllTypesByKassirId($payment_model->kassir_id);
                         if($s1<=$s2){
                             $fmodel = new FinishPayments();
                             $fmodel->id = $id;
                             $fmodel->time = date("Y-m-d H:i:s");
                             $fmodel->user_id = Yii::$app->user->id;
                             if($fmodel->save()){
-                                $this->sendKassaSms($id);
+                                // $this->sendKassaSms($id);
                                 return $this->redirect(['indexkassa']);
                             }
                             else{

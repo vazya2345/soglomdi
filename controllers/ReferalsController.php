@@ -157,6 +157,10 @@ class ReferalsController extends Controller
             if(strlen($model->last_change_date)==0){
                 $model->last_change_date = "2021-01-01 00:00:01";
             }
+            $rs_model = RefSends::find()->where(['refnum'=>$model->refnum])->orderBy(['send_date'=>SORT_DESC])->one();
+            if($rs_model){
+               $model->last_change_date = $rs_model->send_date; 
+            }
             if($model->add1>0){
                 $regs = Registration::find()
                 ->select('sum(IFNULL(sum_cash, 0))+sum(IFNULL(sum_plastik, 0)) AS `s_amount`')
