@@ -45,7 +45,7 @@ class Filials extends \yii\db\ActiveRecord
             'title' => 'Номи',
             'adress' => 'Адреси',
             'phone' => 'Телефон раками',
-            'add1' => 'Add1',
+            'add1' => 'СМС юбормаслик',
             'add2' => 'Add2',
         ];
     }

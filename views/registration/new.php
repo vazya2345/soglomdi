@@ -14,7 +14,7 @@ use kartik\select2\Select2;
 $this->title = 'Янги';
 $this->params['breadcrumbs'][] = ['label' => 'Руйхат', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-
+$model->ref_code = 991;
 $tumans = [
 'Андижон шахри'=>'Андижон шахри',
 'Хонобод шахри'=>'Хонобод шахри',
@@ -98,10 +98,11 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 							'theme' => Select2::THEME_KRAJEE_BS4,
 						    'name' => 'Registration[ref_code]',
 						    'data' => Referals::getAll(),
+						    'value' => 991,
 						    'options' => [
 						    	'placeholder' => 'Рефералнинг фамилиясини киритинг...',
 						        'id'=>'myRefsearch',
-						        'class'=>'form-control'
+						        'class'=>'form-control',
 						    ],
 						    'pluginOptions' => [
 						        'allowClear' => true,

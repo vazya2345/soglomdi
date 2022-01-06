@@ -60,7 +60,7 @@ class RegistrationSearch extends Registration
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            // 'user_id' => $this->user_id,
             'kassir_id' => $this->kassir_id,
             'sum_amount' => $this->sum_amount,
             'sum_cash' => $this->sum_cash,
@@ -79,6 +79,9 @@ class RegistrationSearch extends Registration
         }
         if($this->sum_debt==1){
             $query->andWhere(['>','sum_debt',0]);
+        }
+        if($this->user_id){
+            $query->andWhere(['in','user_id',Users::getFilUsers($this->user_id)]);
         }
 
         

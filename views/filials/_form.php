@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'add1')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'add1')->dropDownList(['' => 'Танланг...', 0 => 'Оддий', 1 => 'Юбормаслик']) ?>
 
     <?= $form->field($model, 'add2')->textInput(['maxlength' => true]) ?>
 
