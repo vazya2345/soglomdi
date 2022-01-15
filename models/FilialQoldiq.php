@@ -88,11 +88,22 @@ class FilialQoldiq extends \yii\db\ActiveRecord
         return $res1;
     }
 
+    public static function getMyBalanceText()
+    {
+        $type_arr = [1=>'Нақд', 2=>'Платсик'];
+        $sum = '';
+        $models = self::find()->where(['kassir_id'=>Yii::$app->user->getId()])->all();
+        // var_dump($models);die;
+        foreach ($models as $model) {
+            $sum.= $type_arr[$model->qoldiq_type].': '.number_format($model->qoldiq).' сўм. ';
+        }
+        return $sum;
+    }
+
     public static function getMyBalance()
     {
         $sum = 0;
         $models = self::find()->where(['kassir_id'=>Yii::$app->user->getId()])->all();
-        // var_dump($models);die;
         foreach ($models as $model) {
             $sum+=$model->qoldiq;
         }

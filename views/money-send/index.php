@@ -12,13 +12,14 @@ $this->title = 'Юборилган пул';
 $this->params['breadcrumbs'][] = $this->title;
 
 $mybalance = FilialQoldiq::getMyBalance();
+$mybalancetext = FilialQoldiq::getMyBalanceText();
 ?>
 <div class="money-send-index card">
     <div class="card-body">
 
     <p>
         <?= Html::a('Янги', ['filial-qoldiq/sendmoney'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Баланс: '.number_format($mybalance). " сўм", '#', ['class' => 'btn btn-primary']) ?>
+        <?= Html::a($mybalancetext, '#', ['class' => 'btn btn-primary']) ?>
 
     </p>
 

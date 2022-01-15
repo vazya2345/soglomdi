@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
     $filial_qoldiqs = FilialQoldiq::getListForSendMoney();
     $mybalance = FilialQoldiq::getMyBalance();
+    $mybalancetext = FilialQoldiq::getMyBalanceText();
 
     echo Html::beginForm(['filial-qoldiq/sendmoneyact'], 'post', ['enctype' => 'multipart/form-data']);
     echo Html::label('Ходим хисобини танланг', 'filial_qoldiq_id', ['class' => 'label username']);
@@ -21,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     echo "<br><br>";
 
     echo Html::label('Юбориш суммасини киритинг', 'form_send_money_sum', ['class' => 'label form_send_money_sum']);
-    echo " &nbsp; <span class='hint'>(Максимал сумма: ". number_format($mybalance) ." сўм)</span>";
+    echo " &nbsp; <span class='hint'>(Максимал сумма ".$mybalancetext.")</span>";
     echo Html::input('number', 'send_money_sum', '', ['class' => 'form-control', 'id'=>'form_send_money_sum', 'min'=>10000, 'max'=>$mybalance]);
     echo "<br>";
 

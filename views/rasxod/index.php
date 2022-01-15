@@ -123,7 +123,9 @@ for ($i=1; $i <= 12; $i++) {
                 'value' => function ($data) {
                     if($data->status==1&&(Yii::$app->user->getRole()==9||Yii::$app->user->getRole()==1)){
                         if(FilialQoldiq::checkBalance($data->user_id,$data->sum_type)>=$data->summa){
-                            $str = Html::a(
+                            
+                            if($data->summa<500000){
+                                $str = Html::a(
                                     'Қабул', 
                                     ['rasxod/qabul', 'id' => $data->id], 
                                     [
@@ -135,8 +137,38 @@ for ($i=1; $i <= 12; $i++) {
                                     ] 
                                     
                                 ).
-                                "<br>".
-                                Html::a(
+                                "<br>";
+                            }
+                            elseif($data->summa>=500000&&Yii::$app->user->getRole()==1){
+                                $str = Html::a(
+                                    'Қабул', 
+                                    ['rasxod/qabul', 'id' => $data->id], 
+                                    [
+                                        'class' => 'profile-link',
+                                        'data' => [
+                                            'confirm' => 'Ишончингиз комилми?',
+                                            'method' => 'post',
+                                        ],
+                                    ] 
+                                    
+                                ).
+                                "<br>";
+                            }
+                            else{
+                                $str = Html::a(
+                                    'Қабул', 
+                                    '#', 
+                                    [
+                                        'class' => 'profile-link disabled lined',
+                                        'data' => [
+                                            'confirm' => 'Лимитдан юқори суммаларни фақат админ қабул қила олади',
+                                        ],
+                                    ] 
+                                    
+                                ).
+                                "<br>";
+                            }
+                            $str .= Html::a(
                                     'Рад', 
                                     ['rasxod/rad', 'id' => $data->id], 
                                     [
