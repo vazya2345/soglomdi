@@ -65,7 +65,7 @@ class Reagent extends \yii\db\ActiveRecord
 
     public static function getAll()
     {
-        $array = self::find()->all();
+        $array = self::find()->orderBy(['title'=>SORT_ASC])->all();
         $result = ArrayHelper::map($array, 'id', 'title');
         return $result;
     }
