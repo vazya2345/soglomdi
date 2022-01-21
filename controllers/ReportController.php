@@ -984,7 +984,7 @@ public function actionKassa1prev()
                 $filname = Filials::getName($filial);
                 foreach ($models as $model) {
                     $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                    $activeSheet->setCellValueExplicit('B'.$row, $filname, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('B'.$row, $filname.'(Асосий)', \PHPExcel_Cell_DataType::TYPE_STRING);
                     $activeSheet->setCellValueExplicit('C'.$row, $model->title, \PHPExcel_Cell_DataType::TYPE_STRING);
                     $activeSheet->setCellValueExplicit('D'.$row, $model->qoldiq, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                     $activeSheet->setCellValueExplicit('E'.$row, $model->price, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -993,6 +993,20 @@ public function actionKassa1prev()
                     $activeSheet->setCellValueExplicit('H'.$row, $model->notific_filial, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                     $row++;
                 }
+                $reagent_fils = ReagentFilial::find()->where(['filial_id'=>$filial])->all();
+                        foreach($reagent_fils as $reagent_fil){
+                            $reagent = Reagent::findOne($reagent_fil->reagent_id);
+                            $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                            $activeSheet->setCellValueExplicit('B'.$row, $filname, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            $activeSheet->setCellValueExplicit('C'.$row, $reagent->title, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            $activeSheet->setCellValueExplicit('D'.$row, $reagent_fil->qoldiq, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                            $activeSheet->setCellValueExplicit('E'.$row, $reagent->price, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                            $activeSheet->setCellValueExplicit('F'.$row, $reagent_fil->qoldiq*$reagent->price, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                            $activeSheet->setCellValueExplicit('G'.$row, $reagent->notific_count, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                            $activeSheet->setCellValueExplicit('H'.$row, $reagent->notific_filial, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                            $row++;
+                        }
+
             }
             elseif($filial=='all'){
                 foreach(Filials::getAll() as $key => $value){
@@ -1001,7 +1015,7 @@ public function actionKassa1prev()
                         $models = Reagent::find()->orderBy(['title'=>SORT_ASC])->all();
                         foreach ($models as $model) {
                             $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                            $activeSheet->setCellValueExplicit('B'.$row, $filname, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            $activeSheet->setCellValueExplicit('B'.$row, $filname.'(Асосий)', \PHPExcel_Cell_DataType::TYPE_STRING);
                             $activeSheet->setCellValueExplicit('C'.$row, $model->title, \PHPExcel_Cell_DataType::TYPE_STRING);
                             $activeSheet->setCellValueExplicit('D'.$row, $model->qoldiq, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                             $activeSheet->setCellValueExplicit('E'.$row, $model->price, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -1046,18 +1060,28 @@ public function actionKassa1prev()
             }
         }
         else{
-            
             if($filial==1){
                 $model = Reagent::findOne($reagent);
                 $filname = Filials::getName($filial);
                     $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                    $activeSheet->setCellValueExplicit('B'.$row, $filname, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('B'.$row, $filname.'(Асосий)', \PHPExcel_Cell_DataType::TYPE_STRING);
                     $activeSheet->setCellValueExplicit('C'.$row, $model->title, \PHPExcel_Cell_DataType::TYPE_STRING);
                     $activeSheet->setCellValueExplicit('D'.$row, $model->qoldiq, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                     $activeSheet->setCellValueExplicit('E'.$row, $model->price, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                     $activeSheet->setCellValueExplicit('F'.$row, $model->qoldiq*$model->price, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                     $activeSheet->setCellValueExplicit('G'.$row, $model->notific_count, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                     $activeSheet->setCellValueExplicit('H'.$row, $model->notific_filial, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $row++;
+                $reagent_fil = ReagentFilial::find()->where(['filial_id'=>$filial,'reagent_id'=>$reagent])->one();
+                    $reagent = Reagent::findOne($reagent_fil->reagent_id);
+                    $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $activeSheet->setCellValueExplicit('B'.$row, $filname, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('C'.$row, $reagent->title, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('D'.$row, $reagent_fil->qoldiq, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $activeSheet->setCellValueExplicit('E'.$row, $reagent->price, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $activeSheet->setCellValueExplicit('F'.$row, $reagent_fil->qoldiq*$reagent->price, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $activeSheet->setCellValueExplicit('G'.$row, $reagent->notific_count, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $activeSheet->setCellValueExplicit('H'.$row, $reagent->notific_filial, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                     $row++;
             }
             elseif($filial=='all'){
@@ -1066,7 +1090,7 @@ public function actionKassa1prev()
                     $model = Reagent::findOne($reagent);
                     if($key==1){
                             $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                            $activeSheet->setCellValueExplicit('B'.$row, $filname, \PHPExcel_Cell_DataType::TYPE_STRING);
+                            $activeSheet->setCellValueExplicit('B'.$row, $filname.'(Асосий)', \PHPExcel_Cell_DataType::TYPE_STRING);
                             $activeSheet->setCellValueExplicit('C'.$row, $model->title, \PHPExcel_Cell_DataType::TYPE_STRING);
                             $activeSheet->setCellValueExplicit('D'.$row, $model->qoldiq, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                             $activeSheet->setCellValueExplicit('E'.$row, $model->price, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
