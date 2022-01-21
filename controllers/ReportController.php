@@ -960,12 +960,19 @@ public function actionKassa1prev()
         $objPHPExcel->setActiveSheetIndex($sheet);
         $activeSheet = $objPHPExcel->getActiveSheet();
         $activeSheet->setCellValueExplicit('C2', date("Y-m-d H:i:s"), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('F2', $reagent, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('H2', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
+
+        if($filial=='all'){
+            $activeSheet->setCellValueExplicit('H2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        else{
+            $activeSheet->setCellValueExplicit('H2', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        
         
         $n=1;
         $row=5;
         if($reagent=='all'){
+            $activeSheet->setCellValueExplicit('F2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
             if($filial==1){
                 $models = Reagent::find()->orderBy(['title'=>SORT_ASC])->all();
                 $filname = Filials::getName($filial);
@@ -1033,6 +1040,7 @@ public function actionKassa1prev()
             }
         }
         else{
+            $activeSheet->setCellValueExplicit('F2', $reagent, \PHPExcel_Cell_DataType::TYPE_STRING);
             if($filial==1){
                 $model = Reagent::findOne($reagent);
                 $filname = Filials::getName($filial);
