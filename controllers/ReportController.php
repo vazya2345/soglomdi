@@ -1049,8 +1049,8 @@ public function actionKassa1prev()
             elseif($filial=='all'){
                 foreach(Filials::getAll() as $key => $value){
                     $filname = Filials::getName($key);
+                    $model = Reagent::findOne($reagent);
                     if($key==1){
-                        $model = Reagent::findOne($reagent);
                             $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                             $activeSheet->setCellValueExplicit('B'.$row, $filname, \PHPExcel_Cell_DataType::TYPE_STRING);
                             $activeSheet->setCellValueExplicit('C'.$row, $model->title, \PHPExcel_Cell_DataType::TYPE_STRING);
