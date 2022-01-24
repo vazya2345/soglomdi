@@ -20,6 +20,7 @@ use app\models\MoneySend;
 use app\models\Payments;
 use app\models\FqSends;
 use app\models\Rasxod;
+use app\models\FilialQoldiq;
 
 use app\models\Reagent;
 use app\models\ReagentFilial;
