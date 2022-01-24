@@ -1211,9 +1211,17 @@ public function actionKassa1prev()
         $objPHPExcel->setActiveSheetIndex($sheet);
         $activeSheet = $objPHPExcel->getActiveSheet();
         $activeSheet->setCellValueExplicit('C2', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('E2', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('G2', $sendtype, \PHPExcel_Cell_DataType::TYPE_STRING);
+        if($filial=='all'){
+            $activeSheet->setCellValueExplicit('E2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        else{
+            $activeSheet->setCellValueExplicit('E2', Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+
         $arr_type = [1=>'Нақд', 2=>'Пластик','all'=>'Барчаси'];
+        $activeSheet->setCellValueExplicit('G2', $arr_type[$sendtype], \PHPExcel_Cell_DataType::TYPE_STRING); 
+        
+
         $row = 5;
         $n=1;
         if($filial=='all'){
@@ -1261,6 +1269,7 @@ public function actionKassa1prev()
             }
         }
         else{
+            $title = Filials::getName($filial);
             $models = Payments::find()->where(['between','create_date',$date1,$date2])->andWhere(['in','kassir_id',Users::getFilUsers($filial)]);
                 if($sendtype=='all'){
                     $sum_in = $models->sum('cash_sum+plastik_sum');
