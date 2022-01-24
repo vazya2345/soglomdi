@@ -1260,7 +1260,7 @@ public function actionKassa1prev()
             }
         }
         else{
-            $$models = Payments::find()->where(['between','create_date',$date1,$date2])->andWhere(['in','kassir_id',Users::getFilUsers($filial)]);
+            $models = Payments::find()->where(['between','create_date',$date1,$date2])->andWhere(['in','kassir_id',Users::getFilUsers($filial)]);
                 if($sendtype=='all'){
                     $sum_in = $models->sum('cash_sum+plastik_sum');
                 }
