@@ -67,6 +67,13 @@ class FilialQoldiq extends \yii\db\ActiveRecord
         return $res1;
     }
 
+    public static function getFilQoldiqs($fil)
+    {
+        $fqs = self::find()->where(['filial_id'=>$fil])->andWhere(['not in', 'kassir_id', [1,17,36,37]])->all();// filial boyicha filtr
+        $result = ArrayHelper::map($fqs, 'id', 'id');
+        return $result;
+    }
+
     public static function getName($id)
     {
         $model = self::findOne($id);
