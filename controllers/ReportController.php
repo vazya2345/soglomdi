@@ -1152,4 +1152,330 @@ public function actionKassa1prev()
         $objWriter->save('php://output');
         exit;
     }
+
+
+////////////////////////////////////////////////////// KASSA TUSHUM CHIQIM //////////////////////////////////////////////////////
+    public function actionKassatch1prev()
+    {
+        if(Yii::$app->request->post('date1')){
+            if(strlen(Yii::$app->request->post('date1'))==0){
+                $date1 = date("Y-m-d");
+            }
+            else{
+                $date1 = Yii::$app->request->post('date1');
+            }
+
+            if(strlen(Yii::$app->request->post('date2'))==0){
+                $date2 = date("Y-m-d");
+            }
+            else{
+                $date2 = Yii::$app->request->post('date2');
+            }
+
+            if(strlen(Yii::$app->request->post('filial'))==0){
+                $filial = 'all';
+            }
+            else{
+                $filial = Yii::$app->request->post('filial');
+            }
+
+            if(strlen(Yii::$app->request->post('sendtype'))==0){
+                $sendtype = 'all';
+            }
+            else{
+                $sendtype = Yii::$app->request->post('sendtype');
+            }
+
+            
+            $this->kassaTushumChiqimReport($date1,$date2,$filial,$sendtype);
+        }
+        return $this->render('kassatch1');
+    }
+
+    private function kassaTushumChiqimReport($date1,$date2,$filial,$sendtype)
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(20 * 60);
+
+        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+
+        $objPHPExcel = new \PHPExcel;
+        
+        $url = './excel/kassatch1.xlsx';
+        $objPHPExcel = \PHPExcel_IOFactory::load($url);
+        $sheet = 0;
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+        $activeSheet->setCellValueExplicit('C2', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('E2', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('G2', $sendtype, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $arr_type = [1=>'Нақд', 2=>'Пластик','all'=>'Барчаси'];
+        $row = 5;
+        $n=1;
+        if($filial=='all'){
+            $filmodels = Filials::getAll();
+            foreach($filmodels as $key => $title){
+                $filial = $key;
+                $models = Payments::find()->where(['between','create_date',$date1,$date2])->andWhere(['in','kassir_id',Users::getFilUsers($filial)]);
+                if($sendtype=='all'){
+                    $sum_in = $models->sum('cash_sum+plastik_sum');
+                }
+                else{
+                    if($sendtype==1){
+                        $sum_in = $models->sum('cash_sum');
+                    }
+                    else{
+                        $sum_in = $models->sum('plastik_sum');
+                    }   
+                }
+                $rasxod = Rasxod::find()->where(['between','create_date',$date1,$date2])->andWhere(['filial_id'=>$filial, 'status'=>2]);
+                if($sendtype!='all'){
+                    $rasxod = $rasxod->andWhere(['sum_type'=>$sendtype]);
+                }
+                $rasxod = $rasxod->sum('summa');
+
+                $recsum = MoneySend::find()->where(['between','send_date',$date1,$date2])->andWhere(['in','rec_user',Users::getFilUsers($filial)])->andWhere(['status'=>2]);
+                if($sendtype!='all'){
+                    $recsum = $recsum->andWhere(['send_type'=>$sendtype]);
+                }
+                $recsum = $recsum->sum('amount');
+
+                $fqsends = FqSends::find()->where(['between','send_date',$date1,$date2])->andWhere(['status'=>2])->andWhere(['in','fq_id',FilialQoldiq::getFilQoldiqs($filial)]);
+                if($sendtype!='all'){
+                    $fqsends = $fqsends->andWhere(['send_type'=>$sendtype]);
+                }
+                $zavkassa_sum = $fqsends->sum('sum');
+                
+                $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('B'.$row, $title, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('C'.$row, $arr_type[$sendtype], \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('D'.$row, $sum_in, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('E'.$row, $rasxod, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('F'.$row, $recsum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('G'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $row++;
+            }
+        }
+        else{
+            $$models = Payments::find()->where(['between','create_date',$date1,$date2])->andWhere(['in','kassir_id',Users::getFilUsers($filial)]);
+                if($sendtype=='all'){
+                    $sum_in = $models->sum('cash_sum+plastik_sum');
+                }
+                else{
+                    if($sendtype==1){
+                        $sum_in = $models->sum('cash_sum');
+                    }
+                    else{
+                        $sum_in = $models->sum('plastik_sum');
+                    }   
+                }
+                $rasxod = Rasxod::find()->where(['between','create_date',$date1,$date2])->andWhere(['filial_id'=>$filial, 'status'=>2]);
+                if($sendtype!='all'){
+                    $rasxod = $rasxod->andWhere(['sum_type'=>$sendtype]);
+                }
+                $rasxod = $rasxod->sum('summa');
+
+                $recsum = MoneySend::find()->where(['between','send_date',$date1,$date2])->andWhere(['in','rec_user',Users::getFilUsers($filial)])->andWhere(['status'=>2]);
+                if($sendtype!='all'){
+                    $recsum = $recsum->andWhere(['send_type'=>$sendtype]);
+                }
+                $recsum = $recsum->sum('amount');
+
+                $fqsends = FqSends::find()->where(['between','send_date',$date1,$date2])->andWhere(['status'=>2])->andWhere(['in','fq_id',FilialQoldiq::getFilQoldiqs($filial)]);
+                if($sendtype!='all'){
+                    $fqsends = $fqsends->andWhere(['send_type'=>$sendtype]);
+                }
+                $zavkassa_sum = $fqsends->sum('sum');
+                
+                $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('B'.$row, $title, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('C'.$row, $arr_type[$sendtype], \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('D'.$row, $sum_in, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('E'.$row, $rasxod, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('F'.$row, $recsum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('G'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+        }
+
+
+        
+        
+ 
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="kassa_tushum_chiqim_'.date("Y-m-d").'.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+
+////////////////////////////////////////////////////// REFERAL   //////////////////////////////////////////////////////
+    public function actionReferal1prev()
+    {
+        if(Yii::$app->request->post('date1')){
+            if(strlen(Yii::$app->request->post('date1'))==0){
+                $date1 = date("Y-m-d");
+            }
+            else{
+                $date1 = Yii::$app->request->post('date1');
+            }
+
+            if(strlen(Yii::$app->request->post('date2'))==0){
+                $date2 = date("Y-m-d");
+            }
+            else{
+                $date2 = Yii::$app->request->post('date2');
+            }
+
+            if(strlen(Yii::$app->request->post('filial'))==0){
+                $filial = 'all';
+            }
+            else{
+                $filial = Yii::$app->request->post('filial');
+            }
+
+            if(strlen(Yii::$app->request->post('lavozim'))==0){
+                $lavozim = 'all';
+            }
+            else{
+                $lavozim = Yii::$app->request->post('lavozim');
+            }
+
+            if(strlen(Yii::$app->request->post('refcode'))==0){
+                $refcode = 'all';
+            }
+            else{
+                $refcode = Yii::$app->request->post('refcode');
+            }
+
+            
+            $this->referal1Report($date1,$date2,$filial,$lavozim,$refcode);
+        }
+        return $this->render('referal1');
+    }
+
+    private function referal1Report($date1,$date2,$filial,$lavozim,$refcode)
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(20 * 60);
+
+        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+
+        $objPHPExcel = new \PHPExcel;
+        
+        $url = './excel/referal.xlsx';
+        $objPHPExcel = \PHPExcel_IOFactory::load($url);
+        $sheet = 0;
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+        $activeSheet->setCellValueExplicit('C2', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('E2', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('G2', $sendtype, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $arr_type = [1=>'Нақд', 2=>'Пластик','all'=>'Барчаси'];
+        $row = 5;
+        $n=1;
+        if($filial=='all'){
+            $filmodels = Filials::getAll();
+            foreach($filmodels as $key => $title){
+                $filial = $key;
+                $models = Registration::find()->where(['between','create_date',$date1,$date2])->andWhere(['in','user_id',Users::getFilUsers($filial)]);
+                if($sendtype!='all'){
+                    if($sendtype==1){
+                        $sum_in = $models->sum('sum_cash');
+                    }
+                    else{
+                        $sum_in = $models->sum('sum_plastik');
+                    }
+                }
+                else{
+                    $sum_in = $models->sum('sum_cash+sum_plastik');
+                }
+                $rasxod = Rasxod::find()->where(['between','create_date',$date1,$date2])->andWhere(['filial_id'=>$filial, 'status'=>2]);
+                if($sendtype!='all'){
+                    $rasxod = $rasxod->andWhere(['sum_type'=>$sendtype]);
+                }
+                $rasxod = $rasxod->sum('summa');
+
+                $recsum = MoneySend::find()->where(['between','send_date',$date1,$date2])->andWhere(['in','rec_user',Users::getFilUsers($filial)])->andWhere(['status'=>2]);
+                if($sendtype!='all'){
+                    $recsum = $recsum->andWhere(['send_type'=>$sendtype]);
+                }
+                $recsum = $recsum->sum('amount');
+
+                $fqsends = FqSends::find()->where(['between','send_date',$date1,$date2])->andWhere(['status'=>2])->andWhere(['in','fq_id',FilialQoldiq::getFilQoldiqs($filial)]);
+                if($sendtype!='all'){
+                    $fqsends = $fqsends->andWhere(['send_type'=>$sendtype]);
+                }
+                $zavkassa_sum = $fqsends->sum('sum');
+
+                $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('B'.$row, $title, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('C'.$row, $arr_type[$sendtype], \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('D'.$row, $sum_in, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('E'.$row, $rasxod, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('F'.$row, $recsum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('G'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $row++;
+            }
+        }
+        else{
+            $models = Registration::find()->where(['between','create_date',$date1,$date2]);
+            $models->andWhere(['in','user_id',Users::getFilUsers($filial)]);
+            if($sendtype!='all'){
+                if($sendtype==1){
+                    $sum_in = $models->sum('sum_cash');
+                }
+                else{
+                    $sum_in = $models->sum('sum_plastik');
+                }
+                
+            }
+            else{
+                $sum_in = $models->sum('sum_cash+sum_plastik');
+            }
+            $rasxod = Rasxod::find()->where(['between','create_date',$date1,$date2])->andWhere(['filial_id'=>$filial, 'status'=>2]);
+            if($sendtype!='all'){
+                $rasxod = $rasxod->andWhere(['sum_type'=>$sendtype]);
+            }
+            $rasxod = $rasxod->sum('summa');
+
+            $recsum = MoneySend::find()->where(['between','send_date',$date1,$date2])->andWhere(['in','rec_user',Users::getFilUsers($filial)])->andWhere(['status'=>2]);
+            if($sendtype!='all'){
+                $recsum = $recsum->andWhere(['send_type'=>$sendtype]);
+            }
+            $recsum = $recsum->sum('amount');
+
+
+
+            $fqsends = FqSends::find()->where(['between','send_date',$date1,$date2])->andWhere(['status'=>2])->andWhere(['in','fq_id',FilialQoldiq::getFilQoldiqs($filial)]);
+            if($sendtype!='all'){
+                $fqsends = $fqsends->andWhere(['send_type'=>$sendtype]);
+            }
+            $zavkassa_sum = $fqsends->sum('sum');
+
+
+
+
+            $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('B'.$row, Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('C'.$row, $arr_type[$sendtype], \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('D'.$row, $sum_in, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('E'.$row, $rasxod, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('F'.$row, $recsum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('G'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+        }
+
+
+        
+        
+ 
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="kassa_tushum_chiqim_'.date("Y-m-d").'.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+        exit;
+    }
 }
