@@ -17,6 +17,11 @@ use app\models\SPokazatel;
 use app\models\RegDopinfo;
 use app\models\PokazLimits;
 use app\models\MoneySend;
+use app\models\Payments;
+use app\models\FqSends;
+use app\models\Rasxod;
+use app\models\Referals;
+use app\models\Registration;
 
 use app\models\Reagent;
 use app\models\ReagentFilial;
@@ -1245,7 +1250,7 @@ public function actionKassa1prev()
                     $fqsends = $fqsends->andWhere(['send_type'=>$sendtype]);
                 }
                 $zavkassa_sum = $fqsends->sum('sum');
-                
+
                 $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                 $activeSheet->setCellValueExplicit('B'.$row, $title, \PHPExcel_Cell_DataType::TYPE_STRING);
                 $activeSheet->setCellValueExplicit('C'.$row, $arr_type[$sendtype], \PHPExcel_Cell_DataType::TYPE_STRING);
