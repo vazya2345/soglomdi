@@ -12,6 +12,7 @@ use app\models\SAnaliz;
 
 use app\models\RegReagents;
 use app\models\RegAnalizs;
+use app\models\Result;
 
 /**
  * This is the model class for table "reagent".
@@ -399,6 +400,10 @@ class Reagent extends \yii\db\ActiveRecord
         $myfil = Users::getMyFil();
         $reganalizs = RegAnalizs::find()->where(['reg_id'=>$reg_id])->all();
         foreach ($reganalizs as $key) {
+            $key->delete();
+        }
+        $res = Result::find()->where(['main_id'=>$reg_id])->all();
+        foreach ($res as $key) {
             $key->delete();
         }
         $regreagents = RegReagents::find()->where(['reg_id'=>$reg_id])->all();
