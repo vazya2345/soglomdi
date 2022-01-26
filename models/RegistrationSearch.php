@@ -81,7 +81,7 @@ class RegistrationSearch extends Registration
             $query->andWhere(['>','sum_debt',0]);
         }
         if($this->user_id){
-            $query->andWhere(['in','user_id',Users::getFilUsers($this->user_id)]);
+            $query->andWhere(['in','user_id',Users::getFilUsersByUserId($this->user_id)]);
         }
 
         

@@ -218,6 +218,16 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $result;
     }
 
+    public static function getFilUsersByUserId($userid)
+    {
+        $model = self::findOne($userid);
+        $emps = self::find()->where(['add1'=>$model->add1])->all();// filial boyicha filtr
+        $result = ArrayHelper::map($emps, 'id', 'id');
+        return $result;
+    }
+
+    
+
     public static function getFilPhoneNum($id)
     {
         $model = self::findOne($id);
