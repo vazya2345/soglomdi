@@ -1598,7 +1598,7 @@ public function actionKassa1prev()
             $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $activeSheet->setCellValueExplicit('B'.$row, Filials::getName($rasxods->filial_id), \PHPExcel_Cell_DataType::TYPE_STRING);
             $activeSheet->setCellValueExplicit('C'.$row, Users::getName($rasxods->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('D'.$row, $money_type_arr[$rasxods->sum_type), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('D'.$row, $money_type_arr[$rasxods->sum_type], \PHPExcel_Cell_DataType::TYPE_STRING);
             $activeSheet->setCellValueExplicit('E'.$row, $rasxods->summa, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $activeSheet->setCellValueExplicit('F'.$row, SRasxodTypes::getName($rasxods->rasxod_type), \PHPExcel_Cell_DataType::TYPE_STRING);
             $activeSheet->setCellValueExplicit('G'.$row, $rasxods->rasxod_desc, \PHPExcel_Cell_DataType::TYPE_STRING);
