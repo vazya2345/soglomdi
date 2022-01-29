@@ -138,9 +138,11 @@ $lav = Users::getMyLav();
                 <li>
                     <?= Html::a('Реагент қолдиқлари', ['/report/reagentqoldiqprev'], ['class' => 'dropdown-item']) ?>
                 </li>
-
                 <li>
                     <?= Html::a('Касса тушум чиқим', ['/report/kassatch1prev'], ['class' => 'dropdown-item']) ?>
+                </li>
+                <li>
+                    <?= Html::a('Харажатлар', ['/report/harajatlar1prev'], ['class' => 'dropdown-item']) ?>
                 </li>
             </ul>
         </li>
