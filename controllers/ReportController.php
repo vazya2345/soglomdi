@@ -1540,7 +1540,7 @@ public function actionKassa1prev()
             }
 
             
-            $this->referal1Report($date1,$date2,$filial,$rasxod_type,$money_type,$refcode);
+            $this->harajatlar1Report($date1,$date2,$filial,$rasxod_type,$money_type,$refcode);
         }
         return $this->render('harajatlar1');
     }
