@@ -24,6 +24,7 @@ use app\models\FilialQoldiq;
 
 use app\models\Reagent;
 use app\models\ReagentFilial;
+use app\models\SRasxodTypes;
 
 
 
@@ -1487,6 +1488,138 @@ public function actionKassa1prev()
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="kassa_tushum_chiqim_'.date("Y-m-d").'.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+////////////////////////////////////////////////////// HARAJATLAR   //////////////////////////////////////////////////////
+    public function actionHarajatlar1prev()
+    {
+        if(Yii::$app->request->post('date1')){
+            if(strlen(Yii::$app->request->post('date1'))==0){
+                $date1 = date("Y-m-d");
+            }
+            else{
+                $date1 = Yii::$app->request->post('date1');
+            }
+
+            if(strlen(Yii::$app->request->post('date2'))==0){
+                $date2 = date("Y-m-d");
+            }
+            else{
+                $date2 = Yii::$app->request->post('date2');
+            }
+
+            if(strlen(Yii::$app->request->post('filial'))==0){
+                $filial = 'all';
+            }
+            else{
+                $filial = Yii::$app->request->post('filial');
+            }
+
+            if(strlen(Yii::$app->request->post('rasxod_type'))==0){
+                $rasxod_type = 'all';
+            }
+            else{
+                $rasxod_type = Yii::$app->request->post('rasxod_type');
+            }
+
+            if(strlen(Yii::$app->request->post('money_type'))==0){
+                $money_type = 'all';
+            }
+            else{
+                $money_type = Yii::$app->request->post('money_type');
+            }
+
+            if(strlen(Yii::$app->request->post('refcode'))==0){
+                $refcode = 'all';
+            }
+            else{
+                $refcode = Yii::$app->request->post('refcode');
+            }
+
+            
+            $this->referal1Report($date1,$date2,$filial,$rasxod_type,$money_type,$refcode);
+        }
+        return $this->render('referal1');
+    }
+
+    private function harajatlar1Report($date1,$date2,$filial,$rasxod_type,$money_type,$refcode)
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(20 * 60);
+
+        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+
+        $objPHPExcel = new \PHPExcel;
+        
+        $url = './excel/harajatlar.xlsx';
+        $objPHPExcel = \PHPExcel_IOFactory::load($url);
+        $sheet = 0;
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $money_type_arr = [1=>'Нақд', 2=>'Пластик','all'=>'Барчаси'];
+        $status_arr = ['1'=>'Юборилди', '2'=>'Қабул қилинди', '3'=>'Рад этилди'];
+
+
+
+        $activeSheet->setCellValueExplicit('C2', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('E2', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('G2', SRasxodTypes::getName($rasxod_type), \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('I2', $money_type_arr[$money_type], \PHPExcel_Cell_DataType::TYPE_STRING);
+        if($refcode=='all'){
+            $activeSheet->setCellValueExplicit('K2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        else{
+            $activeSheet->setCellValueExplicit('K2', Referals::getName($refcode), \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        
+        $row = 5;
+        $n=1;
+
+        $rasxods = Rasxod::find()->where(['between','create_date',$date1,$date2])->andWhere(['status'=>2]);
+        if($filial!='all'){
+            $rasxods = $rasxods->andWhere(['filial_id'=>$filial]);
+        }
+        if($rasxod_type!='all'){
+            $rasxods = $rasxods->andWhere(['rasxod_type'=>$rasxod_type]);
+        }
+        if($money_type!='all'){
+            $rasxods = $rasxods->andWhere(['sum_type'=>$money_type]);
+        }
+        if($refcode!='all'){
+            $rasxods = $rasxods->andWhere(['referal_id'=>$refcode]);
+        }
+        $rasxods = $rasxods->all();
+
+        foreach ($rasxods as $rasxod) {
+            $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('B'.$row, Filials::getName($rasxods->filial_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('C'.$row, Users::getName($rasxods->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('D'.$row, $money_type_arr[$rasxods->sum_type), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('E'.$row, $rasxods->summa, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('F'.$row, SRasxodTypes::getName($rasxods->rasxod_type), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('G'.$row, $rasxods->rasxod_desc, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('H'.$row, $rasxods->create_date, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('I'.$row, $rasxods->rasxod_period, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('J'.$row, $status_arr[$rasxods->status], \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('K'.$row, Users::getName($rasxods->send_user), \PHPExcel_Cell_DataType::TYPE_STRING);
+            if(strlen($rasxods->referal_id)>0){
+                $refmodel = Referals::getByRefnum($rasxods->referal_id);
+                $activeSheet->setCellValueExplicit('L'.$row, $rasxods->referal_id, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('M'.$row, $refmodel->desc, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('N'.$row, $refmodel->fio, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('O'.$row, $refmodel->phone, \PHPExcel_Cell_DataType::TYPE_STRING);
+            }
+            $row++;
+        }
+        
+ 
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="harajatlar_'.date("Y-m-d").'.xlsx"');
         header('Cache-Control: max-age=0');
         $objWriter->save('php://output');
         exit;

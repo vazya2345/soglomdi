@@ -54,6 +54,9 @@ class SRasxodTypes extends \yii\db\ActiveRecord
 
     public static function getName($id)
     {
+        if($id=='all'){
+            return 'Барчаси';
+        }
         $model = self::findOne($id);
         if($model){
             return $model->title;
