@@ -1600,9 +1600,6 @@ public function actionKassa1prev()
         }
         $rasxods = $rasxods->all();
 
-        var_dump($rasxods);
-        die;
-
         foreach ($rasxods as $rasxod) {
             $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $activeSheet->setCellValueExplicit('B'.$row, Filials::getName($rasxod->filial_id), \PHPExcel_Cell_DataType::TYPE_STRING);
