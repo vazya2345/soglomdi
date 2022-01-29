@@ -1566,7 +1566,13 @@ public function actionKassa1prev()
 
 
         $activeSheet->setCellValueExplicit('C2', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('E2', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
+        
+        if($refcode=='all'){
+            $activeSheet->setCellValueExplicit('E2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        else{
+            $activeSheet->setCellValueExplicit('E2', Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
         $activeSheet->setCellValueExplicit('G2', SRasxodTypes::getName($rasxod_type), \PHPExcel_Cell_DataType::TYPE_STRING);
         $activeSheet->setCellValueExplicit('I2', $money_type_arr[$money_type], \PHPExcel_Cell_DataType::TYPE_STRING);
         if($refcode=='all'){
@@ -1579,7 +1585,7 @@ public function actionKassa1prev()
         $row = 5;
         $n=1;
 
-        $rasxods = Rasxod::find()->where(['between','create_date',$date1,$date2])->andWhere(['status'=>2]);
+        $rasxods = Rasxod::find()->where(['between','create_date',$date1,$date2]);
         if($filial!='all'){
             $rasxods = $rasxods->andWhere(['filial_id'=>$filial]);
         }
@@ -1594,21 +1600,24 @@ public function actionKassa1prev()
         }
         $rasxods = $rasxods->all();
 
+        var_dump($rasxods);
+        die;
+
         foreach ($rasxods as $rasxod) {
             $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('B'.$row, Filials::getName($rasxods->filial_id), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('C'.$row, Users::getName($rasxods->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('D'.$row, $money_type_arr[$rasxods->sum_type], \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('E'.$row, $rasxods->summa, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('F'.$row, SRasxodTypes::getName($rasxods->rasxod_type), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('G'.$row, $rasxods->rasxod_desc, \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('H'.$row, $rasxods->create_date, \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('I'.$row, $rasxods->rasxod_period, \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('J'.$row, $status_arr[$rasxods->status], \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('K'.$row, Users::getName($rasxods->send_user), \PHPExcel_Cell_DataType::TYPE_STRING);
-            if(strlen($rasxods->referal_id)>0){
-                $refmodel = Referals::getByRefnum($rasxods->referal_id);
-                $activeSheet->setCellValueExplicit('L'.$row, $rasxods->referal_id, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('B'.$row, Filials::getName($rasxod->filial_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('C'.$row, Users::getName($rasxod->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('D'.$row, $money_type_arr[$rasxod->sum_type], \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('E'.$row, $rasxod->summa, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('F'.$row, SRasxodTypes::getName($rasxod->rasxod_type), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('G'.$row, $rasxod->rasxod_desc, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('H'.$row, $rasxod->create_date, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('I'.$row, $rasxod->rasxod_period, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('J'.$row, $status_arr[$rasxod->status], \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('K'.$row, Users::getName($rasxod->send_user), \PHPExcel_Cell_DataType::TYPE_STRING);
+            if(strlen($rasxod->referal_id)>0){
+                $refmodel = Referals::getByRefnum($rasxod->referal_id);
+                $activeSheet->setCellValueExplicit('L'.$row, $rasxod->referal_id, \PHPExcel_Cell_DataType::TYPE_STRING);
                 $activeSheet->setCellValueExplicit('M'.$row, $refmodel->desc, \PHPExcel_Cell_DataType::TYPE_STRING);
                 $activeSheet->setCellValueExplicit('N'.$row, $refmodel->fio, \PHPExcel_Cell_DataType::TYPE_STRING);
                 $activeSheet->setCellValueExplicit('O'.$row, $refmodel->phone, \PHPExcel_Cell_DataType::TYPE_STRING);
