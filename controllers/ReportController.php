@@ -25,6 +25,7 @@ use app\models\FilialQoldiq;
 use app\models\Reagent;
 use app\models\ReagentFilial;
 use app\models\SRasxodTypes;
+use app\models\RefSends;
 
 
 
@@ -1349,13 +1350,6 @@ public function actionKassa1prev()
                 $filial = Yii::$app->request->post('filial');
             }
 
-            if(strlen(Yii::$app->request->post('lavozim'))==0){
-                $lavozim = 'all';
-            }
-            else{
-                $lavozim = Yii::$app->request->post('lavozim');
-            }
-
             if(strlen(Yii::$app->request->post('refcode'))==0){
                 $refcode = 'all';
             }
@@ -1363,13 +1357,27 @@ public function actionKassa1prev()
                 $refcode = Yii::$app->request->post('refcode');
             }
 
+            if(strlen(Yii::$app->request->post('shifoxona'))==0){
+                $shifoxona = 'all';
+            }
+            else{
+                $shifoxona = Yii::$app->request->post('shifoxona');
+            }
+
+            if(strlen(Yii::$app->request->post('lavozim'))==0){
+                $lavozim = 'all';
+            }
+            else{
+                $lavozim = Yii::$app->request->post('lavozim');
+            }
+
             
-            $this->referal1Report($date1,$date2,$filial,$lavozim,$refcode);
+            $this->referal1Report($date1,$date2,$filial,$refcode,$shifoxona,$lavozim);
         }
         return $this->render('referal1');
     }
 
-    private function referal1Report($date1,$date2,$filial,$lavozim,$refcode)
+    private function referal1Report($date1,$date2,$filial,$refcode,$shifoxona,$lavozim)
     {
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
@@ -1384,103 +1392,88 @@ public function actionKassa1prev()
         $objPHPExcel->setActiveSheetIndex($sheet);
         $activeSheet = $objPHPExcel->getActiveSheet();
         $activeSheet->setCellValueExplicit('C2', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('E2', $filial, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('G2', $sendtype, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $arr_type = [1=>'Нақд', 2=>'Пластик','all'=>'Барчаси'];
-        $row = 5;
-        $n=1;
+
+
         if($filial=='all'){
-            $filmodels = Filials::getAll();
-            foreach($filmodels as $key => $title){
-                $filial = $key;
-                $models = Registration::find()->where(['between','create_date',$date1,$date2])->andWhere(['in','user_id',Users::getFilUsers($filial)]);
-                if($sendtype!='all'){
-                    if($sendtype==1){
-                        $sum_in = $models->sum('sum_cash');
-                    }
-                    else{
-                        $sum_in = $models->sum('sum_plastik');
-                    }
-                }
-                else{
-                    $sum_in = $models->sum('sum_cash+sum_plastik');
-                }
-                $rasxod = Rasxod::find()->where(['between','create_date',$date1,$date2])->andWhere(['filial_id'=>$filial, 'status'=>2]);
-                if($sendtype!='all'){
-                    $rasxod = $rasxod->andWhere(['sum_type'=>$sendtype]);
-                }
-                $rasxod = $rasxod->sum('summa');
-
-                $recsum = MoneySend::find()->where(['between','send_date',$date1,$date2])->andWhere(['in','rec_user',Users::getFilUsers($filial)])->andWhere(['status'=>2]);
-                if($sendtype!='all'){
-                    $recsum = $recsum->andWhere(['send_type'=>$sendtype]);
-                }
-                $recsum = $recsum->sum('amount');
-
-                $fqsends = FqSends::find()->where(['between','send_date',$date1,$date2])->andWhere(['status'=>2])->andWhere(['in','fq_id',FilialQoldiq::getFilQoldiqs($filial)]);
-                if($sendtype!='all'){
-                    $fqsends = $fqsends->andWhere(['send_type'=>$sendtype]);
-                }
-                $zavkassa_sum = $fqsends->sum('sum');
-
-                $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $activeSheet->setCellValueExplicit('B'.$row, $title, \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('C'.$row, $arr_type[$sendtype], \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('D'.$row, $sum_in, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $activeSheet->setCellValueExplicit('E'.$row, $rasxod, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $activeSheet->setCellValueExplicit('F'.$row, $recsum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $activeSheet->setCellValueExplicit('G'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $row++;
-            }
+            $activeSheet->setCellValueExplicit('F2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+            $referals = Referals::find();
         }
         else{
-            $models = Registration::find()->where(['between','create_date',$date1,$date2]);
-            $models->andWhere(['in','user_id',Users::getFilUsers($filial)]);
-            if($sendtype!='all'){
-                if($sendtype==1){
-                    $sum_in = $models->sum('sum_cash');
-                }
-                else{
-                    $sum_in = $models->sum('sum_plastik');
-                }
-                
-            }
-            else{
-                $sum_in = $models->sum('sum_cash+sum_plastik');
-            }
-            $rasxod = Rasxod::find()->where(['between','create_date',$date1,$date2])->andWhere(['filial_id'=>$filial, 'status'=>2]);
-            if($sendtype!='all'){
-                $rasxod = $rasxod->andWhere(['sum_type'=>$sendtype]);
-            }
-            $rasxod = $rasxod->sum('summa');
-
-            $recsum = MoneySend::find()->where(['between','send_date',$date1,$date2])->andWhere(['in','rec_user',Users::getFilUsers($filial)])->andWhere(['status'=>2]);
-            if($sendtype!='all'){
-                $recsum = $recsum->andWhere(['send_type'=>$sendtype]);
-            }
-            $recsum = $recsum->sum('amount');
-
-
-
-            $fqsends = FqSends::find()->where(['between','send_date',$date1,$date2])->andWhere(['status'=>2])->andWhere(['in','fq_id',FilialQoldiq::getFilQoldiqs($filial)]);
-            if($sendtype!='all'){
-                $fqsends = $fqsends->andWhere(['send_type'=>$sendtype]);
-            }
-            $zavkassa_sum = $fqsends->sum('sum');
-
-
-
-
-            $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('B'.$row, Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('C'.$row, $arr_type[$sendtype], \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('D'.$row, $sum_in, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('E'.$row, $rasxod, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('F'.$row, $recsum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('G'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-
+            $activeSheet->setCellValueExplicit('F2', Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $referals = Referals::find()->where(['filial'=>$filial]);
         }
 
+        if($refcode=='all'){
+            $activeSheet->setCellValueExplicit('L2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        else{
+            $activeSheet->setCellValueExplicit('L2', Referals::getName($refcode), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $referals = $referals->andWhere(['refnum'=>$refcode]);
+        }
+
+        if($shifoxona=='all'){
+            $activeSheet->setCellValueExplicit('H2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        else{
+            $activeSheet->setCellValueExplicit('H2', $shifoxona, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $referals = $referals->andWhere(['like', 'desc', $shifoxona]);
+        }
+
+        if($lavozim=='all'){
+            $activeSheet->setCellValueExplicit('J2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        else{
+            $activeSheet->setCellValueExplicit('J2', $lavozim, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $referals = $referals->andWhere(['like', 'info', $lavozim]);
+        }
+        $referals = $referals->all();
+        foreach ($referals as $referal) {
+            $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('B'.$row, Filials::getName($referal->filial), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('C'.$row, $referal->refnum, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('D'.$row, $referal->info, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('E'.$row, $referal->desc, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('F'.$row, $referal->fio, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('G'.$row, $referal->phone, \PHPExcel_Cell_DataType::TYPE_STRING);
+
+            $reg_count = Registration::find()
+                            ->where(['between','create_date',$date1,$date2])
+                            ->andWhere(['ref_code'=>$referal->refnum])
+                            ->andWhere(['skidka_reg'=>null])
+                            ->count();
+            $activeSheet->setCellValueExplicit('H'.$row, $reg_count, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+            $reg_sum = Registration::find()
+                        ->where(['between','create_date',$date1,$date2])
+                        ->andWhere(['ref_code'=>$referal->refnum])
+                        ->andWhere(['skidka_reg'=>null])
+                        ->sum('sum_cash+sum_plastik');
+            $activeSheet->setCellValueExplicit('I'.$row, $reg_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+            if($referal->add1>0){
+                $percent_sum = $reg_sum*(int)$referal->add1/100;
+            }
+            else{
+                $percent_sum = (int)$reg_count*$model->fix_sum;
+            }
+
+            $activeSheet->setCellValueExplicit('J'.$row, $percent_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $foyda_sum = $reg_sum-$percent_sum;
+            $activeSheet->setCellValueExplicit('K'.$row, $foyda_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+
+            $refsend_sum = RefSends::find()->where(['between','send_date',$date1,$date2])->andWhere(['refnum'=>$referal->refnum])->sum('sum');
+            $activeSheet->setCellValueExplicit('L'.$row, $foyda_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+
+            $activeSheet->setCellValueExplicit('M'.$row, $referal->avans_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('N'.$row, $referal->avans_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+            $row++;
+        }
+
+
+            
 
         
         
@@ -1567,7 +1560,7 @@ public function actionKassa1prev()
 
         $activeSheet->setCellValueExplicit('C2', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
         
-        if($refcode=='all'){
+        if($filial=='all'){
             $activeSheet->setCellValueExplicit('E2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
         }
         else{
