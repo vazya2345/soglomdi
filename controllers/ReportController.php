@@ -1427,6 +1427,10 @@ public function actionKassa1prev()
             $referals = $referals->andWhere(['like', 'info', $lavozim]);
         }
         $referals = $referals->all();
+
+
+        $n = 1;
+        $row = 5;
         foreach ($referals as $referal) {
             $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $activeSheet->setCellValueExplicit('B'.$row, Filials::getName($referal->filial), \PHPExcel_Cell_DataType::TYPE_STRING);
