@@ -1458,7 +1458,7 @@ public function actionKassa1prev()
                 $percent_sum = $reg_sum*(int)$referal->add1/100;
             }
             else{
-                $percent_sum = (int)$reg_count*$model->fix_sum;
+                $percent_sum = (int)$reg_count*$referal->fix_sum;
             }
 
             $activeSheet->setCellValueExplicit('J'.$row, $percent_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -1484,7 +1484,7 @@ public function actionKassa1prev()
  
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="kassa_tushum_chiqim_'.date("Y-m-d").'.xlsx"');
+        header('Content-Disposition: attachment;filename="referallar_'.date("Y-m-d").'.xlsx"');
         header('Cache-Control: max-age=0');
         $objWriter->save('php://output');
         exit;
