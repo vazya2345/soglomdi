@@ -1379,6 +1379,7 @@ public function actionKassa1prev()
 
     private function referal1Report($date1,$date2,$filial,$refcode,$shifoxona,$lavozim)
     {
+
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
@@ -1451,7 +1452,7 @@ public function actionKassa1prev()
                         ->where(['between','create_date',$date1,$date2])
                         ->andWhere(['ref_code'=>$referal->refnum])
                         ->andWhere(['skidka_reg'=>null])
-                        ->sum('sum_cash+sum_plastik');
+                        ->sum('IFNULL(sum_cash, 0)+IFNULL(sum_plastik, 0)');
             $activeSheet->setCellValueExplicit('I'.$row, $reg_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             if($referal->add1>0){
