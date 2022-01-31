@@ -187,7 +187,7 @@ class ReferalsController extends Controller
                 $sum = (int)$regs*$model->fix_sum;
             }
             
-            $model->qoldiq_summa = (int)$sum;//(int)$model->qoldiq_summa +
+            $model->qoldiq_summa = (int)$model->qoldiq_summa + (int)$sum;//
 
         }
 
