@@ -154,7 +154,7 @@ class ReferalsController extends Controller
         
 
         if($model->id!=131){
-            if(strlen($model->last_change_date)==0){
+            if($model->last_change_date!==true){
                 $model->last_change_date = "2021-01-01 00:00:01";
             }
             $rs_model = RefSends::find()->where(['refnum'=>$model->refnum])->orderBy(['send_date'=>SORT_DESC])->one();
@@ -187,7 +187,7 @@ class ReferalsController extends Controller
                 $sum = (int)$regs*$model->fix_sum;
             }
             
-            $model->qoldiq_summa = (int)$model->qoldiq_summa + (int)$sum;//
+            $model->qoldiq_summa = (int)$sum;//(int)$model->qoldiq_summa + 
 
         }
 
