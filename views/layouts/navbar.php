@@ -163,10 +163,27 @@ $lav = Users::getMyLav();
                     <?= Html::a('Барча тўловлар', ['/payments/index'], ['class' => 'nav-link']) ?>
                 </li>
                 <li class="nav-item">
-                    <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'nav-link']) ?>
-                </li>
-                <li class="nav-item">
                     <?= Html::a('Пул юбориш', ['/filial-qoldiq/sendmoney'], ['class' => 'nav-link']) ?>
+                </li>
+                <li class="nav-item dropdown">
+                    <?= Html::a('Реагент', '#', ['class' => 'nav-link dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-expanded'=>true]) ?>
+                    <ul class="dropdown-menu shadow">
+                        <li>
+                            <?= Html::a('Реагентлар', ['/reagent/index'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Реагент боғлиқлиги', ['/reagent-rel/index'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Реагент киритиш', ['/reagent-input/index'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Реагент юбориш', ['/reagent-send/index'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                    </ul>
                 </li>
         <?php
             }
