@@ -1748,24 +1748,24 @@ public function actionKassa1prev()
 
             $frow = $row-1;
             $activeSheet->setCellValueExplicit('B'.$row, 'Жами', \PHPExcel_Cell_DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('C'.$row, '=SUM(C8:C'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('D'.$row, '=SUM(D8:D'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('E'.$row, '=SUM(E8:E'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('F'.$row, '=SUM(F8:F'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('G'.$row, '=SUM(G8:G'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('H'.$row, '=SUM(H8:H'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('I'.$row, '=SUM(I8:I'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('J'.$row, '=SUM(J8:J'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('K'.$row, '=SUM(K8:K'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('L'.$row, '=SUM(L8:L'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('M'.$row, '=SUM(M8:M'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('N'.$row, '=SUM(N8:N'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('O'.$row, '=SUM(O8:O'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('P'.$row, '=SUM(P8:P'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('Q'.$row, '=SUM(Q8:Q'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('R'.$row, '=SUM(R8:R'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('S'.$row, '=SUM(S8:S'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('T'.$row, '=SUM(T8:T'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('C'.$row, '=SUM(C8:C'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('D'.$row, '=SUM(D8:D'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('E'.$row, '=SUM(E8:E'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('F'.$row, '=SUM(F8:F'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('G'.$row, '=SUM(G8:G'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('H'.$row, '=SUM(H8:H'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('I'.$row, '=SUM(I8:I'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('J'.$row, '=SUM(J8:J'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('K'.$row, '=SUM(K8:K'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('L'.$row, '=SUM(L8:L'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('M'.$row, '=SUM(M8:M'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('N'.$row, '=SUM(N8:N'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('O'.$row, '=SUM(O8:O'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('P'.$row, '=SUM(P8:P'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('Q'.$row, '=SUM(Q8:Q'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('R'.$row, '=SUM(R8:R'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('S'.$row, '=SUM(S8:S'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
+            $activeSheet->setCellValueExplicit('T'.$row, '=SUM(T8:T'.$frow.')', \PHPExcel_Cell_DataType::TYPE_FORMULA);
 
         }
         else{
