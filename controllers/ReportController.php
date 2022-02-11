@@ -26,6 +26,7 @@ use app\models\Reagent;
 use app\models\ReagentFilial;
 use app\models\SRasxodTypes;
 use app\models\RefSends;
+use yii\helpers\ArrayHelper;
 
 
 
@@ -1661,7 +1662,6 @@ public function actionKassa1prev()
 
     private function bp1Report($date1,$date2,$filial)
     {
-
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
@@ -1683,19 +1683,15 @@ public function actionKassa1prev()
         else{
             $activeSheet->setCellValueExplicit('C4', Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
         }
-
-
-
-
-        
         
         $row = 8;
         $n=1;
 
         $covid_analizs = SAnaliz::find()->select('id')->where(['in','group_id',[19,26]])->all();
+        $covid_analizs = ArrayHelper::map($covid_analizs, 'id', 'id');
+
         $other_analizs = SAnaliz::find()->select('id')->where(['not in','group_id',[19,26]])->all();
-
-
+        $other_analizs = ArrayHelper::map($other_analizs, 'id', 'id');
 
         if($filial=='all'){
             $filials = Filials::find()->all();
@@ -1751,6 +1747,7 @@ public function actionKassa1prev()
             }
 
             $frow = $row-1;
+            $activeSheet->setCellValueExplicit('B'.$row, 'Жами', \PHPExcel_Cell_DataType::TYPE_STRING);
             $activeSheet->setCellValueExplicit('C'.$row, '=SUM(C8:C'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $activeSheet->setCellValueExplicit('D'.$row, '=SUM(D8:D'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $activeSheet->setCellValueExplicit('E'.$row, '=SUM(E8:E'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
