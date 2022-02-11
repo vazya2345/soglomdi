@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\Users;
 
 /**
  * This is the model class for table "registration".
@@ -159,9 +160,19 @@ class Registration extends \yii\db\ActiveRecord
             $res = $amount-$kassa-$reg-$cash-$plastik;
             return $res;
         }
-        
         return 0;
-        
+    }
+
+    public static function getQarzSumFil($fil)
+    {
+        $user_arr = Users::getFilUsers($fil);
+        $amount = self::find()->where(['in','user_id',$user_arr])->sum('sum_amount');
+        $cash = self::find()->where(['in','user_id',$user_arr])->sum('sum_cash');
+        $plastik = self::find()->where(['in','user_id',$user_arr])->sum('sum_plastik');
+        $kassa = self::find()->where(['in','user_id',$user_arr])->sum('skidka_kassa');
+        $reg = self::find()->where(['in','user_id',$user_arr])->sum('skidka_reg');
+        $res = $amount-$kassa-$reg-$cash-$plastik;
+        return $res;
     }
 
 }

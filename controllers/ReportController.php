@@ -1628,4 +1628,211 @@ public function actionKassa1prev()
         $objWriter->save('php://output');
         exit;
     }
+
+
+////////////////////////////////////////////////////// BIZNES PLAN   //////////////////////////////////////////////////////
+    public function actionBp1prev()
+    {
+        if(Yii::$app->request->post('date1')){
+            if(strlen(Yii::$app->request->post('date1'))==0){
+                $date1 = date("Y-m-d");
+            }
+            else{
+                $date1 = Yii::$app->request->post('date1');
+            }
+
+            if(strlen(Yii::$app->request->post('date2'))==0){
+                $date2 = date("Y-m-d");
+            }
+            else{
+                $date2 = Yii::$app->request->post('date2');
+            }
+
+            if(strlen(Yii::$app->request->post('filial'))==0){
+                $filial = 'all';
+            }
+            else{
+                $filial = Yii::$app->request->post('filial');
+            }            
+            $this->bp1Report($date1,$date2,$filial);
+        }
+        return $this->render('bp1');
+    }
+
+    private function bp1Report($date1,$date2,$filial)
+    {
+
+        ini_set('memory_limit', '512M');
+        set_time_limit(20 * 60);
+
+        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+
+        $objPHPExcel = new \PHPExcel;
+        
+        $url = './excel/bp.xlsx';
+        $objPHPExcel = \PHPExcel_IOFactory::load($url);
+        $sheet = 0;
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $activeSheet->setCellValueExplicit('H4', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
+        
+        if($filial=='all'){
+            $activeSheet->setCellValueExplicit('C4', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        else{
+            $activeSheet->setCellValueExplicit('C4', Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+
+
+
+
+        
+        
+        $row = 8;
+        $n=1;
+
+        $covid_analizs = SAnaliz::find()->select('id')->where(['in','group_id',[19,26]])->all();
+        $other_analizs = SAnaliz::find()->select('id')->where(['not in','group_id',[19,26]])->all();
+
+
+
+        if($filial=='all'){
+            $filials = Filials::find()->all();
+            foreach ($filials as $fil) {
+                $users_arr = Users::getFilUsers($fil->id);
+                $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('B'.$row, $fil->title, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $reg_analizs_covid = RegAnalizs::getRegIdsByAnalizsArray($covid_analizs);
+                $covid_sum = Registration::find()
+                                ->where(['between','create_date',$date1,$date2])
+                                ->andWhere(['in','user_id',$users_arr])
+                                ->andWhere(['in', 'id', $reg_analizs_covid])
+                                ->sum('IFNULL(sum_amount,0)-IFNULL(sum_debt,0)-IFNULL(skidka_reg,0)');
+                $reg_analizs_other = RegAnalizs::getRegIdsByAnalizsArray($other_analizs);
+                $other_sum = Registration::find()
+                                ->where(['between','create_date',$date1,$date2])
+                                ->andWhere(['in','user_id',$users_arr])
+                                ->andWhere(['in', 'id', $reg_analizs_other])
+                                ->sum('IFNULL(sum_amount,0)-IFNULL(sum_debt,0)-IFNULL(skidka_reg,0)');
+                $activeSheet->setCellValueExplicit('F'.$row, $covid_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('G'.$row, $other_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+
+                $reg_count = Registration::find()->where(['between','create_date',$date1,$date2])
+                                ->andWhere(['in','user_id',$users_arr])
+                                ->count();
+                $activeSheet->setCellValueExplicit('O'.$row, $reg_count, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+                $fil_qoldiqs = FilialQoldiq::getFilQoldiqs($fil->id);
+                $zavkassa_sum = FqSends::find()->where(['in','fq_id', $fil_qoldiqs])
+                                    ->andWhere(['not in','fq_id',[8,28,44,45]])
+                                    ->andWhere(['between', 'send_date', $date1,$date2])
+                                    ->andWhere(['status'=>2])
+                                    ->sum('sum');
+                $activeSheet->setCellValueExplicit('P'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                
+                $rasxod_sum = Rasxod::find()->where(['filial_id'=>$fil->id])->andWhere(['between','create_date',$date1,$date2])->sum('summa');
+                $activeSheet->setCellValueExplicit('Q'.$row, $rasxod_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+                $agent_sum = Rasxod::find()
+                            ->where(['filial_id'=>$fil->id])
+                            ->andWhere(['rasxod_type'=>2])
+                            ->andWhere(['between','create_date',$date1,$date2])
+                            ->sum('summa');
+                $activeSheet->setCellValueExplicit('R'.$row, $agent_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+                $qarz_sum = Registration::getQarzSumFil($fil->id);
+                $activeSheet->setCellValueExplicit('S'.$row, $qarz_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+                $avans_sum = Referals::find()->where(['filial'=>$fil->id])->sum('avans_sum');
+                $activeSheet->setCellValueExplicit('T'.$row, $avans_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $row++;
+            }
+
+            $frow = $row-1;
+            $activeSheet->setCellValueExplicit('C'.$row, '=SUM(C8:C'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('D'.$row, '=SUM(D8:D'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('E'.$row, '=SUM(E8:E'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('F'.$row, '=SUM(F8:F'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('G'.$row, '=SUM(G8:G'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('H'.$row, '=SUM(H8:H'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('I'.$row, '=SUM(I8:I'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('J'.$row, '=SUM(J8:J'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('K'.$row, '=SUM(K8:K'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('L'.$row, '=SUM(L8:L'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('M'.$row, '=SUM(M8:M'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('N'.$row, '=SUM(N8:N'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('O'.$row, '=SUM(O8:O'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('P'.$row, '=SUM(P8:P'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('Q'.$row, '=SUM(Q8:Q'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('R'.$row, '=SUM(R8:R'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('S'.$row, '=SUM(S8:S'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('T'.$row, '=SUM(T8:T'.$frow.')', \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+        }
+        else{
+            $fil = Filials::findOne($filial);
+                $users_arr = Users::getFilUsers($fil->id);
+                $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('B'.$row, $fil->title, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $reg_analizs_covid = RegAnalizs::getRegIdsByAnalizsArray($covid_analizs);
+                $covid_sum = Registration::find()
+                                ->where(['between','create_date',$date1,$date2])
+                                ->andWhere(['in','user_id',$users_arr])
+                                ->andWhere(['in', 'id', $reg_analizs_covid])
+                                ->sum('IFNULL(sum_amount,0)-IFNULL(sum_debt,0)-IFNULL(skidka_reg,0)');
+                $reg_analizs_other = RegAnalizs::getRegIdsByAnalizsArray($other_analizs);
+                $other_sum = Registration::find()
+                                ->where(['between','create_date',$date1,$date2])
+                                ->andWhere(['in','user_id',$users_arr])
+                                ->andWhere(['in', 'id', $reg_analizs_other])
+                                ->sum('IFNULL(sum_amount,0)-IFNULL(sum_debt,0)-IFNULL(skidka_reg,0)');
+                $activeSheet->setCellValueExplicit('F'.$row, $covid_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('G'.$row, $other_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+
+                $reg_count = Registration::find()->where(['between','create_date',$date1,$date2])
+                                ->andWhere(['in','user_id',$users_arr])
+                                ->count();
+                $activeSheet->setCellValueExplicit('O'.$row, $reg_count, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+                $fil_qoldiqs = FilialQoldiq::getFilQoldiqs($fil->id);
+                $zavkassa_sum = FqSends::find()->where(['in','fq_id', $fil_qoldiqs])
+                                    ->andWhere(['not in','fq_id',[8,28,44,45]])
+                                    ->andWhere(['between', 'send_date', $date1,$date2])
+                                    ->andWhere(['status'=>2])
+                                    ->sum('sum');
+                $activeSheet->setCellValueExplicit('P'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                
+                $rasxod_sum = Rasxod::find()->where(['filial_id'=>$fil->id])->andWhere(['between','create_date',$date1,$date2])->sum('summa');
+                $activeSheet->setCellValueExplicit('Q'.$row, $rasxod_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+                $agent_sum = Rasxod::find()
+                            ->where(['filial_id'=>$fil->id])
+                            ->andWhere(['rasxod_type'=>2])
+                            ->andWhere(['between','create_date',$date1,$date2])
+                            ->sum('summa');
+                $activeSheet->setCellValueExplicit('R'.$row, $agent_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+                $qarz_sum = Registration::getQarzSumFil($fil->id);
+                $activeSheet->setCellValueExplicit('S'.$row, $qarz_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+                $avans_sum = Referals::find()->where(['filial'=>$fil->id])->sum('avans_sum');
+                $activeSheet->setCellValueExplicit('T'.$row, $avans_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+        }
+
+        
+
+
+        
+ 
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="bp_bajarilishi_'.date("Y-m-d").'.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+        exit;
+    }
 }

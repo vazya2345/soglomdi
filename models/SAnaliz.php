@@ -158,4 +158,28 @@ class SAnaliz extends \yii\db\ActiveRecord
         }
         return $res;
     }
+
+    public static function getBpCovidAnalizs()
+    {
+        $res = [];
+        $i=0;
+        $array = self::find()->select('id')->where(['in','group_id',[19,26]])->all();
+        foreach ($array as $key) {
+            $res[$i]=$key->id;
+            $i++;
+        }
+        return $res;
+    }
+
+    public static function getBpOtherAnalizs()
+    {
+        $res = [];
+        $i=0;
+        $array = self::find()->select('id')->where(['not in','group_id',[19,26]])->all();
+        foreach ($array as $key) {
+            $res[$i]=$key->id;
+            $i++;
+        }
+        return $res;
+    }
 }
