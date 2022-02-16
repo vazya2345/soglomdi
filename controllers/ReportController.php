@@ -430,6 +430,9 @@ class ReportController extends Controller
             $models->andWhere(['in','id',RegAnalizs::getRegIds($analiz)]);
         }
         $res = $models->orderBy(['ref_code' => SORT_ASC])->all();
+
+
+        $status_arr = [1=>'Янги',2=>'Р/Э амалиётда',3=>'Амалиётда',4=>'Якунланди'];
         // var_dump($res);die;
         $row = 3;
         $n=1;
@@ -437,19 +440,22 @@ class ReportController extends Controller
             if(round((time()-strtotime($reg->create_date))/60/60/24)>$kunlar){
                 $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                 $activeSheet->setCellValueExplicit('B'.$row, Client::getName($reg->client_id), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('C'.$row, Users::getNameAndFil($reg->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('D'.$row, Client::getPhonenum($reg->client_id), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('E'.$row, date("d.m.Y", strtotime($reg->create_date)), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('F'.$row, Result::getMaxDate($reg->id), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('G'.$row, round((time()-strtotime($reg->create_date))/60/60/24), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $activeSheet->setCellValueExplicit('H'.$row, $reg->skidka_reg+$skidka_kassa, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $activeSheet->setCellValueExplicit('I'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $activeSheet->setCellValueExplicit('J'.$row, $reg->sum_debt, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $activeSheet->setCellValueExplicit('K'.$row, $reg->ref_code, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('C'.$row, Filials::getName(Users::getFilial($reg->user_id)), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('D'.$row, Users::getNameAndFil($reg->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('E'.$row, Client::getPhonenum($reg->client_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('F'.$row, date("d.m.Y", strtotime($reg->create_date)), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('G'.$row, Result::getMaxDate($reg->id), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('H'.$row, $status_arr[$reg->status], \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('I'.$row, round((time()-strtotime($reg->create_date))/60/60/24), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('J'.$row, $reg->sum_amount, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('K'.$row, $reg->skidka_reg+$skidka_kassa, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('L'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('M'.$row, $reg->sum_debt, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                $activeSheet->setCellValueExplicit('N'.$row, $reg->ref_code, \PHPExcel_Cell_DataType::TYPE_STRING);
                 $referal = Referals::getByRefnum($reg->ref_code);
-                $activeSheet->setCellValueExplicit('L'.$row, $referal->desc, \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('M'.$row, $referal->fio, \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('N'.$row, $referal->phone, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('O'.$row, $referal->desc, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('P'.$row, $referal->fio, \PHPExcel_Cell_DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('Q'.$row, $referal->phone, \PHPExcel_Cell_DataType::TYPE_STRING);
                 $row++;
             }
         }
