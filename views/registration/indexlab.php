@@ -96,9 +96,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $arr[$data->status];
                 }
             ],
-            [
-                'header' => 'Қарз', 
-                'format' => 'raw',
+
+            'sum_debt'=>[
+                'attribute'=>'sum_debt',
                 'contentOptions' => function ($data) {
                     $qarz = $data->sum_amount-($data->sum_cash+$data->sum_plastik+$data->skidka_reg+$data->skidka_kassa);
                     if($qarz>0){
@@ -109,10 +109,29 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
                 'value' => function ($data) {
-                        $qarz = $data->sum_amount-($data->sum_cash+$data->sum_plastik+$data->skidka_reg+$data->skidka_kassa);
-                        return $qarz;
+                    if($data->sum_debt===null){
+                        return 0;
+                    }
+                    return 0;
                 }
             ],
+            // [
+            //     'header' => 'Қарз', 
+            //     'format' => 'raw',
+            //     'contentOptions' => function ($data) {
+            //         $qarz = $data->sum_amount-($data->sum_cash+$data->sum_plastik+$data->skidka_reg+$data->skidka_kassa);
+            //         if($qarz>0){
+            //             return  ['class'=>'bg-danger'];    
+            //         }
+            //         else{
+            //             return  ['class'=>'bg-success'];   
+            //         }
+            //     },
+            //     'value' => function ($data) {
+            //             $qarz = $data->sum_amount-($data->sum_cash+$data->sum_plastik+$data->skidka_reg+$data->skidka_kassa);
+            //             return $qarz;
+            //     }
+            // ],
             'user_id'=>[
                 'attribute'=>'user_id',
                 'filter'=>Users::getAllKassirs(),
