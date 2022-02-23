@@ -437,7 +437,7 @@ class ReportController extends Controller
         $row = 3;
         $n=1;
         foreach ($res as $reg) {
-            if(round((time()-strtotime($reg->create_date))/60/60/24)>$kunlar){
+            if((round((time()-strtotime($reg->create_date))/60/60/24)>$kunlar)||($kunlar==0)){
                 $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                 $activeSheet->setCellValueExplicit('B'.$row, Client::getName($reg->client_id), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $activeSheet->setCellValueExplicit('C'.$row, Filials::getName(Users::getFilial($reg->user_id)), \PHPExcel_Cell_DataType::TYPE_STRING);
