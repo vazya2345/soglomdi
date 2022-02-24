@@ -9,6 +9,7 @@ use app\models\FinishPayments;
 use app\models\RegAnalizs;
 use app\models\Registration;
 use app\models\QarzQaytar;
+use app\models\Payments;
 
 $fmodel = FinishPayments::findOne($model->id);
 
@@ -99,8 +100,12 @@ else{
         ],
     ]) ?>
     <br>
+
+
 <?php
-if($model->sum_debt==0){
+$payment_model = Payments::find()->where(['main_id'=>$model->id])->one();
+// if($model->sum_debt==0){
+if(!$payment_model){
 ?>
     <?php $form = ActiveForm::begin(); ?>
 
@@ -108,7 +113,7 @@ if($model->sum_debt==0){
 
     <?= $form->field($model, 'sum_plastik')->textInput(['type'=>'number', 'oninput'=>'checkPay('.$tsum.')','id'=>'plastiksum']) ?>
 
-    <?= $form->field($model, 'sum_debt')->textInput(['type'=>'number', 'oninput'=>'checkPay('.$tsum.')','id'=>'debtsum']) ?>
+    <?= $form->field($model, 'sum_debt')->textInput(['type'=>'number', 'oninput'=>'checkPay('.$tsum.')','id'=>'debtsum', 'value'=>0]) ?>
 
 
     <div class="form-group">
@@ -123,11 +128,8 @@ if($model->sum_debt==0){
 </div>
 <?php
 }
-
-
-
 //// QARZ QAYTARISH
-if($model->sum_debt>0){
+if($payment_model){
     $qmodel = QarzQaytar::getMyModelByRegId($model->id);
 ?>
 <div class="card card-primary">
@@ -148,7 +150,6 @@ if($model->sum_debt>0){
 </div>
 <?php
 }
-/////////////////////
 ?>
 
 

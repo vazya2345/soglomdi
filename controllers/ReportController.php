@@ -309,9 +309,9 @@ class ReportController extends Controller
                     $k_str = 'Хабар';
                 }   
             }
-            $activeSheet->setCellValueExplicit('K'.$row, $k_str, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('K'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_STRING);
 
-            $activeSheet->setCellValueExplicit('L'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('L'.$row, $k_str, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $activeSheet->setCellValueExplicit('M'.$row, $reg->sum_amount-($reg->skidka_reg+$reg->skidka_kassa+$reg->sum_cash+$reg->sum_plastik), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
         	$activeSheet->setCellValueExplicit('N'.$row, Users::getNameAndFil($reg->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);

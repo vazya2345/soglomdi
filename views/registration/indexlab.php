@@ -99,6 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'sum_debt'=>[
                 'attribute'=>'sum_debt',
+                'filter' => [0=>'Барча',1=>'Қарздорлар'],
                 'contentOptions' => function ($data) {
                     $qarz = $data->sum_amount-($data->sum_cash+$data->sum_plastik+$data->skidka_reg+$data->skidka_kassa);
                     if($qarz>0){

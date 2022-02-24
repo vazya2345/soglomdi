@@ -646,6 +646,7 @@ class RegistrationController extends Controller
             $model->natija_input = '0';
             $model->create_date = date("Y-m-d H:i:s");
             $model->change_time = $model->create_date;
+            $model->sum_debt = $model->sum_amount-(int)$model->skidka_reg;
 
             if($model_client==Client::getClientByDoc($model_client->doc_seria,$model_client->doc_number)){
                 $model_client->user_id = Yii::$app->user->id;

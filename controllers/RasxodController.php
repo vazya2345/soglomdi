@@ -146,12 +146,9 @@ class RasxodController extends Controller
     public function actionQabul($id)
     {
         $model = $this->findModel($id);
-        // var_dump($model);die;
         $fq_model = FilialQoldiq::find()->where(['kassir_id'=>$model->user_id,'qoldiq_type'=>$model->sum_type])->one();
-        // var_dump($fq_model);die;
         if($fq_model){
             if($fq_model->qoldiq>=$model->summa){
-
                 if($model->status==1){
                     $fq_model->qoldiq -= $model->summa;
                     $model->status = 2;
@@ -159,6 +156,11 @@ class RasxodController extends Controller
                     if($fq_model->save()&&$model->save()){
                         if($model->rasxod_type==1){
                             $ref_phonenum = Referals::getPhonenumByRefnum($model->referal_id);
+                            $ref_model = Referals::getByRefnum($model->referal_id);
+                            if($ref_model){
+                                $ref_model->avans_sum = (int)$ref_model->avans_sum - (int)$model->summa;
+                                $ref_model->save(false);
+                            }
                             // var_dump($ref_phonenum);die;
                             return $this->redirect(['registration/refsendsmsact', 'ref_phonenum'=>$ref_phonenum, 'ref_sum'=>$model->summa]);
                         }

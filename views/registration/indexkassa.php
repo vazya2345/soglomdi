@@ -56,8 +56,24 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $data->sum_amount;                    
                 }
             ],
-            'sum_cash',
-            'sum_plastik',
+            'sum_cash'=>[
+                'attribute'=>'sum_cash',
+                'value' => function ($data) {
+                    if($data->sum_cash===null){
+                        return 0;                    
+                    }
+                    return $data->sum_cash;
+                }
+            ],
+            'sum_plastik'=>[
+                'attribute'=>'sum_plastik',
+                'value' => function ($data) {
+                    if($data->sum_plastik===null){
+                        return 0;                    
+                    }
+                    return $data->sum_plastik;
+                }
+            ],
             'sum_debt'=>[
                 'attribute'=>'sum_debt',
                 'format' => 'html',
@@ -71,10 +87,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
                 'value' => function ($data) {
-                        return $data->sum_debt;                    
+                    if($data->sum_debt===null){
+                        return 0;                    
+                    }
+                    return $data->sum_debt;                    
                 }
             ],
-            'skidka_reg',
+            'skidka_reg'=>[
+                'attribute'=>'skidka_reg',
+                'value' => function ($data) {
+                    if($data->skidka_reg===null){
+                        return 0;                    
+                    }
+                    return $data->skidka_reg;                    
+                }
+            ],
             // 'skidka_kassa',
             //'other',
             'create_date',
