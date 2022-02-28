@@ -1904,7 +1904,7 @@ public function actionKassa1prev()
             $regs = $regs->andWhere(['in','user_id',$users_arr]);
         }
         $regs = $regs->orderBy(['id'=>SORT_DESC])->all();
-        var_dump($regs);die;
+
         $row = 5;
         $n=1;
 
@@ -1916,21 +1916,24 @@ public function actionKassa1prev()
             $activeSheet->setCellValueExplicit('E'.$row, $reg->create_date, \PHPExcel_Cell_DataType::TYPE_STRING);
 
             $activeSheet->setCellValueExplicit('F'.$row, $reg->sum_amount, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $activeSheet->setCellValueExplicit('G'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $paid_sum = $reg->sum_cash+$reg->sum_plastik;
+            $activeSheet->setCellValueExplicit('G'.$row, $paid_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
-            $reg_sum = RegReagents::getSum($reg->id);
-            $activeSheet->setCellValueExplicit('H'.$row, $reg_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $reag_sum = RegReagents::getSum($reg->id);
+            var_dump($reag_sum);
+            $activeSheet->setCellValueExplicit('H'.$row, $reag_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
             $activeSheet->setCellValueExplicit('I'.$row, $reg->sum_debt, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $ref_sum = Referals::getSumByRegid($reg->id);
             $activeSheet->setCellValueExplicit('J'.$row, $ref_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
-            $foyda = ($reg->sum_cash+$reg->sum_plastik)-$reg_sum-$ref_sum-$sum_debt;
+            $foyda = $paid_sum-$reag_sum-$ref_sum-$sum_debt;
             $activeSheet->setCellValueExplicit('K'.$row, $foyda, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $row++;
         }
         
- 
+        die;
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="reagent_sarfi_'.date("Y-m-d").'.xlsx"');
