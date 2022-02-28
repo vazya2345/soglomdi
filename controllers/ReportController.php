@@ -256,8 +256,8 @@ class ReportController extends Controller
         $activeSheet = $objPHPExcel->getActiveSheet();
         $activeSheet->setCellValueExplicit('C2', $date1, \PHPExcel_Cell_DataType::TYPE_STRING);
         $activeSheet->setCellValueExplicit('D2', $date2, \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('H2', Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $activeSheet->setCellValueExplicit('K2', $referal, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('F2', Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
+        $activeSheet->setCellValueExplicit('H2', $referal, \PHPExcel_Cell_DataType::TYPE_STRING);
 
         $models = Registration::find()->where(['between','create_date',$date1,$date2]);
         if($filial!='all'){
@@ -309,9 +309,8 @@ class ReportController extends Controller
                     $k_str = 'Хабар';
                 }   
             }
-            $activeSheet->setCellValueExplicit('K'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_STRING);
-
-            $activeSheet->setCellValueExplicit('L'.$row, $k_str, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('K'.$row, $k_str, \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('L'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $activeSheet->setCellValueExplicit('M'.$row, $reg->sum_amount-($reg->skidka_reg+$reg->skidka_kassa+$reg->sum_cash+$reg->sum_plastik), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
         	$activeSheet->setCellValueExplicit('N'.$row, Users::getNameAndFil($reg->user_id), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -1734,12 +1733,16 @@ public function actionKassa1prev()
                                     ->sum('sum');
                 $activeSheet->setCellValueExplicit('P'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                 
-                $rasxod_sum = Rasxod::find()->where(['filial_id'=>$fil->id])->andWhere(['between','create_date',$date1,$date2])->sum('summa');
+                $rasxod_sum = Rasxod::find()->where(['filial_id'=>$fil->id])
+                                ->andWhere(['between','create_date',$date1,$date2])
+                                ->andWhere(['status'=>2])
+                                ->sum('summa');
                 $activeSheet->setCellValueExplicit('Q'.$row, $rasxod_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
                 $agent_sum = Rasxod::find()
                             ->where(['filial_id'=>$fil->id])
                             ->andWhere(['rasxod_type'=>2])
+                            ->andWhere(['status'=>2])
                             ->andWhere(['between','create_date',$date1,$date2])
                             ->sum('summa');
                 $activeSheet->setCellValueExplicit('R'.$row, $agent_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -1808,12 +1811,16 @@ public function actionKassa1prev()
                                     ->sum('sum');
                 $activeSheet->setCellValueExplicit('P'.$row, $zavkassa_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
                 
-                $rasxod_sum = Rasxod::find()->where(['filial_id'=>$fil->id])->andWhere(['between','create_date',$date1,$date2])->sum('summa');
+                $rasxod_sum = Rasxod::find()->where(['filial_id'=>$fil->id])
+                                ->andWhere(['between','create_date',$date1,$date2])
+                                ->andWhere(['status'=>2])
+                                ->sum('summa');
                 $activeSheet->setCellValueExplicit('Q'.$row, $rasxod_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
                 $agent_sum = Rasxod::find()
                             ->where(['filial_id'=>$fil->id])
                             ->andWhere(['rasxod_type'=>2])
+                            ->andWhere(['status'=>2])
                             ->andWhere(['between','create_date',$date1,$date2])
                             ->sum('summa');
                 $activeSheet->setCellValueExplicit('R'.$row, $agent_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
