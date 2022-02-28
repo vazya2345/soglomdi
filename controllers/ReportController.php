@@ -27,7 +27,7 @@ use app\models\ReagentFilial;
 use app\models\SRasxodTypes;
 use app\models\RefSends;
 use yii\helpers\ArrayHelper;
-
+use app\models\RegReagents;
 
 
 class ReportController extends Controller
