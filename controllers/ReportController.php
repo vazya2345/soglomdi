@@ -1926,7 +1926,6 @@ public function actionKassa1prev()
             $activeSheet->setCellValueExplicit('I'.$row, $reg->sum_debt, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $ref_sum = Referals::getSumByRegid($reg->id);
-            var_dump($ref_sum);
             $activeSheet->setCellValueExplicit('J'.$row, $ref_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $foyda = $paid_sum-$reag_sum-$ref_sum-$sum_debt;
@@ -1934,7 +1933,6 @@ public function actionKassa1prev()
             $row++;
         }
         
-        die;
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="reagent_sarfi_'.date("Y-m-d").'.xlsx"');
