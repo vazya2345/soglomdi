@@ -1903,8 +1903,7 @@ public function actionKassa1prev()
             $users_arr = Users::getFilUsers($filial);
             $regs = $regs->andWhere(['in','user_id',$users_arr]);
         }
-        $regs->orderBy(['id'=>SORT_DESC])->all();
-        var_dump($regs);die;
+        $regs = $regs->orderBy(['id'=>SORT_DESC])->all();
         $row = 5;
         $n=1;
 
