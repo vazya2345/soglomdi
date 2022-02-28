@@ -1920,12 +1920,13 @@ public function actionKassa1prev()
             $activeSheet->setCellValueExplicit('G'.$row, $paid_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $reag_sum = RegReagents::getSum($reg->id);
-            var_dump($reag_sum);
+            
             $activeSheet->setCellValueExplicit('H'.$row, $reag_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $activeSheet->setCellValueExplicit('I'.$row, $reg->sum_debt, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $ref_sum = Referals::getSumByRegid($reg->id);
+            var_dump($ref_sum);
             $activeSheet->setCellValueExplicit('J'.$row, $ref_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $foyda = $paid_sum-$reag_sum-$ref_sum-$sum_debt;
