@@ -150,6 +150,9 @@ $lav = Users::getMyLav();
                 <li>
                     <?= Html::a('Бизнес план', ['/report/bp1prev'], ['class' => 'dropdown-item']) ?>
                 </li>
+                <li>
+                    <?= Html::a('Реагент сарфи', ['/report/reagentsarfiprev'], ['class' => 'dropdown-item']) ?>
+                </li>
             </ul>
         </li>
         <?php        

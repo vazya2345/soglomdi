@@ -170,6 +170,7 @@ class ReferalsController extends Controller
                 ->where(['>','create_date',$model->last_change_date])
                 ->andWhere(['ref_code'=>$model->refnum])
                 ->andWhere(['skidka_reg'=>null])
+                ->andWhere(['sum_debt'=>0])
                 ->asArray()
                 ->all();
                 if($regs[0]['s_amount']){
@@ -185,6 +186,7 @@ class ReferalsController extends Controller
                     ->andWhere(['ref_code'=>$model->refnum])
                     ->andWhere(['OR',['>','sum_cash',0],['>','sum_plastik',0]])
                     ->andWhere(['skidka_reg'=>null])
+                    ->andWhere(['sum_debt'=>0])
                     ->asArray()
                     ->count();
                 $sum = (int)$regs*$model->fix_sum;

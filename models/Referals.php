@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use app\models\Users;
+use app\models\Registration;
 /**
  * This is the model class for table "referals".
  *
@@ -207,6 +208,31 @@ class Referals extends \yii\db\ActiveRecord
             return '998000000000';
         }
     }
+
+
+    public static function getSumByRegid($id)
+    {
+        $reg = Registration::findOne($id);
+        $model = self::getByRefnum($reg->ref_code);
+        if($model){
+            if((int)$model->add1>0){
+                if($reg->skidka_reg>0||$reg->skidka_kassa>0||$reg->sum_debt>0){
+                    return 0;
+                }
+                else{
+                    $sum = ($reg->sum_cash+$reg->sum_plastik)*$model->add1/100;
+                    return $sum;
+                }
+            }
+            else{
+                return $model->fix_sum;
+            }
+        }
+        else{
+            return 0;
+        }
+    }
+    
 
 
 }

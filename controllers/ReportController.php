@@ -1845,4 +1845,96 @@ public function actionKassa1prev()
         $objWriter->save('php://output');
         exit;
     }
+
+
+
+
+////////////////////////////////////////////////////// REAGENT SARFI   //////////////////////////////////////////////////////
+    public function actionReagentsarfiprev()
+    {
+        if(Yii::$app->request->post('date1')){
+            if(strlen(Yii::$app->request->post('date1'))==0){
+                $date1 = date("Y-m-d");
+            }
+            else{
+                $date1 = Yii::$app->request->post('date1');
+            }
+
+            if(strlen(Yii::$app->request->post('date2'))==0){
+                $date2 = date("Y-m-d");
+            }
+            else{
+                $date2 = Yii::$app->request->post('date2');
+            }
+
+            if(strlen(Yii::$app->request->post('filial'))==0){
+                $filial = 'all';
+            }
+            else{
+                $filial = Yii::$app->request->post('filial');
+            }            
+            $this->reagentsarfiReport($date1,$date2,$filial);
+        }
+        return $this->render('reagent_sarfi');
+    }
+
+    private function reagentsarfiReport($date1,$date2,$filial)
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(20 * 60);
+
+        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+
+        $objPHPExcel = new \PHPExcel;
+        
+        $url = './excel/reagent_sarf.xlsx';
+        $objPHPExcel = \PHPExcel_IOFactory::load($url);
+        $sheet = 0;
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $activeSheet->setCellValueExplicit('D2', $date1.' - '.$date2, \PHPExcel_Cell_DataType::TYPE_STRING);
+        $regs = Registration::find()->where(['between','create_date',$date1,$date2]);
+        if($filial=='all'){
+            $activeSheet->setCellValueExplicit('H2', 'Барчаси', \PHPExcel_Cell_DataType::TYPE_STRING);
+        }
+        else{
+            $activeSheet->setCellValueExplicit('H2', Filials::getName($filial), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $users_arr = Users::getFilUsers($filial);
+            $regs = $regs->andWhere(['in','user_id',$users_arr]);
+        }
+        $regs->orderBy(['id'=>SORT_DESC])->all();
+        $row = 5;
+        $n=1;
+
+        foreach ($regs as $reg) {
+            $activeSheet->setCellValueExplicit('A'.$row, $n++, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('B'.$row, Filials::getName(Users::getFilial($reg->user_id)), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('C'.$row, Client::getName($reg->client_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('D'.$row, Client::getPhonenum($reg->client_id), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('E'.$row, $reg->create_date, \PHPExcel_Cell_DataType::TYPE_STRING);
+
+            $activeSheet->setCellValueExplicit('F'.$row, $reg->sum_amount, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('G'.$row, $reg->sum_cash+$reg->sum_plastik, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+            $reg_sum = RegReagents::getSum($reg->id);
+            $activeSheet->setCellValueExplicit('H'.$row, $reg_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $activeSheet->setCellValueExplicit('I'.$row, $reg->sum_debt, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+            $ref_sum = Referals::getSumByRegid($reg->id);
+            $activeSheet->setCellValueExplicit('J'.$row, $ref_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+            $foyda = ($reg->sum_cash+$reg->sum_plastik)-$reg_sum-$ref_sum-$sum_debt;
+            $activeSheet->setCellValueExplicit('K'.$row, $foyda, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $row++;
+        }
+        
+ 
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel,  "Excel2007");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="reagent_sarfi_'.date("Y-m-d").'.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+        exit;
+    }
 }

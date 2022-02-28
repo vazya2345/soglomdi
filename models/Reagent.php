@@ -92,6 +92,15 @@ class Reagent extends \yii\db\ActiveRecord
             return 'Топилмади';
     }
 
+    public static function getPrice($id)
+    {
+        $model = self::findOne($id);
+        if($model)
+            return $model->price;
+        else
+            return 0;
+    }
+
     public static function isBirMarta($id)
     {
         $model = self::findOne($id);

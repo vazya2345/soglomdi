@@ -87,6 +87,15 @@ class ReagentSendController extends Controller
                 if($rfmodel->save()){
                     $reagent_model->qoldiq = $reagent_model->qoldiq-$model->soni;
                     $reagent_model->save(false);
+                    if($reagent_model->qoldiq<$reagent_model->notific_count){
+                                $notif_model = new ReagentNotifications();
+                                $notif_model->reagent_id = $reagent_model->id;
+                                $notif_model->create_date = date("Y-m-d H:i:s");
+                                $notif_model->filial_id = 1; //// FILIAL
+                                if(!$notif_model->save()){
+                                    var_dump($notif_model);die;
+                                }
+                    }
                     $notifs = ReagentNotifications::find()->where(['reagent_id'=>$model->reagent_id,'filial_id'=>$model->filial_id])->all();
                     foreach ($notifs as $notif) {
                         $notif->delete(); 

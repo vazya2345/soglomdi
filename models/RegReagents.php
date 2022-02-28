@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use app\models\Reagent;
 /**
  * This is the model class for table "reg_reagents".
  *
@@ -59,5 +59,15 @@ class RegReagents extends \yii\db\ActiveRecord
         else{
             return 0;
         }
+    }
+
+    public static function getSum($reg_id)
+    {
+        $sum = 0;
+        $models = self::find()->where(['reg_id'=>$reg_id])->all();
+        foreach ($models as $model) {
+            $sum+=Reagent::getPrice($model->reagent_id)*$model->soni;
+        }
+        return $sum;
     }
 }
