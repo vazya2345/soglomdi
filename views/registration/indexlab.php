@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => [0=>'Барча',1=>'Қарздорлар'],
                 'contentOptions' => function ($data) {
                     $qarz = $data->sum_amount-($data->sum_cash+$data->sum_plastik+$data->skidka_reg+$data->skidka_kassa);
-                    if($qarz>0){
+                    if($data->sum_debt>0||$qarz>0){
                         return  ['class'=>'bg-danger'];    
                     }
                     else{
@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if($data->sum_debt===null){
                         return 0;
                     }
-                    return 0;
+                    return $data->sum_debt;
                 }
             ],
             // [
