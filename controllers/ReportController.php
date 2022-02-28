@@ -1904,6 +1904,7 @@ public function actionKassa1prev()
             $regs = $regs->andWhere(['in','user_id',$users_arr]);
         }
         $regs = $regs->orderBy(['id'=>SORT_DESC])->all();
+        var_dump($regs);die;
         $row = 5;
         $n=1;
 
