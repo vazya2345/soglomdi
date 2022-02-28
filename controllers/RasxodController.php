@@ -158,7 +158,12 @@ class RasxodController extends Controller
                             $ref_phonenum = Referals::getPhonenumByRefnum($model->referal_id);
                             $ref_model = Referals::getByRefnum($model->referal_id);
                             if($ref_model){
-                                $ref_model->avans_sum = (int)$ref_model->avans_sum - (int)$model->summa;
+                                if($ref_model->avans_sum<$model->summa){
+                                    $ref_model->avans_sum = 0;
+                                }
+                                else{
+                                    $ref_model->avans_sum = (int)$ref_model->avans_sum - (int)$model->summa;
+                                }
                                 $ref_model->save(false);
                             }
                             // var_dump($ref_phonenum);die;

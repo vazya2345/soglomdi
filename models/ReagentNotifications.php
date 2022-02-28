@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use app\models\Reagent;
 /**
  * This is the model class for table "reagent_notifications".
  *
