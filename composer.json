@@ -27,7 +27,8 @@
         "aki/yii2-vue": "*",
         "xj/yii2-qrcode-widget": "^1.1",
         "irazasyed/telegram-bot-sdk": "^2.0",
-        "kartik-v/yii2-widget-select2": "dev-master"
+        "kartik-v/yii2-widget-select2": "dev-master",
+        "phpoffice/phpexcel": "^1.8"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

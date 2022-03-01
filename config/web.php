@@ -40,6 +40,7 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\Users',
             'enableAutoLogin' => true,
+            'class' => 'app\components\User',
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

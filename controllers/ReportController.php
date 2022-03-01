@@ -402,7 +402,7 @@ class ReportController extends Controller
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         

@@ -93,17 +93,17 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->id;
     }
 
-    public function getRole()
-    {
-        return $this->role_id;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getAuthKey()
     {
         return $this->id;
+    }
+
+    public function getRole()
+    {
+        return $this->role_id;
     }
 
     /**
@@ -266,7 +266,6 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             return false;
         }
     }
-
     
 }
 
