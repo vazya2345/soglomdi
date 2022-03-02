@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Payments;
+use Fpdf\Fpdf;
 
 class SiteController extends Controller
 {
@@ -67,6 +68,8 @@ class SiteController extends Controller
         }
         return $this->render('index');
     }
+
+
 
     /**
      * Login action.
@@ -147,7 +150,7 @@ class SiteController extends Controller
         // ini_set('memory_limit', '512M');
         // set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -187,6 +190,18 @@ class SiteController extends Controller
         header('Cache-Control: max-age=0');
         $objWriter->save('php://output');
         exit;
+    }
+
+
+    public function actionTest1()
+    {
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial','B',16);
+        // $pdf->Cell(40,10,'Hello World!');
+        $pdf->WriteHTML('avaz');
+        return $pdf->Output();
+        // return $this->render('test');
     }
     
 }

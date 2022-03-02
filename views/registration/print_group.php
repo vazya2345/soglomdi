@@ -11,8 +11,7 @@ use app\models\Result;
 use xj\qrcode\QRcode;
 use xj\qrcode\widgets\Text;
 
-$pokazs = SPokazatel::getPokazs($analiz_id);
-// var_dump($model);die;
+
 $this->title = 'Натижа';
 $this->params['breadcrumbs'][] = $this->title;
 $client_name = Client::getName($model->client_id);
@@ -211,4 +210,8 @@ echo $qr;
     }
 ?>
 </style>
+
+
+
+
 

@@ -13,23 +13,6 @@
         "source": "https://github.com/yiisoft/yii2"
     },
     "minimum-stability": "stable",
-    "require": {
-        "php": ">=5.6.0",
-        "yiisoft/yii2": "~2.0.14",
-        "yiisoft/yii2-bootstrap": "~2.0.0",
-        "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-        "hail812/yii2-adminlte3": "*",
-        "custom-it/yii2-excel-report": "^1.0",
-        "kartik-v/yii2-grid": "@dev",
-        "kartik-v/yii2-editable": "@dev",
-        "moonlandsoft/yii2-phpexcel": "*",
-        "kosoukhov/ldap": "^1.0",
-        "aki/yii2-vue": "*",
-        "xj/yii2-qrcode-widget": "^1.1",
-        "irazasyed/telegram-bot-sdk": "^2.0",
-        "kartik-v/yii2-widget-select2": "dev-master",
-        "phpoffice/phpexcel": "^1.8"
-    },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
         "yiisoft/yii2-gii": "~2.1.0",
@@ -78,5 +61,14 @@
             "type": "composer",
             "url": "https://asset-packagist.org"
         }
-    ]
+    ],
+    "require": {
+        "robregonm/yii2-pdf": "*",
+        "hail812/yii2-adminlte3": "~1.1",
+        "kartik-v/yii2-widget-select2": "@dev",
+        "yiisoft/yii2-bootstrap": "^2.0",
+        "xj/yii2-qrcode-widget": "~1.1",
+        "fpdf/fpdf": "^1.83",
+        "phpoffice/phpexcel": "^1.8"
+    }
 }

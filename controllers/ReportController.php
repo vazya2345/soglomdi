@@ -245,7 +245,7 @@ class ReportController extends Controller
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -509,7 +509,7 @@ public function actionKassa1prev()
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -666,7 +666,7 @@ public function actionKassa1prev()
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -870,7 +870,7 @@ public function actionKassa1prev()
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -962,7 +962,7 @@ public function actionKassa1prev()
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -1209,7 +1209,7 @@ public function actionKassa1prev()
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -1389,7 +1389,7 @@ public function actionKassa1prev()
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -1554,7 +1554,7 @@ public function actionKassa1prev()
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -1670,7 +1670,7 @@ public function actionKassa1prev()
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -1883,7 +1883,7 @@ public function actionKassa1prev()
         ini_set('memory_limit', '512M');
         set_time_limit(20 * 60);
 
-        require('../vendor/PHPExcel/Classes/PHPExcel.php');
+        require('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 
         $objPHPExcel = new \PHPExcel;
         
@@ -1919,11 +1919,13 @@ public function actionKassa1prev()
             $paid_sum = $reg->sum_cash+$reg->sum_plastik;
             $activeSheet->setCellValueExplicit('G'.$row, $paid_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
-            $reag_sum = RegReagents::getSum($reg->id);
             
-            $activeSheet->setCellValueExplicit('H'.$row, $reag_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            
+            $activeSheet->setCellValueExplicit('H'.$row, $reg->sum_debt, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
-            $activeSheet->setCellValueExplicit('I'.$row, $reg->sum_debt, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            
+            $reag_sum = RegReagents::getSum($reg->id);
+            $activeSheet->setCellValueExplicit('I'.$row, $reag_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
             $ref_sum = Referals::getSumByRegid($reg->id);
             $activeSheet->setCellValueExplicit('J'.$row, $ref_sum, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
