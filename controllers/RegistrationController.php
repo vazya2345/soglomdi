@@ -890,7 +890,7 @@ class RegistrationController extends Controller
 
     public function actionViewqr($group,$reg_id)
     {
-        Yii::$app->response->format = 'pdf';
+        // Yii::$app->response->format = 'pdf';
         $this->layout = '//print';
         
 
@@ -921,6 +921,7 @@ class RegistrationController extends Controller
             ]);
         }
         else{
+            Yii::$app->response->format = 'pdf';
             return $this->render('print_group', [
                 'model' => $model,
                 'searchModel' => $searchModel,
