@@ -191,6 +191,43 @@ $lav = Users::getMyLav();
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown">
+                    <?= Html::a('Хисоботлар', '#', ['class' => 'nav-link dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-expanded'=>true]) ?>
+                    <ul class="dropdown-menu shadow">
+                        <li>
+                            <?= Html::a('Қарздорлик', ['/report/qarzreportprev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Докторлар1', ['/report/doktor1prev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Лаборатор', ['/report/lab1prev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+
+                        <li>
+                            <?= Html::a('Юборилган пул', ['/report/moneysendprev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+
+                        <li>
+                            <?= Html::a('Реагент қолдиқлари', ['/report/reagentqoldiqprev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Касса тушум чиқим', ['/report/kassatch1prev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Харажатлар', ['/report/harajatlar1prev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Рефераллар', ['/report/referal1prev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Бизнес план', ['/report/bp1prev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                        <li>
+                            <?= Html::a('Реагент сарфи', ['/report/reagentsarfiprev'], ['class' => 'dropdown-item']) ?>
+                        </li>
+                    </ul>
+                </li>
         <?php
             }
             elseif(!Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==9)){
@@ -198,12 +235,6 @@ $lav = Users::getMyLav();
             <li class="nav-item dropdown">
                 <?= Html::a('Справочники', '#', ['class' => 'nav-link dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-expanded'=>true]) ?>
                 <ul class="dropdown-menu shadow">
-                    <li>
-                        <?= Html::a('Қарздорлик', ['/report/qarzreportprev'], ['class' => 'dropdown-item']) ?>
-                    </li>
-                    <li>
-                        <?= Html::a('Докторлар1', ['/report/doktor1prev'], ['class' => 'dropdown-item']) ?>
-                    </li>
                     <li>
                         <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'dropdown-item']) ?>
                     </li>
@@ -213,13 +244,47 @@ $lav = Users::getMyLav();
                     <li>
                         <?= Html::a('Реф жўнатма', ['/ref-sends/index'], ['class' => 'dropdown-item']) ?>
                     </li>
-                    <li>
-                        <?= Html::a('Юборилган пул', ['/report/moneysendprev'], ['class' => 'dropdown-item']) ?>
-                    </li>
                 </ul>
             </li>
             <li class="nav-item">
                 <?= Html::a('Қарздорлар', ['registration/qarzdorlar'], ['class' => 'nav-link']) ?>
+            </li>
+            <li class="nav-item dropdown">
+                <?= Html::a('Хисоботлар', '#', ['class' => 'nav-link dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-expanded'=>true]) ?>
+                <ul class="dropdown-menu shadow">
+                    <li>
+                        <?= Html::a('Қарздорлик', ['/report/qarzreportprev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Докторлар1', ['/report/doktor1prev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Лаборатор', ['/report/lab1prev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+
+                    <li>
+                        <?= Html::a('Юборилган пул', ['/report/moneysendprev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+
+                    <li>
+                        <?= Html::a('Реагент қолдиқлари', ['/report/reagentqoldiqprev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Касса тушум чиқим', ['/report/kassatch1prev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Харажатлар', ['/report/harajatlar1prev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Рефераллар', ['/report/referal1prev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Бизнес план', ['/report/bp1prev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Реагент сарфи', ['/report/reagentsarfiprev'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                </ul>
             </li>
         <?php
             }
