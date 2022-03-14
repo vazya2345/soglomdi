@@ -513,7 +513,7 @@ class RegistrationController extends Controller
         if(!Registration::getIsPay($reg_id)){
             return $this->render('not_pay');  
         }
-        Yii::$app->response->format = 'pdf';
+        // Yii::$app->response->format = 'pdf';
         $this->layout = '//print';
         
         
@@ -548,6 +548,7 @@ class RegistrationController extends Controller
             ]);
         }
         else{
+            Yii::$app->response->format = 'pdf';
             return $this->render('print_group', [
                 'model' => $model,
                 'searchModel' => $searchModel,

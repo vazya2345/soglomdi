@@ -31,144 +31,221 @@ $qr = Text::widget([
     'outputDirWeb' => '@web/upload/qrcode',
     'ecLevel' => QRcode::QR_ECLEVEL_L,
     'text' => 'https://soglom-diagnostika.uz/?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
-    'size' => 3,
+    'size' => 6,
 ]);
 $qr = str_replace('/web', './', $qr);
 ?>
 
-<div class="header">
-    <table class="tb-header">
-        <tr>
-            <td align="center" colspan="2">
-                <img src="./img/st.jpg" class="logo" width="300">
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                «SOG’LOM TABASSUM» ХК, манзил Андижон ш., Бобур шох кўчаси 109-Б уй. Тел:(0-595) 204-01-50.
-            </td>
-
-        </tr>
-    </table>
-
-</div>
-
-<div class="header">
-
-    <div class="top_title">
-        <p class="top_title_text blue fnt_big fnt_curved">The test results about coronavirus (Covid19) infection</p>
-        <p class="top_title_text red fnt_big">REFERENCE*</p>
-        <p class="top_title_text blue fnt_big fnt_curved">Коронавирус (Covid 19) инфекциясига текширилган<br>тест натижаси ҳақида</p>
-        <p class="top_title_text red fnt_big">МАЪЛУМОТНОМА* №<?=$_GET['reg_id']?></p>
-        <p class="top_title_text blue fnt_big fnt_curved">о результате проводимого теста<br>на коронавирусную (Covid 19) инфекцию</p>
-        <p class="top_title_text red fnt_big">СПРАВКА*</p>
-    </div>
-
-</div>
-
-<div class="container">
-    <div class="content-top-table-div">
-         <table class="table_client">
-            <tr>
-                <td>1.</td>
-                <td>Full name<br>Фамилия, исм, шариф<br>Фамилия, имя, отечество</td>
-                <td class="text_bottom"><?=$client->lname.' '.$client->fname.' '.$client->mname;?></td>
-                <td rowspan="7"><img class="covid_img" src="./img/covid.jpg"></td> 
-            </tr>
-            <tr>
-                <td>2.</td>
-                <td>Date of birth<br>Туғилган санаси<br>Дата рождения</td>
-                <td class="text_bottom"><?=$client->birthdate?></td>
-            </tr>
-            <tr>
-                <td>3.</td>
-                <td>Passport series and number<br>Паспорт серияси ва рақами<br>Серия и номер паспорта</td>
-                <td class="text_bottom"><?=$client->doc_seria.$client->doc_number?></td>
-            </tr>
-            <tr>
-                <td>4.</td>
-                <td>Phone number<br>Телефон рақами<br>Номер телефона</td>
-                <td class="text_bottom">
-                    <?php
-                        if($client->add1=='+998000000000'){
-                            echo '';
-                        }
-                        else{
-                            echo $client->add1;
-                        }
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td>5.</td>
-                <td>Date tested<br>Текширилган сана<br>Дата тестирования</td>
-                <td class="text_bottom"><?=$resmodel->create_date?></td>
-            </tr>
-            <tr>
-                <td>6.</td>
-                <td>Research method<br>Текширув усули<br>Метод исследования</td>
-                <?php
-                    if($group=='ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА'){
-                        echo '<td class="text_bottom">PCR Real-time<br>PZR<br>ПЦР в реальном времени</td>';
-                    }
-                    elseif($group=='КОВИД1'){
-                        echo '<td class="text_bottom">SARS-CoV-2 (ПЦР мазок)</td>';
-                    }
-                    else{
-                        echo '<td class="text_bottom">PCR Real-time<br>PZR<br>ПЦР в реальном времени</td>';
-                    }
-                ?>
+<div class="content px-2">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-flag pt-2 px-2 pb-1 pt-lg-5 px-lg-5 pb-lg-2">
                 
-            </tr> 
-            <tr>
-                <td>7.</td>
-                <td>The result of laboratory analysis<br>Лаборатор таҳлил натижаси<br>Результат лабораторного анализа</td>
-                <td class="text_bottom">
-                    <?php
-                        if($resmodel->reslut_value=='Положительный'){
-                            echo 'Positive<br>Положительный<br>Musbat';
-                        }
-                        elseif($resmodel->reslut_value=='Отрицательный'){
-                            echo 'Negative<br>Отрицательный<br>Manfiy';
-                        }
-                        else{
-                            echo 'Natija kiritilmagan';
-                        }
-                    ?>
-                </td>
-            </tr>
-        </table>
-        
+
+
+                <div class="row mb-5">
+                    <div class="col-md-5 text-center my-auto font-weight-bold text-uppercase">
+                        <h4>Ministry of Health of the Republic of Uzbekistan</h4>
+                        <h4>«SOG’LOM TABASSUM» ХК</h4>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mx-auto">
+                            <img src="./img/ilon.jpg" alt="" class="w-100 logo" width="100">
+                        </div>
+                    </div>
+                    <div class="col-md-5 text-center my-auto font-weight-bold text-uppercase">
+                        <h4>Министерство Здравоохранения Республики Узбекистан</h4>
+                        <h4>"SOG’LOM TABASSUM" ЧП</h4>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+
+
+                <div class="my-1">
+                    <h5>
+                        <strong>ID / Номер: </strong>
+                        <span><?=$_GET['reg_id']?></span>
+                    </h5>
+                </div>
+                <div class="my-1">
+                    <h5>
+                        <strong>Laboratory (name) / Лаборатория (название):
+                        </strong>
+                        <span>"SOG’LOM TABASSUM" ЧП</span>
+                    </h5>
+                </div>
+                <div class="my-1">
+                    <h5>
+                        <strong>Place of sampling / Место забора анализа
+                            : </strong>
+                        <span>"SOG’LOM TABASSUM" ЧП</span>
+                    </h5>
+                </div>
+                <div class="my-1">
+                    <h5>
+                        <strong>Research method / Метод исследования: </strong>
+                        <span>
+                            <?php
+                                if($group=='ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА'){
+                                    echo 'PCR Real-time / ПЦР в реальном времени';
+                                }
+                                elseif($group=='КОВИД1'){
+                                    echo 'SARS-CoV-2 (ПЦР мазок)';
+                                }
+                                else{
+                                    echo 'PCR Real-time / ПЦР в реальном времени';
+                                }
+                            ?>
+                        </span>
+                    </h5>
+                </div>
+
+
+                
+
+                <hr style="border: 4px solid #bbb">
+                
+
+
+                <div class="my-1">
+                    <h5>
+                        <strong>Passport / Серия и номер паспорта: </strong>
+                        <span><?=$client->doc_seria.$client->doc_number?></span>
+                    </h5>
+                </div>
+
+                <div class="my-1">
+                    <h5>
+                        <strong>Full name / Полное имя: </strong>
+                        <span><?=$client->lname.' '.$client->fname.' '.$client->mname;?></span>
+                    </h5>
+                </div>
+
+                <div class="my-1">
+                    <h5>
+                        <strong>Birth date / Дата рождения: </strong>
+                        <span><?=$client->birthdate?></span>
+                    </h5>
+                </div>
+
+                <div class="my-1">
+                    <h5>
+                        <strong>Sex / Пол: </strong>
+                        <span>
+                            <?php
+                                if($client->sex=='M'){
+                                    echo "Male / Мужчина";
+                                }
+                                else{
+                                    echo "Female / Женщина";
+                                }
+                            ?>
+                        </span>
+                    </h5>
+                </div>
+
+                <div class="my-1">
+                    <h5>
+                        <strong>Analysis date / Дата сдачи анализа:</strong>
+                        <span><?=$model->create_date?></span>
+                    </h5>
+                </div>
+                
+
+                <div class="my-1 d-flex align-items-baseline">
+                        <h5 class="mr-2">
+                            <strong>Test result and date / Результат и дата теста: </strong>
+                            <?php
+                                if($resmodel->reslut_value=='Положительный'){
+                                    echo '<span>Positive / Положительный</span>';
+                                }
+                                elseif($resmodel->reslut_value=='Отрицательный'){
+                                    echo '<span>Negative / Отрицательный</span>';
+                                }
+                                else{
+                                    echo 'Natija kiritilmagan';
+                                }
+                            ?>
+                            
+                            
+                            <strong>(<?=$resmodel->create_date?>)</strong>
+                        </h5>
+                </div>
+                
+
+
+
+
+
+                <div class="row my-2">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <div id="qrContainer" class="w-100"><?=$qr?></div>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+
+
+
+
+
+                <div class="mt-5 mx-auto text-center myfooter">
+                    <h6 class="text-uppercase">
+                        <span>«SOG’LOM TABASSUM» ХК</span>
+                    </h6>
+                    <h6>
+                        <span>Адрес: </span>
+                        <span>Андижон ш., Бобур шох кўчаси 109-Б уй.</span>
+                    </h6>
+                    <h6>
+                        <span>Телефон: </span>
+                        <a href="tel:998952040150">+998 95 204-01-50</a>
+                    </h6>
+                    <h6>
+                        <span>Email: </span>
+                        <a href="mailto:info@soglom-diagnostika.uz">
+                            info@soglom-diagnostika.uz
+                        </a>
+                    </h6>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <table class="table_client1">
-            <tr>
-                <td>The person responsible for analysis</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Тахлил учун маъсул шахс</td>
-                <td><?=Users::getName($model->user_id)?>  _______________ «<?=date('d')?>» <?=date('m')?> <?=date('Y')?></td>
-            </tr>
-            <tr>
-                <td>Ответственное лицо за анализ</td>
-                <td class="imzo">(имзо/подпись/signature)</td>
-            </tr>
-        </table>
-    </div>
-    <!-- <span>м.ў/м.п</span> -->
-    
-  <br>
-    
-                             
-<div class="qrimg">
-    <?=$qr?>
-    <p class="qrtext"><br>Checking the result<br>Проверка результатов<br>Natijani tekshirish</p>
 </div>
 
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <style type="text/css">
+    .cont {
+        width: 1050px!important;
+    }
     .content-top-table-div table{
         width: 100%;
     }
@@ -237,6 +314,83 @@ $qr = str_replace('/web', './', $qr);
     /*text-align: center;*/
     vertical-align: top;
     padding-left: 120px;
+}
+
+
+
+
+
+/*new style*/
+
+div{
+    font-family: Nunito;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 0;
+    
+}
+.border-flag {
+    border: 40px solid transparent;
+    -o-border-image: url('./img/flag_border.png') 12% stretch;
+    border-image: url('./img/flag_border.png') 12% stretch;
+}
+.h4{
+    text-transform: uppercase!important;
+}
+.col-md-5{
+    max-width: 38%;
+    float: left;
+    padding: 20px;
+}
+.col-md-2{
+    max-width: 13%;
+    float: left;
+}
+.clear{
+    clear: both;
+}
+h4{
+    font-size: 18px;
+    text-align: center;
+    font-weight: normal;
+}
+div img.logo{
+    vertical-align: middle;
+    padding: 45% 0 0px 0;
+}
+.my-1{
+    margin-bottom: 15px!important;
+    margin-top: 15px!important;
+    margin-left: 25px;
+    text-transform: none;
+}
+.my-1 h5{
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 0;
+}
+#qrContainer{
+    text-align: center;
+    padding: 25px 0;
+}
+.text-uppercase{
+    text-transform: uppercase;
+}
+.text-center{
+    text-align: center;
+}
+.myfooter{
+    font-size: 26px;
+    font-weight: normal;
+
+}
+.myfooter h6{
+    margin: 10px 0;
+    padding: 0;
+    font-weight: normal;
 }
 </style>
 

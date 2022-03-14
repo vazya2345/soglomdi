@@ -96,6 +96,7 @@ class ReagentSendController extends Controller
                                     var_dump($notif_model);die;
                                 }
                     }
+                    die;
                     $notifs = ReagentNotifications::find()->where(['reagent_id'=>$model->reagent_id,'filial_id'=>$model->filial_id])->all();
                     foreach ($notifs as $notif) {
                         $notif->delete(); 
