@@ -606,7 +606,14 @@ class RegistrationController extends Controller
                 if($model){
                     $model->reslut_value = $value;
                     $model->user_id = Yii::$app->user->id;
-                    $model->create_date = date("Y-m-d H:i:s");
+                    if(strlen($model->create_date)>5){
+                        // $model->create_date = $model->create_date;
+                        $a =1;
+                    }
+                    else{
+                        $model->create_date = date("Y-m-d H:i:s");    
+                    }
+                    
                     // var_dump($model->errors);die;
                     $model->save(false);
                 }
@@ -891,7 +898,7 @@ class RegistrationController extends Controller
     public function actionViewqr($group,$reg_id)
     {
         // Yii::$app->response->format = 'pdf';
-        $this->layout = '//print';
+        $this->layout = '//print_bs';
         
 
 
