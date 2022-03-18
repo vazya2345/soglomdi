@@ -171,7 +171,7 @@ $qr = str_replace('/web', './', $qr);
                                 <div class="row my-2">
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
-                        <div id="qrContainer" class="w-100"><canvas width="256" height="256"></canvas></div>
+                        <div id="qrContainer" class="w-100"><?=$qr?></div>
                     </div>
                     <div class="col-md-4"></div>
                 </div>
