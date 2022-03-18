@@ -514,7 +514,7 @@ class RegistrationController extends Controller
             return $this->render('not_pay');  
         }
         // Yii::$app->response->format = 'pdf';
-        $this->layout = '//print_bs';
+        // $this->layout = '//print_bs';
         
         
 
@@ -539,6 +539,7 @@ class RegistrationController extends Controller
             $dataProvider->query->andWhere(['main_id'=>$reg_id])->andWhere(['in','analiz_id',$analizs]);
             $dataProvider->pagination = ['pageSize' => 100];
         if($check_chegara==1){
+            $this->layout = '//print_bs';
             return $this->render('print_group_chegara', [
                 'model' => $model,
                 'searchModel' => $searchModel,
@@ -549,6 +550,7 @@ class RegistrationController extends Controller
         }
         else{
             Yii::$app->response->format = 'pdf';
+            $this->layout = '//print';
             return $this->render('print_group', [
                 'model' => $model,
                 'searchModel' => $searchModel,
@@ -898,7 +900,7 @@ class RegistrationController extends Controller
     public function actionViewqr($group,$reg_id)
     {
         // Yii::$app->response->format = 'pdf';
-        $this->layout = '//print_bs';
+        // $this->layout = '//print_bs';
         
 
 
@@ -919,6 +921,7 @@ class RegistrationController extends Controller
             $dataProvider->pagination = ['pageSize' => 100];
         
         if($check_chegara==1){
+            $this->layout = '//print_bs';
             return $this->render('print_group_chegara', [
                 'model' => $model,
                 'searchModel' => $searchModel,
@@ -929,6 +932,7 @@ class RegistrationController extends Controller
         }
         else{
             Yii::$app->response->format = 'pdf';
+            $this->layout = '//print';
             return $this->render('print_group', [
                 'model' => $model,
                 'searchModel' => $searchModel,
