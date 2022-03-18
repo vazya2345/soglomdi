@@ -32,7 +32,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/admi
             </li>
         </ul>
         <div class="d-flex justify-content-center w-100">
-            <a href="https://t.me/SEOvJSX" target="_blank" class="text-green" style="font-size: 18px;">
+            <a href="https://t.me/Lormaslahat" target="_blank" class="text-green" style="font-size: 18px;">
                 <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/telegram-3713743-3100712.png" width="15">
                 Вопросы, ответы и новости        </a>
         </div>
