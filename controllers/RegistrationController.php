@@ -514,7 +514,7 @@ class RegistrationController extends Controller
             return $this->render('not_pay');  
         }
         // Yii::$app->response->format = 'pdf';
-        $this->layout = '//print';
+        $this->layout = '//print_bs';
         
         
 
