@@ -31,12 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Users::getName($data->user_id);                    
                 }
             ],
-            'analiz_id'=>[
-                'attribute'=>'analiz_id',
-                'value' => function ($data) {
-                        return SAnaliz::getName($data->analiz_id);                    
-                }
-            ],
+            // 'analiz_id'=>[
+            //     'attribute'=>'analiz_id',
+            //     'value' => function ($data) {
+            //             return SAnaliz::getName($data->analiz_id);                    
+            //     }
+            // ],
             'sum_amount',
             'sum_cash',
             'sum_plastik',
