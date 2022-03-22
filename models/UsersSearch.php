@@ -61,6 +61,7 @@ class UsersSearch extends Users
             'id' => $this->id,
             'role_id' => $this->role_id,
             'active' => $this->active,
+            'add1' => $this->add1,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
@@ -70,8 +71,8 @@ class UsersSearch extends Users
             ->andFilterWhere(['like', 'mobile', $this->mobile])
             ->andFilterWhere(['like', 'info', $this->info])
             ->andFilterWhere(['like', 'img', $this->img])
-            ->andFilterWhere(['like', 'other', $this->other])
-            ->andFilterWhere(['like', 'add1', $this->add1]);
+            ->andFilterWhere(['like', 'other', $this->other]);
+            // ->andFilterWhere(['like', 'add1', $this->add1])
 
         return $dataProvider;
     }

@@ -87,9 +87,12 @@ class Registration extends \yii\db\ActiveRecord
 
     public static function getIsPay($id)
     {
+        // var_dump(Users::getMyLogin(Yii::$app->user->id));
+        // var_dump(strpos(Users::getMyLogin(Yii::$app->user->id),'adm'));die;
+
         $model = self::findOne($id);
         $tolangan = $model->sum_cash+$model->sum_plastik+$model->skidka_reg+$model->skidka_kassa;
-        if($model->sum_amount<=$tolangan){
+        if($model->sum_amount<=$tolangan||(strpos(Users::getMyLogin(Yii::$app->user->id),'_qarz_')!==false)){
             return true;
         }
         else{

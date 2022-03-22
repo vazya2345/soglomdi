@@ -72,8 +72,10 @@ class ReagentSendController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->send_date = date("Y-m-d H:i:s");
+
             $reagent_model = Reagent::findOne($model->reagent_id);
-            if($model->save()&&$reagent_model->qoldiq>=$model->soni){
+
+            if($reagent_model->qoldiq>=$model->soni){
                 $rfmodel = ReagentFilial::find()->where(['filial_id'=>$model->filial_id,'reagent_id'=>$model->reagent_id])->one();
                 if($rfmodel){
                     $rfmodel->qoldiq+=$model->soni;
@@ -84,19 +86,19 @@ class ReagentSendController extends Controller
                     $rfmodel->reagent_id = $model->reagent_id;
                     $rfmodel->qoldiq = $model->soni;
                 }
-                if($rfmodel->save()){
-                    $reagent_model->qoldiq = $reagent_model->qoldiq-$model->soni;
-                    $reagent_model->save(false);
+
+                $reagent_model->qoldiq = $reagent_model->qoldiq-$model->soni;
+
+                if($rfmodel->save()&&$model->save()&&$reagent_model->save()){    
                     if($reagent_model->qoldiq<$reagent_model->notific_count){
                                 $notif_model = new ReagentNotifications();
                                 $notif_model->reagent_id = $reagent_model->id;
                                 $notif_model->create_date = date("Y-m-d H:i:s");
-                                $notif_model->filial_id = 1; //// FILIAL
+                                $notif_model->filial_id = 777; //// FILIAL
                                 if(!$notif_model->save()){
                                     var_dump($notif_model);die;
                                 }
                     }
-                    die;
                     $notifs = ReagentNotifications::find()->where(['reagent_id'=>$model->reagent_id,'filial_id'=>$model->filial_id])->all();
                     foreach ($notifs as $notif) {
                         $notif->delete(); 

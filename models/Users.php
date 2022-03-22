@@ -267,5 +267,15 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         }
     }
     
+    public static function getMyLogin()
+    {
+        $model = self::findOne(Yii::$app->user->id);
+        if($model){
+            return $model->login;
+        }
+        else{
+            return false;
+        }
+    }
 }
 

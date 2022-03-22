@@ -205,7 +205,6 @@ class Reagent extends \yii\db\ActiveRecord
         if($reagent){
             if($reagent->check==1&&!SAnaliz::isFil($analiz_id)){// agar analiz filialda tekshirilmasa
                 
-
                 if($reagent->qoldiq>=$count){
                     $reagent->qoldiq-=$count;
                 }
@@ -252,54 +251,51 @@ class Reagent extends \yii\db\ActiveRecord
                 if($model){
                     if($model->qoldiq>=$count){
                         $model->qoldiq-=$count;
-                    }
-                    else{
-                        echo "Реагентлар миқдори кўрсатилгандан кам қолган. Бош офисга боғланинг. reagent_id(".self::getName($id).' - '.$id.") error(r1)";die;
-                    }
-                    if($model->save()){
-                        $regreagent_model = new RegReagents();
-                        $regreagent_model->reg_id = $reg_id;
-                        $regreagent_model->reagent_id = $id;
-                        $regreagent_model->soni = $count;
-                        $regreagent_model->filial_id = $myfil;
-                        if($regreagent_model->save()){
-                            if($model->qoldiq<=$reagent->notific_filial&&!ReagentNotifications::isReagent($id, $myfil)){
-                                $notif_model = new ReagentNotifications();
-                                $notif_model->reagent_id = $id;
-                                $notif_model->create_date = date("Y-m-d H:i:s");
-                                $notif_model->filial_id = $myfil; //// FILIAL
-                                if($notif_model->save()){
-                                    return true;
+
+                        if($model->save()){
+                            $regreagent_model = new RegReagents();
+                            $regreagent_model->reg_id = $reg_id;
+                            $regreagent_model->reagent_id = $id;
+                            $regreagent_model->soni = $count;
+                            $regreagent_model->filial_id = $myfil;
+                            if($regreagent_model->save()){
+                                if($model->qoldiq<=$reagent->notific_filial&&!ReagentNotifications::isReagent($id, $myfil)){
+                                    $notif_model = new ReagentNotifications();
+                                    $notif_model->reagent_id = $id;
+                                    $notif_model->create_date = date("Y-m-d H:i:s");
+                                    $notif_model->filial_id = $myfil; //// FILIAL
+                                    $notif_model->save(false);
                                 }
                                 else{
-                                    var_dump($notif_model);die;
+                                    return true;
                                 }
                             }
                             else{
-                                return true;
+                                echo "Агар ушбу хабарни кўраётган бўлсангиз тизим администраторига мурожаат қилинг. Реагентлар хисобланишида хато юз берди. Хато коди: ERR_R274";
+                                var_dump($regreagent_model->errors);
+                                die;
                             }
                         }
                         else{
-                            var_dump($regreagent_model->errors);
-                            echo "REGREAGENTERROR!!!";die;
+                            echo "Агар ушбу хабарни кўраётган бўлсангиз тизим администраторига мурожаат қилинг. Реагентлар хисобланишида хато юз берди. Хато коди: ERR_R279";
+                            var_dump($model);die;
                         }
                     }
                     else{
-                        var_dump($model);die;
+                        echo "Реагентлар миқдори кўрсатилгандан кам қолган. Тизим администраторига боғланинг. reagent_id(".self::getName($id).' - '.$id.") ERR_R285";die;
                     }
                 }
                 else{
-                    echo "Ушбу реагент филиалда кўрсатилмаган. Бош офисга боғланинг. reagent_id(".self::getName($id).' - '.$id.") error(r2)";die;
+                    echo "Ушбу реагент филиалда кўрсатилмаган. Тизим администраторига боғланинг. reagent_id(".self::getName($id).' - '.$id.") ERR_R289";die;
                 }
-
             }
         }
         else{
-            echo "Бундай реагент топилмади. Бош офисга боғланинг. reagent_id(".self::getName($id).' - '.$id.") error(r3)";die;
+            echo "Бундай реагент топилмади. Тизим администраторига боғланинг. reagent_id(".self::getName($id).' - '.$id.") ERR_R294";die;
         }
     }
 
-    public static function minusCountForAnaliz($id,$reg_id)
+    public static function minusCountForAnaliz($id,$reg_id) 
     {
 
         $models = ReagentRel::getReagentsForAnaliz($id);

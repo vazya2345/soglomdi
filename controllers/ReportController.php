@@ -1741,7 +1741,7 @@ public function actionKassa1prev()
 
                 $agent_sum = Rasxod::find()
                             ->where(['filial_id'=>$fil->id])
-                            ->andWhere(['rasxod_type'=>2])
+                            ->andWhere(['rasxod_type'=>1])
                             ->andWhere(['status'=>2])
                             ->andWhere(['between','create_date',$date1,$date2])
                             ->sum('summa');
@@ -1819,7 +1819,7 @@ public function actionKassa1prev()
 
                 $agent_sum = Rasxod::find()
                             ->where(['filial_id'=>$fil->id])
-                            ->andWhere(['rasxod_type'=>2])
+                            ->andWhere(['rasxod_type'=>1])
                             ->andWhere(['status'=>2])
                             ->andWhere(['between','create_date',$date1,$date2])
                             ->sum('summa');

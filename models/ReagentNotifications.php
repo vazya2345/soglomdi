@@ -47,7 +47,7 @@ class ReagentNotifications extends \yii\db\ActiveRecord
         ];
     }
 
-    public function isReagent($reagent_id,$filial_id)
+    public static function isReagent($reagent_id,$filial_id)
     {
         $model = self::find()->where(['reagent_id'=>$reagent_id, 'filial_id'=>$filial_id])->one();
         if($model){
