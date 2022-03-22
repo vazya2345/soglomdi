@@ -410,7 +410,7 @@ class RegistrationController extends Controller
             $i = 0;
             $analiz_names = [];
             foreach ($analizs as $analiz) {
-                Result::checkPokazs($id,$analiz->analiz_id);
+                // Result::checkPokazs($id,$analiz->analiz_id);
                 Result::checkPokazs($id,$analiz->analiz_id);
                 $searchModel[$i] = new ResultSearch();
                 $dataProvider[$i] = $searchModel[$i]->search(Yii::$app->request->queryParams);
@@ -445,7 +445,7 @@ class RegistrationController extends Controller
                 $i = 0;
                 $analiz_names = [];
                 foreach ($analizs as $analiz) {
-                    Result::checkPokazs($id,$analiz->analiz_id);
+                    // Result::checkPokazs($id,$analiz->analiz_id);
                     Result::checkPokazs($id,$analiz->analiz_id);
                     $searchModel[$i] = new ResultSearch();
                     $dataProvider[$i] = $searchModel[$i]->search(Yii::$app->request->queryParams);

@@ -8,7 +8,7 @@ use app\models\Users;
 use app\models\SPokazatel;
 use app\models\SAnaliz;
 
-$pokazs = SPokazatel::getPokazs($model->analiz_id);
+// $pokazs = SPokazatel::getPokazs($model->analiz_id);
 
 $this->title = 'Натижа киритиш';
 $this->params['breadcrumbs'][] = $this->title;
