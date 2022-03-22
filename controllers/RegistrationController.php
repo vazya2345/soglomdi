@@ -431,6 +431,7 @@ class RegistrationController extends Controller
                 ]);
             }
             else{
+                echo "Ушбу хатолик анализлар тўлиқ базага тушмаганини билдиради, илтимос тизим администраторига алоқага чиқинг ERR_REG434";die;
                 return $this->render('result', [
                     'model' => $model,
                     'searchModel' => $searchModel,
@@ -466,6 +467,7 @@ class RegistrationController extends Controller
                     ]);
                 }
                 else{
+                    echo "Ушбу хатолик анализлар тўлиқ базага тушмаганини билдиради, илтимос тизим администраторига алоқага чиқинг ERR_REG469";die;
                     return $this->render('result', [
                         'model' => $model,
                         'searchModel' => $searchModel,
