@@ -12,7 +12,7 @@ use app\models\Users;
 use xj\qrcode\QRcode;
 use xj\qrcode\widgets\Text;
 
-$pokazs = SPokazatel::getPokazs($analiz_id);
+// $pokazs = SPokazatel::getPokazs($analiz_id);
 $client = Client::findOne($model->client_id);
 $reg_id = $_GET['reg_id'];
 $resmodel = Result::find()->where(['main_id'=>$reg_id])->andWhere(['is not','main_id',null])->one();
