@@ -38,12 +38,14 @@ class MoneySendController extends Controller
     {
         $searchModel = new MoneySendSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query
+        
+        if(Yii::$app->user->getRole()!=1){
+            $dataProvider->query
             ->andWhere(['send_user'=>Yii::$app->user->id])
             ->orWhere(['rec_user'=>Yii::$app->user->id])
-            ->orderBy(['id'=>SORT_DESC]);
-
-
+            ->orderBy(['id'=>SORT_DESC]);    
+        }
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
