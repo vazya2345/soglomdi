@@ -77,7 +77,7 @@ class Registration extends \yii\db\ActiveRecord
         $model = self::findOne($id);
         $tolangan = $model->sum_cash+$model->sum_plastik+$model->skidka_reg+$model->skidka_kassa;
         // var_dump($tolangan);die;
-        if($model->sum_amount<=$tolangan){
+        if($model->sum_amount<=$tolangan||(strpos(Users::getMyLogin(Yii::$app->user->id),'_qarz_')!==false)){
             return "<a href='?r=registration/result&id=".$id."'>Натижа</a>";
         }
         else{
