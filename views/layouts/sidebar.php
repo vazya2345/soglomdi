@@ -142,6 +142,19 @@ $name = Users::getMyname();
                         ],
                     ],
 
+                    [
+                        'label' => 'Ойлик хисоблаш',
+                        'url' => '#',
+                        'icon' => 'dot-circle',
+                        'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1),
+                        'items' => [
+                            ['label' => 'Ходимлар', 'url' => ['/oylik-hodimlar/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Ушланмалар', 'url' => ['/oylik-uderj/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Шаклланиши', 'url' => ['/oylik-shakl/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Давр', 'url' => ['/oylik-periods/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                        ]
+                    ],
+
                     
 
 
