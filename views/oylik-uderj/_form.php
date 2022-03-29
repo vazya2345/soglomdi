@@ -40,7 +40,7 @@ use app\models\OylikPeriods;
 
     <?= $form->field($model, 'summa')->textInput() ?>
 
-    <?= $form->field($model, 'period')->dropDownList(OylikPeriods::getActivePeriod(),['readonly'=>true]) ?>
+    <?= $form->field($model, 'period')->textInput(['value'=>OylikPeriods::getActivePeriod(), 'readonly'=>true]) ?>
     
     <div class="form-group">
         <?= Html::submitButton('Сақлаш', ['class' => 'btn btn-success']) ?>
