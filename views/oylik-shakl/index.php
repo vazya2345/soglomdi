@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <p>
-        <?= Html::a('Шакллантириш', ['shakllantirish'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Ойлик шакллантириш', ['shakllantirish'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Аванс шакллантириш', ['avans'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -29,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            // 'id',
             'period' => [
                 'attribute'=>'period',
                 'filter'=>OylikPeriods::getAll(),

@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
+use app\models\OylikHodimlar;
+use app\models\OylikUderjTypes;
 /* @var $this yii\web\View */
 /* @var $model app\models\OylikUderj */
 
@@ -30,8 +31,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'oylik_hodimlar_id',
-            'title',
+            'oylik_hodimlar_id' => [
+                'attribute'=>'oylik_hodimlar_id',
+                'filter'=>OylikHodimlar::getAll(),
+                'value' => function ($model) {
+                        return OylikHodimlar::getName($model->oylik_hodimlar_id);                    
+                }
+            ],
+            'title' => [
+                'attribute'=>'title',
+                'filter'=>OylikUderjTypes::getAll(),
+                'value' => function ($model) {
+                        return OylikUderjTypes::getName($model->title);                    
+                }
+            ],
             'summa',
             'period',
             'create_date',

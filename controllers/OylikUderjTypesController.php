@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\OylikUderj;
-use app\models\OylikUderjSearch;
+use app\models\OylikUderjTypes;
+use app\models\OylikUderjTypesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OylikUderjController implements the CRUD actions for OylikUderj model.
+ * OylikUderjTypesController implements the CRUD actions for OylikUderjTypes model.
  */
-class OylikUderjController extends Controller
+class OylikUderjTypesController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class OylikUderjController extends Controller
     }
 
     /**
-     * Lists all OylikUderj models.
+     * Lists all OylikUderjTypes models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new OylikUderjSearch();
+        $searchModel = new OylikUderjTypesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class OylikUderjController extends Controller
     }
 
     /**
-     * Displays a single OylikUderj model.
+     * Displays a single OylikUderjTypes model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,23 +58,16 @@ class OylikUderjController extends Controller
     }
 
     /**
-     * Creates a new OylikUderj model.
+     * Creates a new OylikUderjTypes model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new OylikUderj();
+        $model = new OylikUderjTypes();
 
-        if ($model->load(Yii::$app->request->post())) {
-            // var_dump(Yii::$app->user->id);die;
-            $model->create_date = date("Y-m-d H:i:s");
-            $model->create_userid = Yii::$app->user->id;
-            
-            if($model->save()){
-                
-                return $this->redirect(['view', 'id' => $model->id]);    
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -83,7 +76,7 @@ class OylikUderjController extends Controller
     }
 
     /**
-     * Updates an existing OylikUderj model.
+     * Updates an existing OylikUderjTypes model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -103,7 +96,7 @@ class OylikUderjController extends Controller
     }
 
     /**
-     * Deletes an existing OylikUderj model.
+     * Deletes an existing OylikUderjTypes model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -117,15 +110,15 @@ class OylikUderjController extends Controller
     }
 
     /**
-     * Finds the OylikUderj model based on its primary key value.
+     * Finds the OylikUderjTypes model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return OylikUderj the loaded model
+     * @return OylikUderjTypes the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = OylikUderj::findOne($id)) !== null) {
+        if (($model = OylikUderjTypes::findOne($id)) !== null) {
             return $model;
         }
 

@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use app\models\OylikHodimlar;
 use app\models\OylikPeriods;
+use app\models\OylikUderjTypes;
 /* @var $this yii\web\View */
 /* @var $model app\models\OylikUderj */
 /* @var $form yii\widgets\ActiveForm */
@@ -36,7 +37,7 @@ use app\models\OylikPeriods;
 
 
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'title')->dropDownList(OylikUderjTypes::getAll()) ?>
 
     <?= $form->field($model, 'summa')->textInput() ?>
 

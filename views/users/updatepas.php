@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = 'Узгартириш';
 
             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-            <?= $form->field($model, 'password')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'password')->textInput(['maxlength' => true, 'type'=>'password']) ?>
 
             
 

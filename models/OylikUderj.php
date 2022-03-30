@@ -38,8 +38,8 @@ class OylikUderj extends \yii\db\ActiveRecord
             [['oylik_hodimlar_id', 'summa', 'create_userid'], 'integer'],
             [['create_date'], 'safe'],
             [['title'], 'string', 'max' => 500],
-            [['oylik_hodimlar_id'], 'exist', 'skipOnError' => true, 'targetClass' => OylikHodimlar::className(), 'targetAttribute' => ['oylik_hodimlar_id' => 'id']],
-            [['create_userid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['create_userid' => 'id']],
+            // [['oylik_hodimlar_id'], 'exist', 'skipOnError' => true, 'targetClass' => OylikHodimlar::className(), 'targetAttribute' => ['oylik_hodimlar_id' => 'id']],
+            // [['create_userid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['create_userid' => 'id']],
         ];
     }
 
@@ -51,7 +51,7 @@ class OylikUderj extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'oylik_hodimlar_id' => 'Ходим',
-            'title' => 'Номи',
+            'title' => 'Ушланма тури',
             'summa' => 'Сумма',
             'period' => 'Давр',
             'create_date' => 'Ярартилган сана',
@@ -69,13 +69,5 @@ class OylikUderj extends \yii\db\ActiveRecord
         return $this->hasOne(OylikHodimlar::className(), ['id' => 'oylik_hodimlar_id']);
     }
 
-    /**
-     * Gets query for [[CreateUser]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCreateUser()
-    {
-        return $this->hasOne(User::className(), ['id' => 'create_userid']);
-    }
+
 }

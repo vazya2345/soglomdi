@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
+use app\models\OylikHodimlar;
+use app\models\OylikUderjTypes;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OylikUderjSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -26,12 +28,24 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'oylik_hodimlar_id',
-            'title',
+            'oylik_hodimlar_id' => [
+                'attribute'=>'oylik_hodimlar_id',
+                'filter'=>OylikHodimlar::getAll(),
+                'value' => function ($data) {
+                        return OylikHodimlar::getName($data->oylik_hodimlar_id);                    
+                }
+            ],
+            'title' => [
+                'attribute'=>'title',
+                'filter'=>OylikUderjTypes::getAll(),
+                'value' => function ($data) {
+                        return OylikUderjTypes::getName($data->title);                    
+                }
+            ],
             'summa',
             'period',
             //'create_date',
-            //'create_userid',
+            //'create_userid', 
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

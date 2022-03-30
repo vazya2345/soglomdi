@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use app\models\OylikHodimlar;
 use app\models\OylikPeriods;
 use app\models\OylikUderj;
+use app\models\OylikUderjTypes;
 use app\models\Filials;
 /**
  * OylikShaklController implements the CRUD actions for OylikShakl model.
@@ -42,6 +43,9 @@ class OylikShaklController extends Controller
     {
         $searchModel = new OylikShaklSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort([
+            'defaultOrder' => ['shakl_id'=>SORT_ASC],
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -162,7 +166,7 @@ class OylikShaklController extends Controller
                     $shmodel2->fio = $hodim->fio;
                     $shmodel2->fil_name = $shmodel1->fil_name;
                     $shmodel2->lavozim = $hodim->lavozim;
-                    $shmodel2->title = $uderj->title;
+                    $shmodel2->title = OylikUderjTypes::getName($uderj->title);
                     $shmodel2->summa = $uderj->summa;
                     $uderjsum += $uderj->summa;
                     $shmodel2->shakl_id = 2;
@@ -197,6 +201,56 @@ class OylikShaklController extends Controller
 
 
 
+        return $this->redirect(['index']);
+    }
+
+
+    public function actionAvans()
+    {
+        \Yii::$app
+        ->db
+        ->createCommand()
+        ->delete('oylik_shakl', ['period' => OylikPeriods::getActivePeriod(), 'title'=>'Аванс'])
+        ->execute();
+
+
+        $hodimlar = OylikHodimlar::find()->all();
+        foreach ($hodimlar as $hodim) {
+            /// OKLAD
+            $shmodel1 = new OylikShakl();
+            $shmodel1->period = OylikPeriods::getActivePeriod();
+            $shmodel1->oylik_hodimlar_id = $hodim->id;
+            $shmodel1->fio = $hodim->fio;
+            $shmodel1->fil_name = Filials::getName($hodim->filial_id);
+            $shmodel1->lavozim = $hodim->lavozim;
+            $shmodel1->title = 'Аванс';
+            $shmodel1->summa = round($hodim->summa*0.4);
+            $shmodel1->shakl_id = 2;
+
+
+
+
+            $umodel = new OylikUderj();
+            $umodel->oylik_hodimlar_id = $hodim->id;
+            $umodel->title = '1';
+            $umodel->summa = $shmodel1->summa;
+            $umodel->period = $shmodel1->period;
+            $umodel->create_date = date("Y-m-d H:i:s");
+            $umodel->create_userid = Yii::$app->user->id;
+
+
+
+
+            if($shmodel1->save()&&$umodel->save()){
+                $a=1;
+            }
+            else{
+                var_dump($umodel->errors);
+                var_dump($shmodel1->errors);die;
+            }
+
+
+        }
         return $this->redirect(['index']);
     }
 }

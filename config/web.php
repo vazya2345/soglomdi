@@ -56,8 +56,10 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\Users',
-            'enableAutoLogin' => true,
+            // 'enableAutoLogin' => true,
             'class' => 'app\components\User',
+            'enableSession' => true,
+            'authTimeout' => 60*10,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

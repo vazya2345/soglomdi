@@ -152,6 +152,7 @@ $name = Users::getMyname();
                             ['label' => 'Ушланмалар', 'url' => ['/oylik-uderj/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                             ['label' => 'Шаклланиши', 'url' => ['/oylik-shakl/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                             ['label' => 'Давр', 'url' => ['/oylik-periods/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Ушланма турлари', 'url' => ['/oylik-uderj-types/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                         ]
                     ],
 
