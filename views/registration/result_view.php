@@ -71,7 +71,8 @@ $group_name = '';
         $group_name = $analiz_names[$i]['add1'];
         // var_dump($group_name);die;
         if((isset($analiz_names[$j])||$i==0)&&strlen($group_name)>0){
-            if($group_name!=$analiz_names[$j]['add1']){
+            if(($j<0)&&($group_name!=$analiz_names[$j]['add1'])){
+            // if(($group_name!=$analiz_names[$j]['add1'])){
                 if($i!=0){
                     echo "</div></div>";    
                 }
