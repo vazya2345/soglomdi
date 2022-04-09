@@ -249,6 +249,9 @@ $lav = Users::getMyLav();
             <li class="nav-item">
                 <?= Html::a('Қарздорлар', ['registration/qarzdorlar'], ['class' => 'nav-link']) ?>
             </li>
+            <li class="nav-item">
+                <?= Html::a('Касса', ['/filial-qoldiq/index'], ['class' => 'nav-link']) ?>
+            </li>
             <li class="nav-item dropdown">
                 <?= Html::a('Хисоботлар', '#', ['class' => 'nav-link dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-expanded'=>true]) ?>
                 <ul class="dropdown-menu shadow">

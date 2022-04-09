@@ -33,7 +33,7 @@ $qr = Text::widget([
     'outputDir' => '@webroot/upload/qrcode',
     'outputDirWeb' => '@web/upload/qrcode',
     'ecLevel' => QRcode::QR_ECLEVEL_L,
-    'text' => 'https://soglom-diagnostika.uz/?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
+    'text' => 'https://soglom-tabassum.uz/?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
     'size' => 3,
 ]);
 $qr = str_replace('/web', './', $qr);
@@ -42,7 +42,7 @@ echo $qr;
             </td>
         </tr>
         <tr>
-            <td colspan="2" align="center">
+            <td colspan="2" align="center" class="adress">
                 «SOG’LOM TABASSUM» ХК, манзил Андижон ш., Бобур шох кўчаси 109-Б уй. Тел:(0-595) 204-01-50.
             </td>
 
@@ -129,8 +129,7 @@ echo $qr;
 </div>
 
 
-<br><br><br><br><br>
-
+<br>
 </div>
 
 <style type="text/css">
@@ -154,6 +153,7 @@ echo $qr;
     table.table td, table.table th{
         border: 1px solid black;
         padding: 5px;
+        font-size: 10px;
     }
     table.table td:nth-child(2){
         width: 40%;
@@ -181,7 +181,7 @@ echo $qr;
         margin-top: 10px;
     }
     .name-of-analiz{
-        font-size: 12px;
+        font-size: 10px;
         font-weight: bold;
         color: gray;
         text-align: center;
@@ -192,16 +192,17 @@ echo $qr;
 ?>
     table.table th{
         background-color: silver;
-        padding: 10px
+        padding: 5px 10px;
+        font-size: 10px;
     }
     .table_analiz, .table_client{
-        margin-top: 20px;
+        margin-top: 10px;
     }
     .analiz-results{
-        margin-top: 30px;
+        margin-top: 10px;
     }
     .name-of-analiz{
-        font-size: 24px;
+        font-size: 10px;
         font-weight: bold;
         color: gray;
         text-align: center;
@@ -209,6 +210,19 @@ echo $qr;
 <?php
     }
 ?>
+
+
+.table_client{
+    font-size: 10px;
+}
+.adress{
+    font-size: 10px;
+    text-align: center;
+    padding-left: 50px;
+}
+.tb-header{
+    margin: 0 auto;
+}
 </style>
 
 
