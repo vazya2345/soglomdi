@@ -35,7 +35,7 @@ $qr = Text::widget([
     'outputDir' => '@webroot/upload/qrcode',
     'outputDirWeb' => '@web/upload/qrcode',
     'ecLevel' => QRcode::QR_ECLEVEL_L,
-    'text' => Url::home('https').'?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
+    'text' => Url::home('http').'?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
     'size' => 2,
 ]);
 $qr = str_replace('/web', './', $qr);
