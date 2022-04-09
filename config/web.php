@@ -41,6 +41,8 @@ $config = [
             'formatters' => [
                 'pdf' => [
                     'class' => 'robregonm\pdf\PdfResponseFormatter',
+                    'format' => 'A4',
+                    'marginTop' => 10,
                 ],
             ]
         ],

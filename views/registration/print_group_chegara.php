@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
 use app\models\Client;
@@ -33,7 +34,7 @@ $qr = Text::widget([
     'outputDir' => '@webroot/upload/qrcode',
     'outputDirWeb' => '@web/upload/qrcode',
     'ecLevel' => QRcode::QR_ECLEVEL_L,
-    'text' => 'https://soglom-tabassum.uz/?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
+    'text' => Url::home('https').'?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
     'size' => 7,
 ]);
 $qr = str_replace('/web', './', $qr);

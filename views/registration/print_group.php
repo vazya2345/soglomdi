@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
 use app\models\Client;
@@ -10,6 +11,7 @@ use app\models\SAnaliz;
 use app\models\Result;
 use xj\qrcode\QRcode;
 use xj\qrcode\widgets\Text;
+
 
 
 $this->title = 'Натижа';
@@ -24,7 +26,7 @@ header('Content-disposition: inline; filename="' . $name . '.pdf"');
     <table class="tb-header">
         <tr>
             <td align="center">
-                <img src="./img/logo_pdf.png" class="logo" width="400">
+                <img src="./img/logo_pdf.png" class="logo" width="250">
             </td>
             <td>
 <?php 
@@ -33,8 +35,8 @@ $qr = Text::widget([
     'outputDir' => '@webroot/upload/qrcode',
     'outputDirWeb' => '@web/upload/qrcode',
     'ecLevel' => QRcode::QR_ECLEVEL_L,
-    'text' => 'https://soglom-tabassum.uz/?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
-    'size' => 3,
+    'text' => Url::home('https').'?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
+    'size' => 2,
 ]);
 $qr = str_replace('/web', './', $qr);
 echo $qr;
@@ -60,8 +62,6 @@ echo $qr;
         <tr>
             <td class="bold">Пациент: <?=$client_name?></td>
             <td class="bold" rowspan="2" valign="top">Дата: <?=$res_date?></td>
-        </tr>
-        <tr>
             <td class="bold">Дата рождения: <?=Client::getBirthDate($model->client_id)?></td>
         </tr>
     </table>
@@ -81,7 +81,7 @@ echo $qr;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn', 'header'=>'№'],
             'pokaz_id'=>[
                 'header'=>'ВИД АНАЛИЗА',
                 'attribute'=>'pokaz_id',
@@ -128,11 +128,19 @@ echo $qr;
     ]); ?>
 </div>
 
-
-<br>
 </div>
 
 <style type="text/css">
+    @page *{
+        margin-top: 0cm;
+        margin-bottom: 0cm;
+        margin-left: 0cm;
+        margin-right: 0cm;
+    }
+    body{
+        margin: 0;
+    }
+
     .content-top-table-div table{
         width: 100%;
     }
@@ -175,7 +183,7 @@ echo $qr;
         padding: 5px
     }
     .table_analiz, .table_client{
-        margin-top: 10px;
+        margin-top: 2px;
     }
     .analiz-results{
         margin-top: 10px;
@@ -196,7 +204,7 @@ echo $qr;
         font-size: 10px;
     }
     .table_analiz, .table_client{
-        margin-top: 10px;
+        margin-top: 2px;
     }
     .analiz-results{
         margin-top: 10px;
