@@ -59,7 +59,7 @@ class PokazLimits extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getUztextindikator($pokaz_id,$indikator,$indikator_value,$sex,$birthdate,$age,$indikator_id,$myid,$checked='')
+    public static function getUztextindikator($pokaz_id,$indikator,$indikator_value,$sex,$birthdate,$age,$indikator_id,$myid,$checked='') 
     {
 
         $result = '';
@@ -181,7 +181,7 @@ class PokazLimits extends \yii\db\ActiveRecord
                 $result.="<label><input type='radio' name=pokaz[".$myid."][".$pokaz_id."] value='".$indikator_id."' /> ".$indikator.' - '.PokazLimits::getUztextindikatorvalue($indikator_value)."</label><br>";
             }
         }
-        $result = str_replace('{jinsi}', $jinsi, $result);
+        // $result = str_replace('{jinsi}', $jinsi, $result);
         return $result;
     }
 
