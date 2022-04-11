@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = 'Тулов';
                 <img src="./img/logo_min.png" class="logo" height="60">
             </td>
             <td align="center">
-                <p class="main_title">SOG’LOM DIAGNOSTIKA</p>
+                <p class="main_title">SOG’LOM TABASSUM</p>
             </td>
         </tr>
         <tr>
