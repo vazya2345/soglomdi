@@ -31,7 +31,7 @@ class Filials extends \yii\db\ActiveRecord
     {
         return [
             [['adress'], 'string'],
-            [['title', 'phone', 'add1', 'add2'], 'string', 'max' => 255],
+            [['title', 'phone', 'add1', 'add2', 'chek_nomi', 'chek_lozung'], 'string', 'max' => 255],
         ];
     }
 
@@ -47,6 +47,8 @@ class Filials extends \yii\db\ActiveRecord
             'phone' => 'Телефон раками',
             'add1' => 'СМС юбормаслик',
             'add2' => 'Add2',
+            'chek_nomi' => 'Чекдаги номи',
+            'chek_lozung' => 'Чекдаги гап'
         ];
     }
 

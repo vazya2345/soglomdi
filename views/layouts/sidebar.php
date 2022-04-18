@@ -162,6 +162,7 @@ $name = Users::getMyname();
                     /// END ZAVKASSA
                     ['label' => 'Касса', 'url' => ['/filial-qoldiq/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==9)],
 
+                    ['label' => 'Тизим маълумотлари', 'url' => ['/system-variables/index'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                     ['label' => 'Пароль ўзгартириш', 'url' => ['/users/updatepas'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest],
 
                     

@@ -917,6 +917,10 @@ class RegistrationController extends Controller
                 $check_chegara=1;
                 $group = 'КОВИД';
             }
+            elseif($value==252){
+                $check_chegara=1;
+                $group = 'КОВИД1';
+            }
         }
             $searchModel = new ResultSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

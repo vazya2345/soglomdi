@@ -9,35 +9,36 @@ use app\models\FinishPayments;
 use app\models\RegAnalizs;
 use app\models\Registration;
 use app\models\Users;
+use app\models\Filials;
 
 $fmodel = FinishPayments::findOne($model->id);
 
 $fmodel = true;
 
-
-
-$this->title = 'Тулов - ' . Client::getName($model->client_id);
-$this->params['breadcrumbs'][] = ['label' => 'Руйхат', 'url' => ['indexkassa']];
-// $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Тулов';
 ?>
 <div class="header">
     <table class="tb-header">
         <tr>
-            <td>
-                <img src="./img/logo_min.png" class="logo" height="60">
-            </td>
             <td align="center">
-                <p class="main_title">SOG’LOM TABASSUM</p>
+                <p class="main_title">
+                    <?php
+                        $fil_model = Filials::findOne(Users::getFilial($model->user_id));
+                        if($fil_model&&$fil_model->chek_nomi!==false){
+                            echo $fil_model->chek_nomi;
+                        }
+                        else{
+                            echo "SOG’LOM TABASSUM";
+                        }
+                    ?>
+                </p>
             </td>
         </tr>
         <tr>
-            <td colspan="2" align="center">
+            <td align="center">
                 Тел: <?=Users::getFilPhoneNum($model->user_id)?>.
             </td>
         </tr>
     </table>
-<br>
 </div>
 
 <div class="container">
@@ -45,7 +46,7 @@ $this->params['breadcrumbs'][] = 'Тулов';
 <?php 
 if($fmodel){
 ?>
-<div class="card">
+<div class="card" id="client_info">
 	<div class="card-body">
 	<?= DetailView::widget([
         'model' => $model,
@@ -59,9 +60,16 @@ if($fmodel){
             ],
             [
                 'attribute' => 'client_id',
-                'label'=>'Тел',
+                'label'=>'Телефон',
                 'value' => function ($data) {
                         return Client::getPhonenum($data->client_id);                    
+                }
+            ],
+            [
+                'attribute' => 'client_id',
+                'label'=>'Туғилган сана',
+                'value' => function ($data) {
+                        return Client::getBirthDate($data->client_id);                    
                 }
             ],
             'create_date'=>[
@@ -77,8 +85,8 @@ if($fmodel){
 <?php
 }
 ?>
-<br><br>
-<div class="card">
+<br>
+<div class="card" id="analizs_clock">
     <div class="card-body">
         <table id="w2" class="table table-striped table-bordered detail-view">
             <tbody>
@@ -104,74 +112,75 @@ foreach ($analizs as $analiz) {
 <?php 
 if($fmodel){
 ?>
-<div class="card">
+<div class="card" id="payments">
     <div class="card-body">
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'sum_amount'=>[
-                'attribute'=>'sum_amount',
-                'value' => function ($data) {
-                    if($data->sum_amount>0)
-                        return number_format($data->sum_amount, 0, '.', ' ');
-                    else
-                        return 0;
-                }
-            ],
-            'skidka_reg'=>[
-                'attribute'=>'skidka_reg',
-                'label'=>'Скидка',
-                'value' => function ($data) {
-                    if($data->skidka_reg>0)
-                        return number_format($data->skidka_reg+$data->skidka_kassa, 0, '.', ' ');
-                    else
-                        return 0;
-                }
-            ],
-            'sum_cash'=>[
-                'attribute'=>'sum_cash',
-                'value' => function ($data) {
-                    if($data->sum_cash>0)
-                        return number_format($data->sum_cash, 0, '.', ' ');
-                    else
-                        return 0;
-                }
-            ],
-            'sum_plastik'=>[
-                'attribute'=>'sum_plastik',
-                'label'=>'Пластик',
-                'value' => function ($data) {
-                    if($data->sum_plastik>0)
-                        return number_format($data->sum_plastik, 0, '.', ' ');
-                    else
-                        return 0;
-                }
-            ],
-            // 'sum_debt'=>[
-            //     'attribute'=>'sum_debt',
-            //     'value' => function ($data) {
-            //         if($data->sum_debt>0)
-            //             return number_format($data->sum_debt, 0, '.', ' ');
-            //         else
-            //             return 0;
-            //     }
-            // ],
-            
-            [
-                'attribute'=>'other',
-                'label'=>'Қарз суммаси',
-                'value' => function ($data) {
-                        return Registration::getSumForPay($data->id);                    
-                }
-            ],
-        ],
-    ]) ?>
+        <table id="w1" class="table table-striped table-bordered detail-view">
+            <tbody>
+                <tr><th>Умумий нарх</th><td><?=number_format($model->sum_amount, 0, '.', ' ')?></td></tr>
+                <?php
+                    if(($model->skidka_reg+$model->skidka_kassa)>0){
+                        ?>
+                            <tr><th>Скидка</th><td><?=number_format($model->skidka_reg+$model->skidka_kassa, 0, '.', ' ')?></td></tr>
+                        <?php
+                    }
+                ?>
+
+                <?php
+                    if(($model->sum_cash)>0){
+                        ?>
+                            <tr><th>Накд пул</th><td><?=number_format($model->sum_cash, 0, '.', ' ')?></td></tr>
+                        <?php
+                    }
+                ?>
+
+                <?php
+                    if(($model->sum_plastik)>0){
+                        ?>
+                            <tr><th>Пластик</th><td><?=number_format($model->sum_plastik, 0, '.', ' ')?></td></tr>
+                        <?php
+                    }
+                ?>
+
+                <?php
+                    if((Registration::getSumForPay($model->id))>0){
+                        ?>
+                            <tr><th>Қарз суммаси</th><td><?=number_format(Registration::getSumForPay($model->id), 0, '.', ' ')?></td></tr>
+                        <?php
+                    }
+                ?>
+                
+                
+                
+                
+            </tbody>
+        </table>
     </div>
 </div>
 <?php
 }
 ?>
 
+</div>
+
+
+
+
+
+
+
+
+
+
+<hr>
+<div class="footer">
+    <?php
+                        if($fil_model&&$fil_model->chek_lozung!==false){
+                            echo $fil_model->chek_lozung;
+                        }
+                        else{
+                            echo "Doim sog‘ bo‘ling!";
+                        }
+    ?>
 </div>
 
 <style type="text/css">
@@ -184,13 +193,50 @@ if($fmodel){
     body {
         font-size: 28px;
     }
-    .table tr th{
+    #client_info .table tr th{
         text-align: left;
+        width: 50%;
+        vertical-align: baseline;
+        padding: 10px 0px;
     }
+
+    #analizs_clock .table tr th{
+        text-align: left;
+        vertical-align: baseline;
+        padding: 3px 0px;
+        width: 80%;
+    }
+    #analizs_clock .table tr th:nth-child(2), #analizs_clock .table tr td:nth-child(2){
+        text-align: right;
+    }
+
+
+    #payments .table tr th{
+        text-align: left;
+        vertical-align: baseline;
+        padding: 3px 0px;
+        width: 80%;
+    }
+    #payments .table tr th:nth-child(2), #payments .table tr td:nth-child(2){
+        text-align: right;
+    }
+
+    
     .table{
         width: 100%;
     }
-    #w1 td{
+    #payments td{
         text-align: right;
+    }
+    .main_title{
+        margin: 10px 0;
+    }
+    .header{
+        margin-bottom: 10px;
+    }
+    .footer{
+        font-style: italic;
+        margin: 20px;
+        text-align: center;
     }
 </style>
