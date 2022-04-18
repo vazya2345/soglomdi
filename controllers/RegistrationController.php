@@ -515,15 +515,11 @@ class RegistrationController extends Controller
         if(!Registration::getIsPay($reg_id)){
             return $this->render('not_pay');  
         }
-        // Yii::$app->response->format = 'pdf';
-        // $this->layout = '//print_bs';
         
-        
-
-
         $model = $this->findModel($reg_id);
 
         $analizs = RegAnalizs::getAnalizsByGroup($group,$reg_id);
+        // var_dump($analizs);die;
         $check_chegara = 0;
         foreach ($analizs as $key => $value){
             Result::checkPokazs($reg_id,$value);
@@ -533,7 +529,7 @@ class RegistrationController extends Controller
             }
             elseif($value==252){
                 $check_chegara=1;
-                $group = 'КОВИД1';
+                // $group = 'ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА';
             }
         }
             $searchModel = new ResultSearch();
@@ -901,19 +897,16 @@ class RegistrationController extends Controller
 
     public function actionViewqr($group,$reg_id)
     {
-        // Yii::$app->response->format = 'pdf';
-        // $this->layout = '//print_bs';
-        
-
-
+        // echo 1;die;
         $model = $this->findModel($reg_id);
 
-        // $analizs = RegAnalizs::getAnalizIdsByRegId($reg_id);
         $analizs = RegAnalizs::getAnalizsByGroup($group,$reg_id);
         $check_chegara = 0;
+
+        // var_dump($analizs);die;
         foreach ($analizs as $key => $value){
             Result::checkPokazs($reg_id,$value);
-            if($value==252||$value==253||$value==134||$value==261||$value==250||$value==249){
+            if($value==253||$value==134||$value==261||$value==250||$value==249){
                 $check_chegara=1;
                 $group = 'КОВИД';
             }
@@ -926,7 +919,8 @@ class RegistrationController extends Controller
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['main_id'=>$reg_id])->andWhere(['in','analiz_id',$analizs]);
             $dataProvider->pagination = ['pageSize' => 100];
-        
+
+
         if($check_chegara==1){
             $this->layout = '//print_bs';
             return $this->render('print_group_chegara', [
