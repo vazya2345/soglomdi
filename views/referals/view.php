@@ -37,7 +37,7 @@ $umodel = Users::find()->where(['other'=>$model->refnum])->one();
             'user_id',
             'filial'=>[
                 'attribute'=>'filial',
-                'value'=>function ($data) {
+                'value'=>function ($model) {
                     return Filials::getName($model->filial);
                 }
             ],
