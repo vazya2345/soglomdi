@@ -1,0 +1,16 @@
+RPNKBQpy8Wg3gsww<?php
+
+return [
+    'class' => 'yii\db\Connection',
+    'dsn' => 'mysql:host=localhost;dbname=soglomdi',
+    'username' => 'soglomdi',
+    'password' => 'RPNKBQpy8Wg3gsww',
+    'charset' => 'utf8mb4',
+
+    // Schema cache options (for production environment)
+    //'enableSchemaCache' => true,
+    //'schemaCacheDuration' => 60,
+    //'schemaCache' => 'cache',
+];
+
+

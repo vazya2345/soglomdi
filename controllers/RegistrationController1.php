@@ -3,20 +3,29 @@
 namespace app\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use app\models\Registration;
-use app\models\Client;
-use app\models\RegDopinfo;
-use app\models\Result;
-use app\models\SAnaliz;
-use app\models\SGroups;
-use app\models\ResultSearch;
 use app\models\RegistrationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use app\models\Client;
+use app\models\RegDopinfo;
+use app\models\Result;
+use app\models\Users;
+use app\models\SAnaliz;
+use app\models\SGroups;
+use app\models\RegAnalizs;
+use app\models\ResultSearch;
 use app\models\FinishPayments;
-
+use app\models\Payments;
+use app\models\Reagent;
+use app\models\Referals;
+use app\models\SmsTemplates;
+use app\models\SendSms;
+use app\models\Filials;
+use app\models\FilialQoldiq;
 /**
  * RegistrationController implements the CRUD actions for Registration model.
  */
@@ -28,6 +37,21 @@ class RegistrationController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['viewqr'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        // 'actions' => ['*'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -43,15 +67,30 @@ class RegistrationController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->getRole()==3){
-            return $this->redirect(['indexkassa']);
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['site/index']);
         }
-        elseif(Yii::$app->user->getRole()==4||Yii::$app->user->getRole()==5){
+        if(Yii::$app->user->getRole()==4||Yii::$app->user->getRole()==5||Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9){
             return $this->redirect(['indexlab']);
         }
-        else{
+        elseif(Yii::$app->user->getRole()==7){
+            $myfil_users_arr = Users::getMyFilUsers();
             $searchModel = new RegistrationSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['in', 'user_id', $myfil_users_arr]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+            return $this->render('indexlab_filial', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        elseif(Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==6){
+            $myfil_users_arr = Users::getMyFilUsers();
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['in', 'user_id', $myfil_users_arr]);
             $dataProvider->setSort([
                 'defaultOrder' => ['id'=>SORT_DESC],
             ]);
@@ -59,6 +98,21 @@ class RegistrationController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
+        }
+        elseif(Yii::$app->user->getRole()==8){
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['ref_code'=>Referals::getMyRefCode()]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+            return $this->render('index_referal', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else{
+            return $this->redirect(['site/index']);
         }
     }
 
@@ -70,9 +124,12 @@ class RegistrationController extends Controller
         elseif(Yii::$app->user->getRole()==4||Yii::$app->user->getRole()==5){
             return $this->redirect(['indexlab']);
         }
-        else{
+        elseif(Yii::$app->user->getRole()==3){
+            $myfil_users_arr = Users::getMyFilUsers();
+
             $searchModel = new RegistrationSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['in', 'user_id', $myfil_users_arr]);
             $dataProvider->setSort([
                 'defaultOrder' => ['id'=>SORT_DESC],
             ]);
@@ -81,21 +138,74 @@ class RegistrationController extends Controller
                 'dataProvider' => $dataProvider,
             ]);
         }
+        else{
+            return $this->redirect(['index']);
+        }
+    }
+
+    public function actionIndexupdate()
+    {
+        if(Yii::$app->user->getRole()==3){
+            $myfil_users_arr = Users::getMyFilUsers();
+
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['in', 'user_id', $myfil_users_arr]);
+            $dataProvider->query->andWhere(['status'=>1]);
+            $dataProvider->query->andWhere(['sum_cash'=>NULL,'sum_plastik'=>NULL]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+            return $this->render('index_update', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else{
+            return $this->redirect(['index']);
+        }
     }
 
     public function actionIndexlab()
     {
-        if(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==2){
+        if(Yii::$app->user->getRole()==2){
             return $this->redirect(['index']);
         }
         elseif(Yii::$app->user->getRole()==3){
-            return $this->redirect(['indexkassa']);
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $reg_ids = RegAnalizs::getRegIdsByAnalizsArray(SAnaliz::getFilAnalizs());
+            // var_dump($reg_ids);die;
+            $dataProvider->query->andWhere(['user_id'=>Yii::$app->user->getId()]);
+            $dataProvider->query->andWhere(['in','id',$reg_ids]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
         }
-        $searchModel = new RegistrationSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->setSort([
-            'defaultOrder' => ['id'=>SORT_DESC],
-        ]);
+        elseif(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9){
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+        }
+        elseif(Yii::$app->user->getRole()==5){
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+        }
+        else{
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $reg_ids = RegAnalizs::getRegIdsByAnalizsArray(SAnaliz::getAnalizsByLabUserid(Yii::$app->user->getId()));
+            $dataProvider->query->andWhere(['in','id',$reg_ids]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+        }
+        
         return $this->render('indexlab', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -109,16 +219,62 @@ class RegistrationController extends Controller
         }
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $s1 = (int)$model->sum_amount;
-            $s2 = (int)$model->sum_cash+(int)$model->sum_plastik;
-            if($s1<=$s2){
-                $fmodel = new FinishPayments();
-                $fmodel->id = $id;
-                $fmodel->time = date("Y-m-d H:i:s");
-                $fmodel->user_id = Yii::$app->user->id;
-                $fmodel->save(false);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->kassir_id = Yii::$app->user->id;
+            if((int)$model->sum_amount<(int)$model->sum_cash){
+                $model->sum_cash = (int)$model->sum_amount;
             }
+            if((int)$model->sum_amount<(int)$model->sum_plastik){
+                $model->sum_plastik = (int)$model->sum_amount;
+            }
+            if((int)$model->sum_amount<((int)$model->sum_plastik+(int)$model->sum_cash)){
+                $model->sum_cash = (int)$model->sum_amount;
+                $model->sum_plastik = 0;
+            }
+
+            $model->sum_debt = (int)$model->sum_amount-((int)$model->sum_cash+(int)$model->sum_plastik+(int)$model->skidka_reg+(int)$model->skidka_kassa);
+            if($model->sum_debt<0){
+                $model->sum_debt = 0;
+            }
+            if($model->save()){
+
+                
+                $s1 = (int)$model->sum_amount;
+                $s2 = (int)$model->sum_cash+(int)$model->sum_plastik+(int)$model->skidka_reg+(int)$model->skidka_kassa;
+
+                $payment_model = new Payments();
+                $payment_model->main_id = $id;
+                $payment_model->kassir_id = Yii::$app->user->id;
+                $payment_model->cash_sum = (int)$model->sum_cash;
+                $payment_model->plastik_sum = (int)$model->sum_plastik;
+                $payment_model->create_date = date("Y-m-d H:i:s");
+                $cp_model = Payments::find()->where(['main_id'=>$id])->andWhere(['between', 'create_date', date("Y-m-d H:i:s", strtotime($payment_model->create_date)-120), date("Y-m-d H:i:s", strtotime($payment_model->create_date)+120)])->one();
+                if(!$cp_model){
+                    if($payment_model->save()){
+                        FilialQoldiq::hisobAllTypesByKassirId($payment_model->kassir_id);
+                        if($s1<=$s2){
+                            $fmodel = new FinishPayments();
+                            $fmodel->id = $id;
+                            $fmodel->time = date("Y-m-d H:i:s");
+                            $fmodel->user_id = Yii::$app->user->id;
+                            if($fmodel->save()){
+                                // $this->sendKassaSms($id);
+                                return $this->redirect(['indexkassa']);
+                            }
+                            else{
+                                var_dump($fmodel->errors);die;
+                            }
+                        }
+                    }
+                    else{
+                        var_dump($payment_model->errors);die;
+                    }
+                }
+                else{
+                    echo "Тўлов икки марта ўтиб кетиш хавфи пайдо бўлди.";die;
+                }
+            }
+            
             return $this->redirect(['indexkassa']);
         }
 
@@ -126,6 +282,23 @@ class RegistrationController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionKassachek($id)
+    {
+        // Yii::$app->response->format = 'pdf';
+        $this->layout = '//chek';
+
+
+        if(Yii::$app->user->getRole()!=3){
+            return $this->redirect(['index']);
+        }
+        $model = $this->findModel($id);
+
+        return $this->render('kassachek', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * Displays a single Registration model.
      * @param integer $id
@@ -146,175 +319,16 @@ class RegistrationController extends Controller
      */
     public function actionCreate()
     {
-        if(Yii::$app->user->getRole()!=2){
-            return $this->redirect(['index']);
-        }
         $model = new Registration();
-        $model_client = new Client();
-        
-        // print_r(Yii::$app->request->post());die;
-        if ($model->load(Yii::$app->request->post())&&$model_client->load(Yii::$app->request->post())) {
-            $model->user_id = Yii::$app->user->id;
-            $model->add2 = 0;
-            $model->create_date = date("Y-m-d H:i:s");
-            $model->change_time = date("Y-m-d H:i:s");
 
-            if($model_client1 = Client::getClientByDoc($model_client->doc_seria,$model_client->doc_number)){
-                $model_client1->fname = $model_client->fname;
-                $model_client1->lname = $model_client->lname;
-                $model_client1->mname = $model_client->mname;
-                $model_client1->birthdate = $model_client->birthdate;
-                $model_client1->sex = $model_client->sex;
-                $model_client1->user_id = Yii::$app->user->id;
-                $model_client1->change_date = date("Y-m-d H:i:s");
-                $model_client1->save(false);
-                $model->client_id = $model_client1->id;
-            }
-            else{
-                $model_client->user_id = Yii::$app->user->id;
-                $model_client->create_date = date("Y-m-d H:i:s");
-                $model_client->change_date = date("Y-m-d H:i:s");
-                $model_client->save(false);
-                $model->client_id = $model_client->id;
-            }
-
-            if($model->save()){
-                $client_id = $model->client_id;
-                $add1 = $model->add1;
-                if(Yii::$app->request->post('pokaz')!==null){
-                    foreach (Yii::$app->request->post('pokaz')[0] as $key => $value) {
-                        $dopmodel = new RegDopinfo;
-                        $dopmodel->reg_id = $model->id;
-                        $dopmodel->indikator_id = $key;
-                        $dopmodel->value = $value;
-                        $dopmodel->save(false);
-                    }
-                }
-
-                if(Yii::$app->request->post('regs')!==NULL){
-                    foreach (Yii::$app->request->post('regs') as $key => $value) {
-                        $r_model = new Registration();
-                        $r_model->analiz_id = $value['analiz_id'];
-                        $r_model->sum_amount = $value['sum_amount'];
-                        $r_model->client_id = $client_id;
-                        $r_model->add1 = $add1;
-                        $r_model->user_id = Yii::$app->user->id;
-                        $r_model->create_date = date("Y-m-d H:i:s");
-                        $r_model->change_time = date("Y-m-d H:i:s");
-                        if($r_model->save()){
-                            if(Yii::$app->request->post('pokaz')[$key]!==null){
-                                foreach (Yii::$app->request->post('pokaz')[$key] as $key1 => $value1) {
-                                    $dopmodel = new RegDopinfo;
-                                    $dopmodel->reg_id = $r_model->id;
-                                    $dopmodel->indikator_id = $key1;
-                                    $dopmodel->value = $value1;
-                                    $dopmodel->save(false);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-            
-            
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
-            'model_client' => $model_client,
         ]);
     }
-
-    public function actionNew()
-    {
-        if(Yii::$app->user->getRole()!=2){
-            return $this->redirect(['index']);
-        }
-        $model = new Registration();
-        $model_client = new Client();
-        
-        if($model->load(Yii::$app->request->post())){
-            print_r(Yii::$app->request->post());die;
-        }
-        if ($model->load(Yii::$app->request->post())&&$model_client->load(Yii::$app->request->post())) {
-            $model->user_id = Yii::$app->user->id;
-            $model->add2 = 0;
-            $model->create_date = date("Y-m-d H:i:s");
-            $model->change_time = date("Y-m-d H:i:s");
-
-            if($model_client1 = Client::getClientByDoc($model_client->doc_seria,$model_client->doc_number)){
-                $model_client1->fname = $model_client->fname;
-                $model_client1->lname = $model_client->lname;
-                $model_client1->mname = $model_client->mname;
-                $model_client1->birthdate = $model_client->birthdate;
-                $model_client1->sex = $model_client->sex;
-                $model_client1->user_id = Yii::$app->user->id;
-                $model_client1->change_date = date("Y-m-d H:i:s");
-                $model_client1->save(false);
-                $model->client_id = $model_client1->id;
-            }
-            else{
-                $model_client->user_id = Yii::$app->user->id;
-                $model_client->create_date = date("Y-m-d H:i:s");
-                $model_client->change_date = date("Y-m-d H:i:s");
-                $model_client->save(false);
-                $model->client_id = $model_client->id;
-            }
-
-            if($model->save()){
-                $client_id = $model->client_id;
-                $add1 = $model->add1;
-                if(Yii::$app->request->post('pokaz')!==null){
-                    foreach (Yii::$app->request->post('pokaz')[0] as $key => $value) {
-                        $dopmodel = new RegDopinfo;
-                        $dopmodel->reg_id = $model->id;
-                        $dopmodel->indikator_id = $key;
-                        $dopmodel->value = $value;
-                        $dopmodel->save(false);
-                    }
-                }
-
-                if(Yii::$app->request->post('regs')!==NULL){
-                    foreach (Yii::$app->request->post('regs') as $key => $value) {
-                        $r_model = new Registration();
-                        $r_model->analiz_id = $value['analiz_id'];
-                        $r_model->sum_amount = $value['sum_amount'];
-                        $r_model->client_id = $client_id;
-                        $r_model->add1 = $add1;
-                        $r_model->user_id = Yii::$app->user->id;
-                        $r_model->create_date = date("Y-m-d H:i:s");
-                        $r_model->change_time = date("Y-m-d H:i:s");
-                        if($r_model->save()){
-                            if(Yii::$app->request->post('pokaz')[$key]!==null){
-                                foreach (Yii::$app->request->post('pokaz')[$key] as $key1 => $value1) {
-                                    $dopmodel = new RegDopinfo;
-                                    $dopmodel->reg_id = $r_model->id;
-                                    $dopmodel->indikator_id = $key1;
-                                    $dopmodel->value = $value1;
-                                    $dopmodel->save(false);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-            
-            
-        }
-        
-        $groups = SGroups::find()->where(['active'=>1])->all();
-
-        return $this->render('new', [
-            'model' => $model,
-            'model_client' => $model_client,
-            'groups' => $groups,
-        ]);
-    }
-
 
     /**
      * Updates an existing Registration model.
@@ -366,24 +380,58 @@ class RegistrationController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionQarzdorlar()
+    {
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['site/index']);
+        }
+        if(Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9){
+            return $this->redirect(['index']);
+        }
+        else{
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['>','sum_debt',0]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+            return $this->render('qarzdorlar', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+    }
+
     public function actionResult($id)
     {
-        if(Registration::getIsPay($id)&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==2)){
+        if(Registration::getIsPay($id)&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==6||Yii::$app->user->getRole()==9)){
             $model = $this->findModel($id);
-            Result::checkPokazs($model);
-            $searchModel = new ResultSearch();
-            $_GET['ResultSearch']['main_id']=$id;
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->pagination = ['pageSize' => 100];
-            $i=1;
-            if($i==1){
+            $analizs = RegAnalizs::find()->where(['reg_id'=>$id])->all();
+            $i = 0;
+            $analiz_names = [];
+            foreach ($analizs as $analiz) {
+                // Result::checkPokazs($id,$analiz->analiz_id);
+                Result::checkPokazs($id,$analiz->analiz_id);
+                $searchModel[$i] = new ResultSearch();
+                $dataProvider[$i] = $searchModel[$i]->search(Yii::$app->request->queryParams);
+                $dataProvider[$i]->query->andWhere(['main_id'=>$id,'analiz_id'=>$analiz->analiz_id]);
+                $analiz_names[$i]['name'] = SAnaliz::getName($analiz->analiz_id);
+                $analiz_names[$i]['add1'] = SAnaliz::getAdd1($analiz->analiz_id);
+                $analiz_names[$i]['analiz'] = $analiz->analiz_id;
+                $dataProvider[$i]->pagination = ['pageSize' => 100];
+                $i++;
+            }
+
+            if($i>0){
                 return $this->render('result_view', [
                     'model' => $model,
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
+                    'analiz_names' => $analiz_names,
                 ]);
             }
             else{
+                echo "Ушбу хатолик анализлар тўлиқ базага тушмаганини билдиради, илтимос тизим администраторига алоқага чиқинг ERR_REG434";die;
                 return $this->render('result', [
                     'model' => $model,
                     'searchModel' => $searchModel,
@@ -392,27 +440,68 @@ class RegistrationController extends Controller
             }
         }
         else{
-            return $this->render('not_pay');  
+            if(Registration::getIsPay($id)&&(Yii::$app->user->getRole()==8)){
+                $model = $this->findModel($id);
+                $analizs = RegAnalizs::find()->where(['reg_id'=>$id])->all();
+                $i = 0;
+                $analiz_names = [];
+                foreach ($analizs as $analiz) {
+                    // Result::checkPokazs($id,$analiz->analiz_id);
+                    Result::checkPokazs($id,$analiz->analiz_id);
+                    $searchModel[$i] = new ResultSearch();
+                    $dataProvider[$i] = $searchModel[$i]->search(Yii::$app->request->queryParams);
+                    $dataProvider[$i]->query->andWhere(['main_id'=>$id,'analiz_id'=>$analiz->analiz_id]);
+                    $analiz_names[$i]['name'] = SAnaliz::getName($analiz->analiz_id);
+                    $analiz_names[$i]['add1'] = SAnaliz::getAdd1($analiz->analiz_id);
+                    $analiz_names[$i]['analiz'] = $analiz->analiz_id;
+                    $dataProvider[$i]->pagination = ['pageSize' => 100];
+                    $i++;
+                }
+
+                if($i>0){
+                    return $this->render('result_view', [
+                        'model' => $model,
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                        'analiz_names' => $analiz_names,
+                    ]);
+                }
+                else{
+                    echo "Ушбу хатолик анализлар тўлиқ базага тушмаганини билдиради, илтимос тизим администраторига алоқага чиқинг ERR_REG469";die;
+                    return $this->render('result', [
+                        'model' => $model,
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                    ]);    
+                }
+            }
+            else{
+                return $this->render('not_pay');    
+            }
         }
         
     }
 
-    public function actionPrint($id)
+    public function actionPrint($analiz_id,$reg_id)
     {
-        Yii::$app->response->format = 'pdf';
+        if(!Registration::getIsPay($reg_id)){
+            return $this->render('not_pay');  
+        }
+        // Yii::$app->response->format = 'pdf';
         $this->layout = '//print';
-        $model = $this->findModel($id);
-        Result::checkPokazs($model);
+        $model = $this->findModel($reg_id);
+        Result::checkPokazs($reg_id,$analiz_id);
         $searchModel = new ResultSearch();
-        $_GET['ResultSearch']['main_id']=$id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['main_id'=>$reg_id,'analiz_id'=>$analiz_id]);
         $dataProvider->pagination = ['pageSize' => 100];
-        $i=1;
-        if($i==1){
+        $i=2;
+        if($i>1){
             return $this->render('print', [
                 'model' => $model,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'analiz_id' => $analiz_id,
             ]);
         }
         else{
@@ -421,23 +510,81 @@ class RegistrationController extends Controller
         
     }
 
+    public function actionPrintGroup($group,$reg_id)
+    {
+        if(!Registration::getIsPay($reg_id)){
+            return $this->render('not_pay');  
+        }
+        
+        $model = $this->findModel($reg_id);
+
+        $analizs = RegAnalizs::getAnalizsByGroup($group,$reg_id);
+        // var_dump($analizs);die;
+        $check_chegara = 0;
+        foreach ($analizs as $key => $value){
+            Result::checkPokazs($reg_id,$value);
+            if($value==253||$value==134||$value==261||$value==250||$value==249){
+                $check_chegara=1;
+                $group = 'КОВИД';
+            }
+            elseif($value==252){
+                $check_chegara=1;
+                // $group = 'ЭКСПРЕСС ТЕСТ ДИАГНОСТИКА';
+            }
+        }
+            $searchModel = new ResultSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['main_id'=>$reg_id])->andWhere(['in','analiz_id',$analizs]);
+            $dataProvider->pagination = ['pageSize' => 100];
+        if($check_chegara==1){
+            $this->layout = '//print_bs';
+            return $this->render('print_group_chegara', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'analizs' => $analizs,
+                'group' => $group,
+            ]);
+        }
+        else{
+            Yii::$app->response->format = 'pdf';
+            $this->layout = '//print';
+            return $this->render('print_group', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'analizs' => $analizs,
+                'group' => $group,
+            ]);
+        }
+        
+        
+    }
+
     public function actionResultlab($id)
     {
-        if(Yii::$app->user->getRole()!=4){
+        if(Yii::$app->user->getRole()!=4&&Yii::$app->user->getRole()!=5&&Yii::$app->user->getRole()!=7&&Yii::$app->user->getRole()!=3&&Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9){
             return $this->redirect(['index']);
         }
         $model = $this->findModel($id);
-        Result::checkPokazs($model);
-        $searchModel = new ResultSearch();
-        $_GET['ResultSearch']['main_id']=$id;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->pagination = ['pageSize' => 100];
-        $fmodel = FinishPayments::findOne($model->id);
-        
+        $analizs = RegAnalizs::find()->where(['reg_id'=>$id])->all();
+        $i = 0;
+        $analiz_names = [];
+        foreach ($analizs as $analiz) {
+            Result::checkPokazs($id,$analiz->analiz_id);
+            $searchModel[$i] = new ResultSearch();
+            $dataProvider[$i] = $searchModel[$i]->search(Yii::$app->request->queryParams);
+            $dataProvider[$i]->query->andWhere(['main_id'=>$id,'analiz_id'=>$analiz->analiz_id]);
+            $analiz_names[$i] = SAnaliz::getName($analiz->analiz_id);
+            $dataProvider[$i]->pagination = ['pageSize' => 100];
+            $i++;
+        }        
         return $this->render('resultlab', [
             'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'analiz_names' => $analiz_names,
+            'analizs' => $analizs,
         ]);    
     
         
@@ -446,23 +593,648 @@ class RegistrationController extends Controller
     public function actionSave($id)
     {
         $pokazs = Yii::$app->request->post('pokaz');
+        // var_dump(Yii::$app->request->post('pokaz'));die;
         foreach ($pokazs as $pokaz => $value) {
-            $model = Result::findOne($pokaz);
-            $model->reslut_value = $value;
-            $model->user_id = Yii::$app->user->id;
-            $model->create_date = date("Y-m-d H:i:s");
-            $model->save(false);
+            if(strpos($pokaz, 'a')){
+                if(strlen($value)>0){
+                    $pokaz = trim($pokaz,'a');
+                }
+            }
+            // var_dump($value);die;
+            if(strlen($value)>0){            
+                $model = Result::find()->where(['id'=>$pokaz])->one();
+                if($model){
+                    $model->reslut_value = $value;
+                    $model->user_id = Yii::$app->user->id;
+                    if(strlen($model->create_date)>5){
+                        // $model->create_date = $model->create_date;
+                        $a =1;
+                    }
+                    else{
+                        $model->create_date = date("Y-m-d H:i:s");    
+                    }
+                    
+                    // var_dump($model->errors);die;
+                    $model->save(false);
+                }
+            }
         }
         $model = $this->findModel($id);
-        $model->add2 = 1;
+        
+        if(Result::isEndedReg($id)){ 
+            $model->status = 4;
+            $model->natija_input = 1;
+            $this->sendReadySms($id);  
+        }
+        else{
+            $model->status = 3; 
+            $model->natija_input = 0;
+        }
+        
         $model->save(false);
-        // echo "A";die;
         return $this->redirect(['resultsaved', 'id' => $id]);
-        // return $this->redirect(['index']);
     }
 
     public function actionResultsaved($id)
     {
         return $this->render('result_saved');
+    }
+
+    public function actionNew()
+    {
+        if(Yii::$app->user->getRole()!=2&&Yii::$app->user->getRole()!=3){
+            return $this->redirect(['index']);
+        }
+        $model = new Registration();
+        $model_client = new Client();
+        
+
+        if ($model->load(Yii::$app->request->post())&&$model_client->load(Yii::$app->request->post())) {
+            $model->user_id = Yii::$app->user->id;
+            $model->kassir_id = Yii::$app->user->id;
+            $model->natija_input = '0';
+            $model->create_date = date("Y-m-d H:i:s");
+            $model->change_time = $model->create_date;
+            $model->sum_debt = $model->sum_amount-(int)$model->skidka_reg;
+
+            if($model_client==Client::getClientByDoc($model_client->doc_seria,$model_client->doc_number)){
+                $model_client->user_id = Yii::$app->user->id;
+                $model_client->change_date = $model->create_date;
+                $model_client->save(false);
+                $model->client_id = $model_client->id;
+            }
+            else{
+                $model_client = new Client();
+                $model_client->load(Yii::$app->request->post());
+                $model_client->user_id = Yii::$app->user->id;
+                $model_client->create_date = $model->create_date;
+                $model_client->change_date = $model->create_date;
+                $model_client->save(false);
+                $model->client_id = $model_client->id;
+            }
+
+            $check_regmodel = Registration::find()
+                ->where([
+                            'user_id'=>$model->user_id,
+                            'sum_amount'=>$model->sum_amount,
+                            'ref_code'=>$model->ref_code,
+                            'other'=>$model->other
+                        ])
+                ->andWhere(['between','create_date', date("Y-m-d H:i:s", strtotime("now - 10 minutes")), $model->create_date])
+                ->one();
+            if($check_regmodel){
+                return $this->redirect(['indexkassa']);
+            }
+
+            if($model->save()){
+                // die;
+                $client_id = $model->client_id;
+                if(Yii::$app->request->post('pokaz')!==null){
+                    foreach (Yii::$app->request->post('pokaz')[0] as $key => $value) {
+                        $dopmodel = new RegDopinfo;
+                        $dopmodel->reg_id = $model->id;
+                        $dopmodel->indikator_id = $key;
+                        $dopmodel->value = $value;
+                        $dopmodel->save(false);
+                    }
+                }
+
+                if(Yii::$app->request->post('analiz')!==NULL){
+                    foreach(Yii::$app->request->post('analiz') as $key => $value) {
+                        $analiz_id = trim($key,'\"');
+                        $r_model = new RegAnalizs();
+                        $r_model->analiz_id = $analiz_id;
+                        $r_model->reg_id = $model->id;
+                        $r_model->summa = SAnaliz::getPrice($analiz_id);
+                        if($r_model->save()){
+                            Reagent::minusCountForAnaliz($analiz_id,$model->id);
+                        }
+                        else{
+                            var_dump($r_model->errors);die;
+                        }
+                    }
+                }
+
+                if(Yii::$app->request->post('reagent')!==NULL){
+                    foreach(Yii::$app->request->post('reagent') as $key => $value) {
+                        if($value>0){
+                            Reagent::minusCount($key,$value,0,$model->id);     
+                        }
+                    }
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                var_dump($model->errors);die;
+            }
+            
+            
+        }
+        
+        $groups = SGroups::find()->where(['active'=>1])->orderBy(['ord'=>SORT_ASC])->all();
+
+        return $this->render('new', [
+            'model' => $model,
+            'model_client' => $model_client,
+            'groups' => $groups,
+        ]);
+    }
+
+    public function actionNew1()
+    {
+        if(Yii::$app->user->getRole()!=2&&Yii::$app->user->getRole()!=3){
+            return $this->redirect(['index']);
+        }
+        $model = new Registration();
+        $model_client = new Client();
+        
+
+        if ($model->load(Yii::$app->request->post())&&$model_client->load(Yii::$app->request->post())) {
+            $model->user_id = Yii::$app->user->id;
+            $model->natija_input = '0';
+            // $model->sum_debt = $model->sum_amount-(int)$model->skidka_reg-(int)$model->skidka_kassa;
+            $model->create_date = date("Y-m-d H:i:s");
+            $model->change_time = $model->create_date;
+
+            if($model_client_save = Client::getClientByDoc($model_client->doc_seria,$model_client->doc_number)){
+                $model_client_save->lname = $model_client->lname;
+                $model_client_save->fname = $model_client->fname;
+                $model_client_save->mname = $model_client->mname;
+
+                $model_client_save->add1 = $model_client->add1;
+                $model_client_save->address_tuman = $model_client->address_tuman;
+                $model_client_save->address_text = $model_client->address_text;
+
+                $model_client_save->user_id = Yii::$app->user->id;
+                $model_client_save->change_date = $model->create_date;
+                if($model_client_save->save()){
+                    $a = 1;
+                }
+                else{
+                    var_dump($model_client_save->errors);die;
+                }
+                $model->client_id = $model_client_save->id;
+            }
+            elseif($model_client_save = Client::getClientByNameAndBirth($model_client->lname,$model_client->fname,$model_client->birthdate)){
+                if(strlen($model_client->doc_seria)>0){
+                    $model_client_save->doc_seria = $model_client->doc_seria;
+                }
+                if(strlen($model_client->doc_number)>0){
+                    $model_client_save->doc_number = $model_client->doc_number;
+                }
+                $model_client_save->add1 = $model_client->add1;
+                $model_client_save->address_tuman = $model_client->address_tuman;
+                $model_client_save->address_text = $model_client->address_text;
+                if($model_client_save->save()){
+                    $a = 1;
+                }
+                else{
+                    var_dump($model_client_save->errors);die;
+                }
+            }
+            else{
+                // $model_client = new Client();
+                // $model_client->load(Yii::$app->request->post());
+                $model_client->user_id = Yii::$app->user->id;
+                $model_client->create_date = $model->create_date;
+                $model_client->change_date = $model->create_date;
+                if($model_client->save()){
+                    $a = 1;
+                }
+                else{
+                    var_dump($model_client->errors);die;
+                }
+                $model->client_id = $model_client->id;
+            }
+
+            if($model->save()){
+                $client_id = $model->client_id;
+                if(Yii::$app->request->post('pokaz')!==null){
+                    foreach (Yii::$app->request->post('pokaz')[0] as $key => $value) {
+                        $dopmodel = new RegDopinfo;
+                        $dopmodel->reg_id = $model->id;
+                        $dopmodel->indikator_id = $key;
+                        $dopmodel->value = $value;
+                        $dopmodel->save(false);
+                    }
+                }
+
+                if(Yii::$app->request->post('analiz')!==NULL){
+                    foreach(Yii::$app->request->post('analiz') as $key => $value) {
+                        $analiz_id = trim($key,'\"');
+                        $r_model = new RegAnalizs();
+                        $r_model->analiz_id = $analiz_id;
+                        $r_model->reg_id = $model->id;
+                        $r_model->summa = SAnaliz::getPrice($analiz_id);
+                        if($r_model->save()){
+                            Reagent::minusCountForAnaliz($analiz_id);
+                        }
+                        else{
+                            var_dump($r_model->errors);die;
+                        }
+                    }
+                }
+
+                if(Yii::$app->request->post('reagent')!==NULL){
+                    // var_dump(Yii::$app->request->post('reagent'));die;
+                    foreach(Yii::$app->request->post('reagent') as $key => $value) {
+                        if($value>0){
+                            Reagent::minusCount($key,$value,0);     
+                        }
+                    }
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                var_dump($model->errors);die;
+            }
+            
+            
+        }
+        
+        $groups = SGroups::find()->where(['active'=>1])->orderBy(['ord'=>SORT_ASC])->all();
+
+        return $this->render('new1', [
+            'model' => $model,
+            'model_client' => $model_client,
+            'groups' => $groups,
+        ]);
+    }
+
+    public function actionLabqabul($id)
+    {
+        if(Yii::$app->user->getRole()!=4){
+            return $this->redirect(['index']);
+        }
+        $model = $this->findModel($id);
+        $model->status = 3;
+        if($model->save()){
+            $this->sendRtimeSms($id);
+            return $this->redirect(['indexlab']);
+        }
+        else{
+            var_dump($model->errors);die;
+        }
+    }
+
+    public function actionLabrad($id)
+    {
+        if(Yii::$app->user->getRole()!=4){
+            return $this->redirect(['index']);
+        }
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->sendRtimeSms($id);
+            return $this->redirect(['indexlab']);
+        }
+
+        return $this->render('labrad', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionViewqr($group,$reg_id)
+    {
+        // echo 1;die;
+        $model = $this->findModel($reg_id);
+
+        $analizs = RegAnalizs::getAnalizsByGroup($group,$reg_id);
+        $check_chegara = 0;
+
+        // var_dump($analizs);die;
+        foreach ($analizs as $key => $value){
+            Result::checkPokazs($reg_id,$value);
+            if($value==253||$value==134||$value==261||$value==250||$value==249){
+                $check_chegara=1;
+                $group = 'КОВИД';
+            }
+            elseif($value==252){
+                $check_chegara=1;
+                $group = 'КОВИД1';
+            }
+        }
+            $searchModel = new ResultSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['main_id'=>$reg_id])->andWhere(['in','analiz_id',$analizs]);
+            $dataProvider->pagination = ['pageSize' => 100];
+
+
+        if($check_chegara==1){
+            $this->layout = '//print_bs';
+            return $this->render('print_group_chegara', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'analizs' => $analizs,
+                'group' => $group,
+            ]);
+        }
+        else{
+            Yii::$app->response->format = 'pdf';
+            $this->layout = '//print';
+            return $this->render('print_group', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'analizs' => $analizs,
+                'group' => $group,
+            ]);
+        }
+        
+    }
+
+
+    public function actionUpdateAnalizs($id)
+    {
+        if(Yii::$app->user->getRole()!=3){
+            return $this->redirect(['index']);
+        }
+        $model = $this->findModel($id);
+        
+
+        return $this->render('update_analizs', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionInsertAnalizs($reg_id)
+    {
+        // echo "A";die;
+        if(Yii::$app->user->getRole()!=3){
+            return $this->redirect(['index']);
+        }
+        $model = $this->findModel($reg_id);
+        $sum = 0;
+        if(Yii::$app->request->post('analiz')!==NULL){
+
+            if(Reagent::regOtmen($reg_id)){
+                foreach(Yii::$app->request->post('analiz') as $key => $value) {
+                    $analiz_id = trim($key,'\"');
+                    $r_model = new RegAnalizs();
+                    $r_model->analiz_id = $analiz_id;
+                    $r_model->reg_id = $model->id;
+                    $r_model->summa = SAnaliz::getPrice($analiz_id);
+                    $sum+=$r_model->summa;
+                    if($r_model->save()){
+                        Reagent::minusCountForAnaliz($analiz_id,$reg_id);
+                    }
+                    else{
+                        var_dump($r_model->errors);die;
+                    }
+                }
+                if(Yii::$app->request->post('pokaz')!==null){
+                    foreach (Yii::$app->request->post('pokaz')[0] as $key => $value) {
+                        $dopmodel = new RegDopinfo;
+                        $dopmodel->reg_id = $model->id;
+                        $dopmodel->indikator_id = $key;
+                        $dopmodel->value = $value;
+                        $dopmodel->save(false);
+                    }
+                }
+                if(Yii::$app->request->post('reagent')!==NULL){
+                    foreach(Yii::$app->request->post('reagent') as $key => $value) {
+                        if($value>0){
+                            Reagent::minusCount($key,$value,0,$reg_id);     
+                        }
+                    }
+                }
+            }
+            $model->sum_amount = $sum;
+            $model->change_time = date('Y-m-d H:i:s');
+            if($model->save()){
+                return $this->redirect('indexkassa');
+            }
+            else{
+                var_dump($model->errors);die;
+            }
+            
+
+            
+        }
+        
+        $groups = SGroups::find()->where(['active'=>1])->orderBy(['ord'=>SORT_ASC])->all();
+
+        return $this->render('insert_analizs', [
+            'model' => $model,
+            'groups' => $groups,
+        ]);
+    }
+
+    private function sendSmsByTemplate($text,$number)
+    {
+        $username = 'soglomtabassum';
+        $password = '9x3A7c7FfS';
+        $address = 'http://91.204.239.44/broker-api/send';
+        $from = '3700';
+        // $text = 'Test sms from Avaz.';
+        // $number = '998974344466';
+        $msg_id = 'soglomdi'.time();
+
+        $body_json = '{"messages":[{"recipient":"'.$number.'","message-id":"'.$msg_id.'","sms":{"originator": "'.$from.'","content":{"text":"'.$text.'"}}}]}';
+
+echo $body_json;
+echo "<br>";
+
+        // $body_json = json_encode($bodyData, JSON_UNESCAPED_UNICODE);
+        $headers = [
+            'Authorization: Basic ' . base64_encode( $username.':'.$password ),
+            // 'accept: application/json',
+            'content-type: application/json'
+        ];
+        var_dump($headers);
+            echo "<br>";
+        if($curl = curl_init()){
+            curl_setopt($curl, CURLOPT_URL, 'http://91.204.239.44/broker-api/send');
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $body_json);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            $out = curl_exec($curl);
+            var_dump($out);
+            echo "<br>";
+            curl_close($curl);
+            $data = json_decode($out);
+
+            $sms_model = new SendSms();
+            $sms_model->number = $number;
+            $sms_model->sms_text = $text;
+            $sms_model->send_date = date('Y-m-d H:i:s');
+            $sms_model->save(false);
+            // var_dump($data);die;   
+        }
+        return true;
+    }
+
+    public function actionUpdatelab($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['resultlab', 'id' => $model->id]);
+        }
+
+        return $this->render('updatelab', [
+            'model' => $model,
+        ]);
+    }
+
+    private function sendReadySms($id)
+    {
+        $model = $this->findModel($id);
+        $template = SmsTemplates::find()->where(['code'=>'ready'])->one();
+        if($template){
+            $text = $template->sms_text;
+        }
+        else{
+            $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijangiz tayyorligini ma’lum qilamiz.';    
+        }
+        $number = Client::getPhonenumforsms($model->client_id);
+        if($number&&$number!='998000000000'){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
+    }
+
+    private function sendRtimeSms($id)
+    {
+        $model = $this->findModel($id);
+        $template = SmsTemplates::find()->where(['code'=>'rtime'])->one();
+        if($template){
+            $text = $template->sms_text;
+        }
+        else{
+            $text = 'Hurmatli mijoz, Sog’lom diagnostikaga topshirgan tahlil natijalaringiz soat {rtime}da tayyor bo’ladi. Sizga hizmat ko’rsatayotganimizdan hursandmiz.';    
+        }
+        $text = str_replace('{rtime}', date('H:i d.m.Y',strtotime($model->lab_vaqt)), $text);
+
+        $number = Client::getPhonenumforsms($model->client_id);
+        if($number&&$number!='998000000000'){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
+    }
+
+    private function sendKassaSms($id)
+    {
+        $model = $this->findModel($id);
+        $template = SmsTemplates::find()->where(['code'=>'kassa'])->one();
+        if($template){
+            $text = $template->sms_text;
+        }
+        else{
+            $text = 'Assalomu alaykum Hurmatli mijoz, Sog’lom diagnostikaga tibbiy tahlil uchun {summa} to’ladingiz. {qarz}Bizni tanlaganingiz uchun rahmat.';   
+        }
+        if($model){
+            $sum = $model->sum_cash+$model->sum_plastik;
+            $summa = $sum.' so’m';
+            
+
+            if($model->sum_debt!=NULL&&$model->sum_debt!=0){
+                $qarz = 'Qarzingiz: '.$model->sum_debt.' so’m. ';
+            }
+            else{
+                $qarz = '';
+            }
+        }
+        $filial_id = Users::getFilial($model->user_id);
+        if($filial_id){
+            $filtel = Filials::getPhone($filial_id);    
+        }
+        else{
+            $filtel = '';
+        }
+        
+
+        $text = str_replace('{summa}', $summa, $text);
+        $text = str_replace('{qarz}', $qarz, $text);
+        $text = str_replace('{filtel}', $filtel, $text);
+
+        $number = Client::getPhonenumforsms($model->client_id);
+        if($number&&$number!='998000000000'){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
+    }
+
+    public function actionSendqarzsmsact($id)
+    {
+        if($this->sendQarzSms($id)){
+            return $this->redirect(['registration/qarzdorlar']);
+        }
+        else{
+            return 404;
+        }
+
+        
+    }
+
+    private function sendQarzSms($id)
+    {
+        $model = $this->findModel($id);
+        $template = SmsTemplates::find()->where(['code'=>'qarz'])->one();
+        if($template){
+            $text = $template->sms_text;
+        }
+        else{
+            $text = 'Assalomu alaykum, hurmatli mijoz. Sizning Sog\'lom diagnostikadan qarzingiz {QARZSUM} so\'mni tashkil qiladi. Iltimos qarzdorlikni to\'lab qo\'ying. Tel: 95-2040150';    
+        }
+        $text = str_replace('{QARZSUM}', $model->sum_debt, $text);
+
+        $number = Client::getPhonenumforsms($model->client_id);
+        if($number&&$number!='998000000000'){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
+    }
+
+    public function actionTestphone($id)
+    {
+        var_dump($this->sendKassaSms($id));
+        die;
+    }
+    
+
+    public function actionRefsendsmsact($ref_phonenum,$ref_sum)
+    {
+
+        if($this->sendRefsendSms($ref_phonenum,$ref_sum)){
+            return $this->redirect(['rasxod/index']);
+        }
+        else{
+            return 404;
+        }
+        die;
+    }
+
+    private function sendRefsendSms($ref_phonenum,$ref_sum)
+    {
+        $template = SmsTemplates::find()->where(['code'=>'referal'])->one();
+        if($template){
+            $text = $template->sms_text;
+        }
+        else{
+            $text = 'Assalomu alaykum. Sizga {refsum} so\'m yuborildi.';    
+        }
+        $text = str_replace('{refsum}', $ref_sum, $text);
+
+        // var_dump($ref_phonenum);die;
+
+        $number = $ref_phonenum;
+        if($number&&$number!='998000000000'){
+            $this->sendSmsByTemplate($text,$number);
+        }
+        else{
+            return false;
+        }        
     }
 }

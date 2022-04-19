@@ -287,13 +287,21 @@ class PokazLimits extends \yii\db\ActiveRecord
             }
         }
         else{
-            $limit = $limits[0];
-            if(($result>=$limit->down_limit&&$result<=$limit->up_limit)||($result==$limit->norma)){
-                $class = 'success';
+            if(isset($limits[0])){
+                $limit = $limits[0];
+                if(($result>=$limit->down_limit&&$result<=$limit->up_limit)||($result==$limit->norma)){
+                    $class = 'success';
+                }
+                else{
+                    $class = 'danger';
+                }
             }
             else{
-                $class = 'danger';
+                $class = 'warning';
             }
+
+
+            
         }
 
         if($result===NULL){
@@ -322,9 +330,14 @@ class PokazLimits extends \yii\db\ActiveRecord
             }
         }
         else{
-            $limit = $limits[0];
-            if($limit){
-                $res = $limit->down_limit;
+            if(isset($limits[0])){
+                $limit = $limits[0];
+                if($limit){
+                    $res = $limit->down_limit;
+                }
+                else{
+                    $res = 0;
+                }    
             }
             else{
                 $res = 0;
@@ -336,6 +349,7 @@ class PokazLimits extends \yii\db\ActiveRecord
     public static function getNorma($main_id,$pokaz_id)
     {
         $limits = self::find()->where(['pokaz_id'=>$pokaz_id])->all();
+
         if(count($limits)>1){
             $dop = RegDopinfo::find()->where(['reg_id'=>$main_id,'indikator_id'=>$pokaz_id])->one();
             if($dop){
@@ -352,15 +366,21 @@ class PokazLimits extends \yii\db\ActiveRecord
             }
         }
         else{
-            $limit = $limits[0];
-            if($limit){
-                $res = $limit->norma;
+            if(isset($limits[0])){
+                $limit = $limits[0];
+                if($limit){
+                    $res = $limit->norma;
+                }
+                else{
+                    $res = 0;
+                }    
             }
             else{
                 $res = 0;
             }
         }
         return $res;
+
     }
 
     public static function getMax($main_id,$pokaz_id)
@@ -382,13 +402,19 @@ class PokazLimits extends \yii\db\ActiveRecord
             }
         }
         else{
-            $limit = $limits[0];
-            if($limit){
-                $res = $limit->up_limit;
+            if(isset($limits[0])){
+                $limit = $limits[0];
+                if($limit){
+                    $res = $limit->up_limit;
+                }
+                else{
+                    $res = 0;
+                }    
             }
             else{
                 $res = 0;
             }
+
         }
         return $res;
     }
