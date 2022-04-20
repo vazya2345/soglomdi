@@ -206,7 +206,8 @@ class Client extends \yii\db\ActiveRecord
 
     public static function getAll()
     {
-        $array = self::find()->where(['user_id'=>Yii::$app->user->id])->all();
+        // $array = self::find()->where(['user_id'=>Yii::$app->user->id])->all();
+        $array = self::find()->all();
         $result = [];
         foreach ($array as $key) {
             $result[$key->id] = $key->lname.' '.$key->fname.' '.$key->mname.' '.$key->doc_seria.$key->doc_number;
