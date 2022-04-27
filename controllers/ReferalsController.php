@@ -246,6 +246,12 @@ class ReferalsController extends Controller
 
             if($rasxod_model->save()){
                 $model->qoldiq_summa = 0;
+                if($model->avans_sum<$rs_model->sum){
+                    $model->avans_sum = 0;
+                }
+                else{
+                    $model->avans_sum -= $rs_model->sum;   
+                }
                 if($model->save()){
                     return $this->redirect(['index', 'ReferalsSearch[refnum]'=>$model->refnum]);
                 }
