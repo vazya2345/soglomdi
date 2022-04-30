@@ -131,7 +131,7 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 		<div class="row">
 <?php
 	$i = 0;
-	$analiz_array = [250,252,350,351];
+	$analiz_array = [250,252,355,356];
 
 		echo '<div class="col-lg-3">';
 
