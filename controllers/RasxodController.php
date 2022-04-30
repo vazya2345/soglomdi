@@ -165,8 +165,12 @@ class RasxodController extends Controller
                                     $ref_model->avans_sum = (int)$ref_model->avans_sum - (int)$model->summa;
                                 }
                                 $ref_model->save(false);
+                                // var_dump($ref_model);die;
                             }
                             // var_dump($ref_phonenum);die;
+
+
+
                             return $this->redirect(['registration/refsendsmsact', 'ref_phonenum'=>$ref_phonenum, 'ref_sum'=>$model->summa]);
                         }
                         return $this->redirect(['index']);

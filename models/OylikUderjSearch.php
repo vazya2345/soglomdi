@@ -17,8 +17,8 @@ class OylikUderjSearch extends OylikUderj
     public function rules()
     {
         return [
-            [['id', 'oylik_hodimlar_id', 'summa', 'period', 'create_userid'], 'integer'],
-            [['title', 'create_date'], 'safe'],
+            [['id', 'oylik_hodimlar_id', 'summa', 'create_userid'], 'integer'],
+            [['title', 'period', 'create_date'], 'safe'],
         ];
     }
 
@@ -61,12 +61,12 @@ class OylikUderjSearch extends OylikUderj
             'id' => $this->id,
             'oylik_hodimlar_id' => $this->oylik_hodimlar_id,
             'summa' => $this->summa,
-            'period' => $this->period,
             'create_date' => $this->create_date,
             'create_userid' => $this->create_userid,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'period', $this->period]);
 
         return $dataProvider;
     }

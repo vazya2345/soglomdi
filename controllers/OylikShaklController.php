@@ -44,7 +44,7 @@ class OylikShaklController extends Controller
         $searchModel = new OylikShaklSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setSort([
-            'defaultOrder' => ['shakl_id'=>SORT_ASC],
+            'defaultOrder' => ['period' => SORT_DESC, 'shakl_id'=>SORT_ASC],
         ]);
 
         return $this->render('index', [
@@ -213,6 +213,11 @@ class OylikShaklController extends Controller
         ->delete('oylik_shakl', ['period' => OylikPeriods::getActivePeriod(), 'title'=>'Аванс'])
         ->execute();
 
+        \Yii::$app
+        ->db
+        ->createCommand()
+        ->delete('oylik_uderj', ['period' => OylikPeriods::getActivePeriod(), 'title'=>1])
+        ->execute();
 
         $hodimlar = OylikHodimlar::find()->all();
         foreach ($hodimlar as $hodim) {

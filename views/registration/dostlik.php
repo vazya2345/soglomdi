@@ -43,29 +43,7 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 		Мижоз хакидаги маълумотлар:
 	</div>
 	<div class="card-body">
-		<div class="row" style="margin-bottom: 10px;">
-			<div class="col-3">
-				<label class="control-label" for="myclientsearch">Мижоз фамилиясини киритинг</label>
-			</div>
-			<div class="col-9">
-				<?= Select2::widget([
-					'theme' => Select2::THEME_KRAJEE_BS4,
-				    'name' => 'clientsearch',
-				    'data' => Client::getAll(),
-				    'maintainOrder' => true,
-				    'options' => [
-				    	'placeholder' => 'Мижознинг фамилиясини киритинг...',
-				    	'onchange'=>'getClientById(this)',
-				        'id'=>'myclientsearch',
 
-				    ],
-				    'pluginOptions' => [
-				        'allowClear' => true,
-				        'checked'=>$model->ref_code,
-				    ],
-				]);?>
-			</div>
-		</div>
 		<div class="row">
 			<div class="col-3">
 				<?= $form->field($model_client, 'doc_seria')->textInput(['maxlength' => true]) ?>
@@ -153,35 +131,29 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 		<div class="row">
 <?php
 	$i = 0;
-	$arr = [0,2,15,25];
-	$arr1 = [1,14,24,30];
-	foreach ($groups as $group) {
-		if(in_array($i, $arr)){
-			echo '<div class="col-lg-3">';
-		}
+	$analiz_array = [250,252,350,351];
+
+		echo '<div class="col-lg-3">';
+
 		echo   '
 					
-				            <div class="card card-success" id="accordion'.$group->id.'">
+				            <div class="card card-success" id="accordion1">
 				              <div class="card-header border-0">
 				                	<h4 class="card-title w-100">
-				                        <a class="d-block w-100" data-toggle="collapse" href="#collapse'.$group->id.'" aria-expanded="true">
-				                          '.$group->title.'
+				                        <a class="d-block w-100" data-toggle="collapse" href="#collapse1" aria-expanded="true">
+				                          Дўстлик филиали
 				                        </a>
 			                      	</h4>
 				              </div>';
-				              if($group->add1==1){
-				              	echo '<div id="collapse'.$group->id.'" class="collapse show" data-parent="#accordion'.$group->id.'">';
-				              }
-				              else{
-				              	echo '<div id="collapse'.$group->id.'" class="collapse" data-parent="#accordion'.$group->id.'">';
-				              }
+
+				              echo '<div id="collapse1" class="collapse show" data-parent="#accordion1">';
+
 
 				              echo '
 					              <div class="card-body">
 					                <div>';
-					                	$analizs = SAnaliz::find()->where(['group_id'=>$group->id,'is_active'=>1])->orderBy(['ord'=>SORT_ASC])->all();
-										foreach ($analizs as $analiz) {
-											// echo "<input type='che'<div class='analiz_title'>".$analiz->title."</div>";
+										foreach ($analiz_array as $key => $value) {
+											$analiz = SAnaliz::findOne($value);
 											echo '
 													<div class="custom-control custom-checkbox">
 							                          <input class="custom-control-input" type="checkbox" onclick="setPricePlus(this)" id="customCheckbox'.$analiz->id.'" alt="'.$analiz->id.'" name=analiz["'.$analiz->id.'"]>
@@ -195,14 +167,11 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 				        	</div>
 					
 				';
-		if(in_array($i, $arr1)){
-			if($i==30){
+		echo '</div>';
+		echo '<div class="col-lg-3">';
 				echo Reagent::getForRegText1();
-			}
-			echo '</div>';
-		}
-		$i++;
-	}
+		echo '</div>';
+			
 ?>
 
 		</div>

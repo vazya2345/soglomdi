@@ -657,11 +657,13 @@ class RegistrationController extends Controller
             $model->change_time = $model->create_date;
             $model->sum_debt = $model->sum_amount-(int)$model->skidka_reg;
 
-            if($model_client==Client::getClientByDoc($model_client->doc_seria,$model_client->doc_number)){
-                $model_client->user_id = Yii::$app->user->id;
-                $model_client->change_date = $model->create_date;
-                $model_client->save(false);
-                $model->client_id = $model_client->id;
+
+            $getclientmodelbypassport = Client::getClientByDoc($model_client->doc_seria,$model_client->doc_number);
+            if($getclientmodelbypassport&&($model_client->doc_seria==$getclientmodelbypassport->doc_seria&&$model_client->doc_number==$getclientmodelbypassport->doc_number)){
+                $getclientmodelbypassport->user_id = Yii::$app->user->id;
+                $getclientmodelbypassport->change_date = $model->create_date;
+                $getclientmodelbypassport->save(false);
+                $model->client_id = $getclientmodelbypassport->id;
             }
             else{
                 $model_client = new Client();
@@ -734,11 +736,23 @@ class RegistrationController extends Controller
         
         $groups = SGroups::find()->where(['active'=>1])->orderBy(['ord'=>SORT_ASC])->all();
 
-        return $this->render('new', [
-            'model' => $model,
-            'model_client' => $model_client,
-            'groups' => $groups,
-        ]);
+
+
+        // Agar Do'stlik filiali bo'lsa 40minglik analizlarni chiqarish
+        if(Users::getMyFil()==15){
+            return $this->render('dostlik', [
+                'model' => $model,
+                'model_client' => $model_client,
+                'groups' => $groups,
+            ]);
+        }
+        else{
+            return $this->render('new', [
+                'model' => $model,
+                'model_client' => $model_client,
+                'groups' => $groups,
+            ]);    
+        }
     }
 
     public function actionNew1()

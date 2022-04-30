@@ -96,8 +96,17 @@ if($fmodel){
                 </tr>
 <?php
 $analizs = RegAnalizs::find()->where(['reg_id'=>$model->id])->all();
+$s_amount = 0;
 foreach ($analizs as $analiz) {
-    echo '<tr><td>'.SAnaliz::getName($analiz->analiz_id).'</td><td>'.number_format($analiz->summa, 0, '.', ' ').'</td></tr>';
+    if(Users::getMyFil()==15){
+        $model_analiz = SAnaliz::findOne($analiz->analiz_id);
+        echo '<tr><td>'.SAnaliz::getName($analiz->analiz_id).'</td><td>'.number_format($model_analiz->desc, 0, '.', ' ').'</td></tr>';
+        $s_amount += (int)$model_analiz->desc;
+    }
+    else{
+        echo '<tr><td>'.SAnaliz::getName($analiz->analiz_id).'</td><td>'.number_format($analiz->summa, 0, '.', ' ').'</td></tr>';
+    }
+    
 }
 ?>
             </tbody>
@@ -116,41 +125,32 @@ if($fmodel){
     <div class="card-body">
         <table id="w1" class="table table-striped table-bordered detail-view">
             <tbody>
-                <tr><th>Умумий нарх</th><td><?=number_format($model->sum_amount, 0, '.', ' ')?></td></tr>
-                <?php
-                    if(($model->skidka_reg+$model->skidka_kassa)>0){
-                        ?>
-                            <tr><th>Скидка</th><td><?=number_format($model->skidka_reg+$model->skidka_kassa, 0, '.', ' ')?></td></tr>
+                <tr><th>Умумий нарх</th>
+                    <td>
                         <?php
-                    }
-                ?>
+                            if(Users::getMyFil()==15){
+                                echo number_format($s_amount, 0, '.', ' ');
+                                echo '</td></tr>';
+                            }
+                            else{
+                                echo number_format($model->sum_amount, 0, '.', ' ');
+                                echo '</td></tr>';
 
-                <?php
-                    if(($model->sum_cash)>0){
-                        ?>
-                            <tr><th>Накд пул</th><td><?=number_format($model->sum_cash, 0, '.', ' ')?></td></tr>
-                        <?php
-                    }
-                ?>
+                                if(($model->skidka_reg+$model->skidka_kassa)>0){
+                                    echo '<tr><th>Скидка</th><td>'.number_format($model->skidka_reg+$model->skidka_kassa, 0, '.', ' ').'</td></tr>';
+                                }
+                                if(($model->sum_cash)>0){
+                                        echo '<tr><th>Накд пул</th><td>'.number_format($model->sum_cash, 0, '.', ' ').'</td></tr>';    
+                                }
+                                if(($model->sum_plastik)>0){
+                                        echo '<tr><th>Пластик</th><td>'.number_format($model->sum_plastik, 0, '.', ' ').'</td></tr>';
+                                }
+                                if((Registration::getSumForPay($model->id))>0){
+                                        echo '<tr><th>Қарз суммаси</th><td>'.number_format(Registration::getSumForPay($model->id), 0, '.', ' ').'</td></tr>';
+                                }
+                            }
 
-                <?php
-                    if(($model->sum_plastik)>0){
                         ?>
-                            <tr><th>Пластик</th><td><?=number_format($model->sum_plastik, 0, '.', ' ')?></td></tr>
-                        <?php
-                    }
-                ?>
-
-                <?php
-                    if((Registration::getSumForPay($model->id))>0){
-                        ?>
-                            <tr><th>Қарз суммаси</th><td><?=number_format(Registration::getSumForPay($model->id), 0, '.', ' ')?></td></tr>
-                        <?php
-                    }
-                ?>
-                
-                
-                
                 
             </tbody>
         </table>
