@@ -142,7 +142,15 @@ if($payment_model){
     <?= $form->field($qmodel, 'summa_plasitk')->textInput(['type'=>'number', 'oninput'=>'checkQarz('.$tsum.')','id'=>'plastikqarz']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Қарзни ёпиш', ['class' => 'btn btn-success', 'id'=>'qarzbutton', 'disabled'=>true]) ?>
+        <?= Html::submitButton('Қарзни ёпиш', [
+                                                'class' => 'btn btn-success',
+                                                'id'=>'qarzbutton',
+                                                'disabled'=>true,
+                                                'data' => [
+                                                            'confirm' => 'Ишончингиз комилми?',
+                                                            'method' => 'post',
+                                                ]
+        ]) ?> 
     </div>
 
     <?php ActiveForm::end(); ?>

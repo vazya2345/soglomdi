@@ -659,7 +659,9 @@ class RegistrationController extends Controller
 
 
             $getclientmodelbypassport = Client::getClientByDoc($model_client->doc_seria,$model_client->doc_number);
+            
             if($getclientmodelbypassport&&($model_client->doc_seria==$getclientmodelbypassport->doc_seria&&$model_client->doc_number==$getclientmodelbypassport->doc_number)){
+
                 $getclientmodelbypassport->user_id = Yii::$app->user->id;
                 $getclientmodelbypassport->change_date = $model->create_date;
                 $getclientmodelbypassport->save(false);
@@ -674,7 +676,6 @@ class RegistrationController extends Controller
                 $model_client->save(false);
                 $model->client_id = $model_client->id;
             }
-
             $check_regmodel = Registration::find()
                 ->where([
                             'user_id'=>$model->user_id,

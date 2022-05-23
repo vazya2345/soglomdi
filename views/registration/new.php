@@ -101,7 +101,7 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 							'theme' => Select2::THEME_KRAJEE_BS4,
 						    'name' => 'Registration[ref_code]',
 						    'data' => Referals::getAll(),
-						    'value' => 991,
+						    'value' => 3,
 						    'options' => [
 						    	'placeholder' => 'Рефералнинг фамилиясини киритинг...',
 						        'id'=>'myRefsearch',
@@ -308,6 +308,9 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
 					$("#client-mname").val(data.mname); 
 					$("#client-birthdate").val(data.birthdate);
 					$("#client-sex").val(data.sex);
+					$("#client-add1").val(data.add1);
+					$("#client-address_tuman").val(data.address_tuman);
+					$("#client-address_text").val(data.address_text);
 					telcheck();
 				}
 			});

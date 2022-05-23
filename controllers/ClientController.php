@@ -155,6 +155,10 @@ class ClientController extends Controller
 
             $result['birthdate'] = $model->birthdate;
             $result['sex'] = $model->sex;
+            $result['add1'] = $model->add1;
+
+            $result['address_tuman'] = $model->address_tuman;
+            $result['address_text'] = $model->address_text;
         }
         return json_encode($result);
     }

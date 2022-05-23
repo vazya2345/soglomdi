@@ -7,6 +7,7 @@ use app\models\QarzQaytar;
 use app\models\Registration;
 use app\models\Payments;
 use app\models\FinishPayments;
+use app\models\FilialQoldiq;
 use app\models\QarzQaytarSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -143,6 +144,27 @@ class QarzQaytarController extends Controller
                 $reg_model->sum_cash+=(int)$qarz_model->summa_naqd;
                 $reg_model->sum_plastik+=(int)$qarz_model->summa_plasitk;
                 $reg_model->sum_debt=$reg_model->sum_debt-((int)$qarz_model->summa_plasitk+(int)$qarz_model->summa_naqd);
+                if($reg_model->sum_debt<0){
+                    $reg_model->sum_debt = 0;
+                }
+                if(($reg_model->sum_cash+$reg_model->sum_plastik)>$reg_model->sum_amount){
+                    $reg_model->sum_cash-=(int)$qarz_model->summa_naqd;
+                    $reg_model->sum_plastik-=(int)$qarz_model->summa_plasitk;
+                }
+
+
+
+                
+
+
+
+
+
+
+
+
+
+
                 if($reg_model->save()){
                     $s1 = (int)$reg_model->sum_amount;
                     $s2 = (int)$reg_model->sum_cash+(int)$reg_model->sum_plastik+(int)$reg_model->skidka_reg+(int)$reg_model->skidka_kassa;
@@ -152,29 +174,39 @@ class QarzQaytarController extends Controller
                     $payment_model->cash_sum = (int)$qarz_model->summa_naqd;
                     $payment_model->plastik_sum = (int)$qarz_model->summa_plasitk;
                     $payment_model->create_date = date("Y-m-d H:i:s");
-                    if($payment_model->save()){
-                        if($s1<=$s2){
-                            $fmodel = new FinishPayments();
-                            $fmodel->id = $qarz_model->reg_id;
-                            $fmodel->time = date("Y-m-d H:i:s");
-                            $fmodel->user_id = Yii::$app->user->id;
-                            if($fmodel->save()){
-                                return $this->redirect(['registration/indexkassa']);
-                            }
-                            else{
-                                var_dump($fmodel->errors);die;
+
+//check double payment
+                    $cp_model = Payments::find()->where(['main_id'=>$id])->andWhere(['between', 'create_date', date("Y-m-d H:i:s", strtotime($payment_model->create_date)-120), date("Y-m-d H:i:s", strtotime($payment_model->create_date)+120)])->one();
+                    if(!$cp_model){
+                        if($payment_model->save()){
+                            FilialQoldiq::hisobAllTypesByKassirId($payment_model->kassir_id);
+                            if($s1<=$s2){
+                                $fmodel = new FinishPayments();
+                                $fmodel->id = $reg_model->id;
+                                $fmodel->time = date("Y-m-d H:i:s");
+                                $fmodel->user_id = Yii::$app->user->id;
+                                if($fmodel->save()){
+                                    // $this->sendKassaSms($id);
+                                    return $this->redirect(['registration/indexkassa']);
+                                }
+                                else{
+                                    echo "1-"; var_dump($fmodel->errors);die;
+                                }
                             }
                         }
                         else{
-                            return $this->redirect(['registration/indexkassa']);
+                            echo "2-"; var_dump($payment_model->errors);die;
                         }
                     }
                     else{
-                        var_dump($payment_model->errors);die;
+                        echo "Тўлов икки марта ўтиб кетиш хавфи пайдо бўлди.";die;
                     }
+/////////
+
+
                 }
                 else{
-                    var_dump($reg_model->errors);die;
+                    echo "3-"; var_dump($reg_model->errors);die;
                 }
             }
             else{
