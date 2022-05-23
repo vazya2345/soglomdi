@@ -20,6 +20,8 @@ $client_name = Client::getName($model->client_id);
 $res_date = Result::getMaxDate($model->id);
 $name = $client_name.' '.date("Y-m-d",strtotime($res_date));
 header('Content-disposition: inline; filename="' . $name . '.pdf"'); 
+
+$group1 = str_replace(' ', '+', $group);
 ?>
 
 <div class="header">
@@ -35,7 +37,7 @@ $qr = Text::widget([
     'outputDir' => '@webroot/upload/qrcode',
     'outputDirWeb' => '@web/upload/qrcode',
     'ecLevel' => QRcode::QR_ECLEVEL_L,
-    'text' => Url::home('http').'?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
+    'text' => Url::home('http').'?r=registration%2Fviewqr&group='.$group1.'&reg_id='.$_GET['reg_id'],
     'size' => 2,
 ]);
 $qr = str_replace('/web', './', $qr);

@@ -25,7 +25,7 @@ header('Content-disposition: inline; filename="' . $name . '.pdf"');
 
 $this->title = 'Пациент: '.$client->lname.' '.$client->fname.' '.$client->mname;
 $this->params['breadcrumbs'][] = $this->title;
-
+$group1 = str_replace(' ', '+', $group);
 ?>
 
 <?php 
@@ -34,7 +34,7 @@ $qr = Text::widget([
     'outputDir' => '@webroot/upload/qrcode',
     'outputDirWeb' => '@web/upload/qrcode',
     'ecLevel' => QRcode::QR_ECLEVEL_L,
-    'text' => Url::home('http').'?r=registration%2Fviewqr&group='.$group.'&reg_id='.$_GET['reg_id'],
+    'text' => Url::home('http').'?r=registration%2Fviewqr&group='.$group1.'&reg_id='.$_GET['reg_id'],
     'size' => 7,
 ]);
 $qr = str_replace('/web', './', $qr);
