@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return OylikHodimlar::getName($model->oylik_hodimlar_id);                    
                 }
             ],
+
             'title' => [
                 'attribute'=>'title',
                 'filter'=>OylikUderjTypes::getAll(),
@@ -46,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'summa',
+            'status',
             'period',
             'create_date',
             'create_userid',

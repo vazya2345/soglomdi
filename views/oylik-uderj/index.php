@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'summa',
+            'status',
             'period',
             //'create_date',
             //'create_userid', 

@@ -35,7 +35,7 @@ class OylikUderj extends \yii\db\ActiveRecord
     {
         return [
             [['oylik_hodimlar_id', 'title', 'summa', 'period'], 'required'],
-            [['oylik_hodimlar_id', 'summa', 'create_userid'], 'integer'],
+            [['oylik_hodimlar_id', 'summa', 'create_userid', 'status'], 'integer'],
             [['create_date'], 'safe'],
             [['title'], 'string', 'max' => 500],
             // [['oylik_hodimlar_id'], 'exist', 'skipOnError' => true, 'targetClass' => OylikHodimlar::className(), 'targetAttribute' => ['oylik_hodimlar_id' => 'id']],
@@ -53,6 +53,7 @@ class OylikUderj extends \yii\db\ActiveRecord
             'oylik_hodimlar_id' => 'Ходим',
             'title' => 'Ушланма тури',
             'summa' => 'Сумма',
+            'status' => 'Статус',
             'period' => 'Давр',
             'create_date' => 'Ярартилган сана',
             'create_userid' => 'Яратган ходим',

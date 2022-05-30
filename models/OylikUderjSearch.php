@@ -17,7 +17,7 @@ class OylikUderjSearch extends OylikUderj
     public function rules()
     {
         return [
-            [['id', 'oylik_hodimlar_id', 'summa', 'create_userid'], 'integer'],
+            [['id', 'oylik_hodimlar_id', 'summa', 'create_userid', 'status'], 'integer'],
             [['title', 'period', 'create_date'], 'safe'],
         ];
     }
@@ -61,6 +61,7 @@ class OylikUderjSearch extends OylikUderj
             'id' => $this->id,
             'oylik_hodimlar_id' => $this->oylik_hodimlar_id,
             'summa' => $this->summa,
+            'status' => $this->status,
             'create_date' => $this->create_date,
             'create_userid' => $this->create_userid,
         ]);

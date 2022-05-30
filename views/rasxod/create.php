@@ -24,6 +24,7 @@ $mybalancetext = FilialQoldiq::getMyBalanceText();
     <?= $this->render('_form', [
         'model' => $model,
         'mybalance' => $mybalance,
+        'oylikuderj_model' => $oylikuderj_model,
     ]) ?>
 	</div>
 </div>

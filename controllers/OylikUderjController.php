@@ -9,6 +9,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use app\models\Rasxod;
+
+use app\models\OylikHodimlar;
+use app\models\OylikPeriods;
+
 /**
  * OylikUderjController implements the CRUD actions for OylikUderj model.
  */
@@ -70,8 +75,24 @@ class OylikUderjController extends Controller
             // var_dump(Yii::$app->user->id);die;
             $model->create_date = date("Y-m-d H:i:s");
             $model->create_userid = Yii::$app->user->id;
+            $model->status = 1;
             
             if($model->save()){
+
+                $rasxod_model = new Rasxod();
+                $rasxod_model->filial_id = 1;
+                $rasxod_model->user_id = Yii::$app->user->id;
+                $rasxod_model->summa = $model->summa;
+                $rasxod_model->sum_type = 1;
+                $rasxod_model->rasxod_type = 5;
+                $rasxod_model->rasxod_desc = OylikHodimlar::getName($model->oylik_hodimlar_id).'ga oylik hisobidan avtomatik yaratilgan to‘lov'; /////
+                $rasxod_model->rasxod_period = OylikPeriods::getActivePeriod();
+                $rasxod_model->status = 1;
+                $rasxod_model->create_date = date("Y-m-d H:i:s");
+                $rasxod_model->mod_date = date("Y-m-d H:i:s");
+
+                $rasxod_model->oylik_uderj_id = $model->id;
+                $rasxod_model->save(false);
                 
                 return $this->redirect(['view', 'id' => $model->id]);    
             }

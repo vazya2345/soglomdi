@@ -11,6 +11,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use app\models\OylikUderj;
+use app\models\OylikPeriods;
+
 /**
  * RasxodController implements the CRUD actions for Rasxod model.
  */
@@ -76,10 +79,26 @@ class RasxodController extends Controller
     {
         $model = new Rasxod();
 
+        $oylikuderj_model = new OylikUderj();
+
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->id;
             $model->create_date = date("Y-m-d H:i:s");
             if($model->save()){
+                $oylikuderj_model->load(Yii::$app->request->post());
+                $oylikuderj_model->title = 1;
+                $oylikuderj_model->summa = $model->summa;
+                $oylikuderj_model->status = 1;
+                $oylikuderj_model->period = OylikPeriods::getActivePeriod();
+                $oylikuderj_model->create_date = date("Y-m-d H:i:s");
+                $oylikuderj_model->create_userid = Yii::$app->user->id;
+                $oylikuderj_model->rasxod_id = $model->id;
+                $oylikuderj_model->save(false);
+
+
+                $model->oylik_uderj_id = $oylikuderj_model->id;
+                $model->save(false);
+
                 return $this->redirect(['view', 'id' => $model->id]);    
             }
             
@@ -90,6 +109,7 @@ class RasxodController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'oylikuderj_model' => $oylikuderj_model,
         ]);
     }
 
@@ -173,7 +193,17 @@ class RasxodController extends Controller
 
                             return $this->redirect(['registration/refsendsmsact', 'ref_phonenum'=>$ref_phonenum, 'ref_sum'=>$model->summa]);
                         }
-                        return $this->redirect(['index']);
+                        elseif($model->rasxod_type==5){
+                            $oylikuderj_model = OylikUderj::findOne($model->oylik_uderj_id);
+                            $oylikuderj_model->status = 2;
+                            $oylikuderj_model->save(false);
+                            return $this->redirect(['index']); 
+
+                        }
+                        else{
+                            return $this->redirect(['index']);    
+                        }
+                        
                     }
                     else{
                         var_dump($fq_model->errors);

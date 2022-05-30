@@ -236,13 +236,40 @@ $lav = Users::getMyLav();
                 <?= Html::a('Справочники', '#', ['class' => 'nav-link dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-expanded'=>true]) ?>
                 <ul class="dropdown-menu shadow">
                     <li>
-                        <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'dropdown-item']) ?>
-                    </li>
-                    <li>
                         <?= Html::a('Рефераллар', ['/referals/index'], ['class' => 'dropdown-item']) ?>
                     </li>
                     <li>
                         <?= Html::a('Реф жўнатма', ['/ref-sends/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Касса', ['/filial-qoldiq/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Жўнатмалар', ['/fq-sends/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Барча тўловлар', ['/payments/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <!-- <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a> -->
+                <?= Html::a('Реагент', '#', ['class' => 'nav-link dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-expanded'=>true]) ?>
+                <ul class="dropdown-menu shadow">
+                    <li>
+                        <?= Html::a('Реагентлар', ['/reagent/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Реагент боғлиқлиги', ['/reagent-rel/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Реагент киритиш', ['/reagent-input/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Реагент юбориш', ['/reagent-send/index'], ['class' => 'dropdown-item']) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Реагент филиал', ['/reagent-filial/index'], ['class' => 'dropdown-item']) ?>
                     </li>
                 </ul>
             </li>
