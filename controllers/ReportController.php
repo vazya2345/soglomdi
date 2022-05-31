@@ -1692,10 +1692,10 @@ public function actionKassa1prev()
         $row = 8;
         $n=1;
 
-        $covid_analizs = SAnaliz::find()->select('id')->where(['in','group_id',[19,26]])->all();
+        $covid_analizs = SAnaliz::find()->select('id')->where(['in','group_id',[19,26,33]])->all();
         $covid_analizs = ArrayHelper::map($covid_analizs, 'id', 'id');
 
-        $other_analizs = SAnaliz::find()->select('id')->where(['not in','group_id',[19,26]])->all();
+        $other_analizs = SAnaliz::find()->select('id')->where(['not in','group_id',[19,26,33]])->all();
         $other_analizs = ArrayHelper::map($other_analizs, 'id', 'id');
 
         if($filial=='all'){

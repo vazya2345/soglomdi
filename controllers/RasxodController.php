@@ -85,18 +85,22 @@ class RasxodController extends Controller
             $model->user_id = Yii::$app->user->id;
             $model->create_date = date("Y-m-d H:i:s");
             if($model->save()){
-                $oylikuderj_model->load(Yii::$app->request->post());
-                $oylikuderj_model->title = 1;
-                $oylikuderj_model->summa = $model->summa;
-                $oylikuderj_model->status = 1;
-                $oylikuderj_model->period = OylikPeriods::getActivePeriod();
-                $oylikuderj_model->create_date = date("Y-m-d H:i:s");
-                $oylikuderj_model->create_userid = Yii::$app->user->id;
-                $oylikuderj_model->rasxod_id = $model->id;
-                $oylikuderj_model->save(false);
+
+                if($model->rasxod_type==5){
+                    $oylikuderj_model->load(Yii::$app->request->post());
+                    $oylikuderj_model->title = 1;
+                    $oylikuderj_model->summa = $model->summa;
+                    $oylikuderj_model->status = 1;
+                    $oylikuderj_model->period = OylikPeriods::getActivePeriod();
+                    $oylikuderj_model->create_date = date("Y-m-d H:i:s");
+                    $oylikuderj_model->create_userid = Yii::$app->user->id;
+                    $oylikuderj_model->rasxod_id = $model->id;
+                    $oylikuderj_model->save(false);
 
 
-                $model->oylik_uderj_id = $oylikuderj_model->id;
+                    $model->oylik_uderj_id = $oylikuderj_model->id;
+                }
+                
                 $model->save(false);
 
                 return $this->redirect(['view', 'id' => $model->id]);    
