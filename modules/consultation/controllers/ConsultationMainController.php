@@ -273,7 +273,7 @@ class ConsultationMainController extends Controller
             $model = new ConsultationMain();
             $model->reg_id = $id;
             $model->consultation_type = 'Анестезия';
-            $model->value = ConsultationOperationList::getName($key);
+            $model->value = ConsultationAnnestezyList::getName($key);
             if($model->save()){
                 unset($model);
             }
