@@ -9,6 +9,14 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language'=>'uz',
+    'modules' => [
+        'dori' => [
+            'class' => 'app\modules\dori\Module',
+        ],
+        'consultation' => [
+            'class' => 'app\modules\consultation\Module',
+        ],
+    ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',

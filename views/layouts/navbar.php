@@ -398,7 +398,7 @@ foreach ($eslatmalar as $eslatma) {
             </div>
         </li>
         <li class="nav-item">
-            <?= Html::a('<i class="fas fa-sign-out-alt"></i>', ['site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
+            <?= Html::a('<i class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
         </li>
 <?php
 }
@@ -437,7 +437,7 @@ foreach ($eslatmalar as $eslatma) {
                 <!-- Menu Footer-->
                 <li class="user-footer">
                     <a href="#" class="btn btn-default btn-flat">Сахифам</a>
-                    <?= Html::a('Тизимдан чикиш', ['site/logout'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat float-right']) ?>
+                    <?= Html::a('Тизимдан чикиш', ['/site/logout'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat float-right']) ?>
                 </li>
             </ul>
     </li>

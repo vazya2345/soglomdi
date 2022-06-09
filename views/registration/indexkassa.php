@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card-body">
     <p>
         <?= Html::a('Янги', ['new'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Консультация', ['consultation'], ['class' => 'btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

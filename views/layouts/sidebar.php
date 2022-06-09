@@ -72,7 +72,7 @@ $name = Users::getMyname();
                     ['label' => 'Регистрациялар', 'url' => ['/registration/indexlab'], 'icon' => 'dot-circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==4)],
 
 
-                    ['label' => 'Тизимга кириш', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
+                    ['label' => 'Тизимга кириш', 'url' => ['/site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
 
 
 
@@ -153,6 +153,33 @@ $name = Users::getMyname();
                             ['label' => 'Шаклланиши', 'url' => ['/oylik-shakl/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                             ['label' => 'Давр', 'url' => ['/oylik-periods/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
                             ['label' => 'Ушланма турлари', 'url' => ['/oylik-uderj-types/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                        ]
+                    ],
+
+
+                    [
+                        'label' => 'Дори',
+                        'url' => '#',
+                        'icon' => 'dot-circle',
+                        'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10),
+                        'items' => [
+                            ['label' => 'Дорилар', 'url' => ['/dori/dori-list/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
+                            ['label' => 'Дори махали', 'url' => ['/dori/dori-mahali/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
+                            ['label' => 'Дори давомийлиги', 'url' => ['/dori/dori-davomiyligi/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
+                            ['label' => 'Дори қайвақтда', 'url' => ['/dori/dori-qayvaqtda/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
+                        ]
+                    ],
+
+                    [
+                        'label' => 'Консультация',
+                        'url' => '#',
+                        'icon' => 'dot-circle',
+                        'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10),
+                        'items' => [
+                            ['label' => 'Ташхислар', 'url' => ['/consultation/consultation-tashhis-list/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
+                            ['label' => 'Операциялар', 'url' => ['/consultation/consultation-operation-list/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
+                            ['label' => 'Анестезиялар', 'url' => ['/consultation/consultation-annestezy-list/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
+                            ['label' => 'Консультациялар', 'url' => ['/consultation/consultation-main/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
                         ]
                     ],
 

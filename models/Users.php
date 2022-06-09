@@ -277,5 +277,12 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             return false;
         }
     }
+
+    public static function getConsultationDoctors()
+    {
+        $emps = self::find()->where(['role_id'=>10])->all();// filial boyicha filtr
+        $result = ArrayHelper::map($emps, 'id', 'name');
+        return $result;
+    }
 }
 

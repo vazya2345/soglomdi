@@ -26,6 +26,9 @@ use app\models\SmsTemplates;
 use app\models\SendSms;
 use app\models\Filials;
 use app\models\FilialQoldiq;
+use app\models\ConsultationDoctorRel;
+
+
 /**
  * RegistrationController implements the CRUD actions for Registration model.
  */
@@ -86,7 +89,7 @@ class RegistrationController extends Controller
                 'dataProvider' => $dataProvider,
             ]);
         }
-        elseif(Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==3||Yii::$app->user->getRole()==6){
+        elseif(Yii::$app->user->getRole()==2||Yii::$app->user->getRole()==6){
             $myfil_users_arr = Users::getMyFilUsers();
             $searchModel = new RegistrationSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -111,6 +114,13 @@ class RegistrationController extends Controller
                 'dataProvider' => $dataProvider,
             ]);
         }
+        elseif(Yii::$app->user->getRole()==3){
+            return $this->redirect(['registration/indexkassa']);
+        }
+        if(Yii::$app->user->getRole()==10){
+            return $this->redirect(['indexconsultation']);
+        }
+
         else{
             return $this->redirect(['site/index']);
         }
@@ -563,7 +573,7 @@ class RegistrationController extends Controller
 
     public function actionResultlab($id)
     {
-        if(Yii::$app->user->getRole()!=4&&Yii::$app->user->getRole()!=5&&Yii::$app->user->getRole()!=7&&Yii::$app->user->getRole()!=3&&Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9){
+        if(Yii::$app->user->getRole()!=4&&Yii::$app->user->getRole()!=5&&Yii::$app->user->getRole()!=7&&Yii::$app->user->getRole()!=3&&Yii::$app->user->getRole()!=1&&Yii::$app->user->getRole()!=9&&Yii::$app->user->getRole()!=10){
             return $this->redirect(['index']);
         }
         $model = $this->findModel($id);
@@ -578,14 +588,27 @@ class RegistrationController extends Controller
             $analiz_names[$i] = SAnaliz::getName($analiz->analiz_id);
             $dataProvider[$i]->pagination = ['pageSize' => 100];
             $i++;
-        }        
-        return $this->render('resultlab', [
+        }
+
+        if(Yii::$app->user->getRole()==10){
+            return $this->render('resultconsultation', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'analiz_names' => $analiz_names,
+                'analizs' => $analizs,
+            ]);    
+        }
+        else{
+            return $this->render('resultlab', [
             'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'analiz_names' => $analiz_names,
             'analizs' => $analizs,
-        ]);    
+        ]);   
+        }    
+            
     
         
     }
@@ -880,7 +903,7 @@ class RegistrationController extends Controller
 
     public function actionLabqabul($id)
     {
-        if(Yii::$app->user->getRole()!=4){
+        if(Yii::$app->user->getRole()!=4&&Yii::$app->user->getRole()!=10){
             return $this->redirect(['index']);
         }
         $model = $this->findModel($id);
@@ -896,7 +919,7 @@ class RegistrationController extends Controller
 
     public function actionLabrad($id)
     {
-        if(Yii::$app->user->getRole()!=4){
+        if(Yii::$app->user->getRole()!=4&&Yii::$app->user->getRole()!=10){
             return $this->redirect(['index']);
         }
         $model = $this->findModel($id);
@@ -1251,5 +1274,160 @@ echo "<br>";
         else{
             return false;
         }        
+    }
+
+
+    public function actionConsultation()
+    {
+        if(Yii::$app->user->getRole()!=2&&Yii::$app->user->getRole()!=3){
+            return $this->redirect(['index']);
+        }
+        $model = new Registration();
+        $model_client = new Client();
+        $model_consultation_doctor = new ConsultationDoctorRel();
+        
+
+        if ($model->load(Yii::$app->request->post())&&$model_client->load(Yii::$app->request->post())) {
+            $model->user_id = Yii::$app->user->id;
+            $model->kassir_id = Yii::$app->user->id;
+            $model->natija_input = '0';
+            $model->create_date = date("Y-m-d H:i:s");
+            $model->change_time = $model->create_date;
+            $model->sum_debt = $model->sum_amount-(int)$model->skidka_reg;
+
+
+            $getclientmodelbypassport = Client::getClientByDoc($model_client->doc_seria,$model_client->doc_number);
+            
+            if($getclientmodelbypassport&&($model_client->doc_seria==$getclientmodelbypassport->doc_seria&&$model_client->doc_number==$getclientmodelbypassport->doc_number)){
+
+                $getclientmodelbypassport->user_id = Yii::$app->user->id;
+                $getclientmodelbypassport->change_date = $model->create_date;
+                $getclientmodelbypassport->save(false);
+                $model->client_id = $getclientmodelbypassport->id;
+            }
+            else{
+                $model_client = new Client();
+                $model_client->load(Yii::$app->request->post());
+                $model_client->user_id = Yii::$app->user->id;
+                $model_client->create_date = $model->create_date;
+                $model_client->change_date = $model->create_date;
+                $model_client->save(false);
+                $model->client_id = $model_client->id;
+            }
+            $check_regmodel = Registration::find()
+                ->where([
+                            'user_id'=>$model->user_id,
+                            'sum_amount'=>$model->sum_amount,
+                            'ref_code'=>$model->ref_code,
+                            'other'=>$model->other
+                        ])
+                ->andWhere(['between','create_date', date("Y-m-d H:i:s", strtotime("now - 10 minutes")), $model->create_date])
+                ->one();
+            if($check_regmodel){
+                return $this->redirect(['indexkassa']);
+            }
+
+            if($model->save()){
+                if($model_consultation_doctor->load(Yii::$app->request->post())){
+                    $model_consultation_doctor->reg_id = $model->id;
+                    if($model_consultation_doctor->save()){
+                        $a = 1;
+                    }
+                    else{
+                        var_dump($model_consultation_doctor->errors);die;
+                    }
+                }
+                $client_id = $model->client_id;
+                if(Yii::$app->request->post('pokaz')!==null){
+                    foreach (Yii::$app->request->post('pokaz')[0] as $key => $value) {
+                        $dopmodel = new RegDopinfo;
+                        $dopmodel->reg_id = $model->id;
+                        $dopmodel->indikator_id = $key;
+                        $dopmodel->value = $value;
+                        $dopmodel->save(false);
+                    }
+                }
+
+                if(Yii::$app->request->post('analiz')!==NULL){
+                    foreach(Yii::$app->request->post('analiz') as $key => $value) {
+                        $analiz_id = trim($key,'\"');
+                        $r_model = new RegAnalizs();
+                        $r_model->analiz_id = $analiz_id;
+                        $r_model->reg_id = $model->id;
+                        $r_model->summa = SAnaliz::getPrice($analiz_id);
+                        if($r_model->save()){
+                            Reagent::minusCountForAnaliz($analiz_id,$model->id);
+                        }
+                        else{
+                            var_dump($r_model->errors);die;
+                        }
+                    }
+                }
+
+                if(Yii::$app->request->post('reagent')!==NULL){
+                    foreach(Yii::$app->request->post('reagent') as $key => $value) {
+                        if($value>0){
+                            Reagent::minusCount($key,$value,0,$model->id);     
+                        }
+                    }
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                var_dump($model->errors);die;
+            }
+            
+            
+        }
+
+        
+        
+            return $this->render('consultation', [
+                'model' => $model,
+                'model_client' => $model_client,
+                'model_consultation_doctor' => $model_consultation_doctor,
+            ]);    
+    }
+
+
+    public function actionIndexconsultation()
+    {
+        if(Yii::$app->user->getRole()!=10){
+            return $this->redirect(['index']);
+        }
+        else{
+            $searchModel = new RegistrationSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $reg_ids = ConsultationDoctorRel::getRegIds(Yii::$app->user->id);
+            $dataProvider->query->andWhere(['in','id',$reg_ids]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+        }
+        
+        
+        return $this->render('indexconsultation', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
+    public function actionResultconsultationpdf($id)
+    {
+        if(!Registration::getIsPay($id)){
+            return $this->render('not_pay');  
+        }
+        Yii::$app->response->format = 'pdf';
+        $this->layout = '//print';
+
+        $model = $this->findModel($id);
+
+            
+            
+        return $this->render('print_consultation', [
+            'model' => $model,
+        ]);
     }
 }
