@@ -177,11 +177,12 @@ $client_model = Client::findOne($model->client_id);
                 <?= Html::input('text', 'ConsultationDoriRecept['.$i.'][dori_qabul]', '', ['id' => 'dori_qabul_input_'.$i, 'class' => 'form-control', 'readonly'=>true]) ?>
             </div>
             <div class="col-1">
-                <?= Html::dropDownList('ConsultationDoriRecept['.$i.'][dori_mahali]','', DoriMahali::getAll(), ['class'=>'form-control','prompt'=>'Танланг...']) ?>
+                <?= Html::input('number', 'ConsultationDoriRecept['.$i.'][dori_mahali]', '', ['id' => 'dori_mahali_input_'.$i, 'class' => 'form-control']) ?>
             </div>
             <div class="col-1">
-                <?= Html::dropDownList('ConsultationDoriRecept['.$i.'][dori_davomiyligi]','', DoriDavomiyligi::getAll(), ['class'=>'form-control','prompt'=>'Танланг...']) ?>
+                <?= Html::input('number', 'ConsultationDoriRecept['.$i.'][dori_davomiyligi]', '', ['id' => 'dori_davomiyligi_input_'.$i, 'class' => 'form-control']) ?>
             </div>
+
             <div class="col-2">
                 <?= Html::dropDownList('ConsultationDoriRecept['.$i.'][dori_qayvaqtda]','', DoriQayvaqtda::getAll(), ['class'=>'form-control','prompt'=>'Танланг...']) ?>
             </div>

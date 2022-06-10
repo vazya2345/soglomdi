@@ -421,6 +421,7 @@ class PokazLimits extends \yii\db\ActiveRecord
 
     public static function getOneInfo($ind_id,$value,$reg_id)
     {
+        $result = '';
         $client_model = Client::getClientByRegId($reg_id);
         if(strlen($client_model->birthdate)>4){
             $age = date('Y')-date('Y',strtotime($client_model->birthdate));   

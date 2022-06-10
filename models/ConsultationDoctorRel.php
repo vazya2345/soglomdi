@@ -39,7 +39,7 @@ class ConsultationDoctorRel extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'reg_id' => 'Reg ID',
-            'consultation_doctor_id' => 'Consultation Doctor ID',
+            'consultation_doctor_id' => 'Кўрик ўтказувчи врач',
         ];
     }
 

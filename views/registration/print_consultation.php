@@ -12,7 +12,12 @@ use app\modules\consultation\models\ConsultationMain;
 $this->title = 'Натижа';
 $this->params['breadcrumbs'][] = $this->title;
 $client_name = Client::getName($model->client_id);
+
+
+
 $res_date = date('Y-m-d H:i:s');
+
+
 $name = $client_name.' '.date("Y-m-d",strtotime($res_date));
 header('Content-disposition: inline; filename="' . $name . '.pdf"'); 
 
@@ -22,10 +27,18 @@ header('Content-disposition: inline; filename="' . $name . '.pdf"');
 <div class="header">
     <table class="tb-header">
         <tr>
-            <td align="center">
-                <img src="./img/sms-clinica.png" class="logo" width="250">
+            <td align="center" colspan="2">
+                <img src="./img/sms-clinica.png" class="logo" width="750">
             </td>
-            <td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center" class="adress">
+                «SOG’LOM MED SERVICE» МЧЖ, манзил Андижон шахар Шимолий кичик даха 9. Тел:74-224-50-01, 02.
+            </td>
+
+        </tr>
+        <tr>
+            <td class="col-3">
 <?php 
 
 $qr = Text::widget([
@@ -33,19 +46,19 @@ $qr = Text::widget([
     'outputDirWeb' => '@web/upload/qrcode',
     'ecLevel' => QRcode::QR_ECLEVEL_L,
     'text' => Url::home('http').'?r=registration%2Fviewqr&group=tashhis&reg_id='.$_GET['reg_id'],
-    'size' => 2,
+    'size' => 3,
 ]);
 $qr = str_replace('/web', './', $qr);
 echo $qr;
 ?>
             </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center" class="adress">
-                «SOG’LOM TABASSUM» ХК, манзил Андижон ш., Бобур шох кўчаси 109-Б уй. Тел:(0-595) 204-01-50.
+            <td>
+                        <p class="bold">Пациент: <?=$client_name?></p>
+                        <p class="bold">Дата рождения: <?=Client::getBirthDate($model->client_id)?></p>
+                        <p class="bold">Дата: <?=$res_date?></p>
             </td>
-
         </tr>
+
     </table>
 
 </div>
@@ -55,17 +68,11 @@ echo $qr;
 
 
 <div class="content-top-table-div">
-     <table class="table_client">
-        <tr>
-            <td class="bold">Пациент: <?=$client_name?></td>
-            <td class="bold" rowspan="2" valign="top">Дата: <?=$res_date?></td>
-            <td class="bold">Дата рождения: <?=Client::getBirthDate($model->client_id)?></td>
-        </tr>
-    </table>
+     
     <table class="table_analiz">
         <tr>
             <td class="name-of-analiz" colspan="3">
-                Консультация
+                <?=$analiz_name?>
             </td>
         </tr>
     </table>
@@ -76,7 +83,6 @@ echo $qr;
 
 <div class="analiz-results">
     <div class="row">
-        <div class="col-6 firstcol">
 <?php
     $tashhislar = ConsultationMain::find()->where(['reg_id'=>$model->id, 'consultation_type'=>'Ташхис'])->all();
     $i=1;
@@ -91,8 +97,8 @@ echo $qr;
         echo "</table>";
     }
 ?>
-        </div>
-        <div class="col-6">
+    </div>
+    <div class="row">
 <?php
     $analizlar = ConsultationMain::find()->where(['reg_id'=>$model->id, 'consultation_type'=>'Анализ'])->all();
     $i=1;
@@ -110,7 +116,6 @@ echo $qr;
 
 
         </div>
-        <div class="clear"></div>
 </div>
 
 <?php
@@ -162,7 +167,6 @@ echo $qr;
 
 
 <div class="row">
-    <div class="col-6 firstcol">
 <?php
     $operaciyalar = ConsultationMain::find()->where(['reg_id'=>$model->id, 'consultation_type'=>'Операция'])->all();
     $i=1;
@@ -177,8 +181,8 @@ echo $qr;
         echo "</table>";
     }
 ?>
-    </div>
-    <div class="col-6">
+</div>
+<div class="row">
 <?php
     $anasteziyalar = ConsultationMain::find()->where(['reg_id'=>$model->id, 'consultation_type'=>'Анестезия'])->all();
     $i=1;
@@ -193,8 +197,6 @@ echo $qr;
         echo "</table>";
     }
 ?>
-    </div>
-    <div class="clear"></div>
 </div>
 
 <?php
@@ -233,6 +235,9 @@ echo $qr;
     }
     .bold{
         font-weight: bold;
+    }
+    p.bold{
+        font-size: 18px;
     }
     .summary{
         display: none;
@@ -276,7 +281,7 @@ echo $qr;
         margin-top: 10px;
     }
     .name-of-analiz{
-        font-size: 10px;
+        font-size: 18px;
         font-weight: bold;
         color: gray;
         text-align: center;
@@ -293,6 +298,9 @@ echo $qr;
 }
 .tb-header{
     margin: 0 auto;
+}
+.col-3{
+    width: 34%;
 }
 .col-6{
     width: 48%;

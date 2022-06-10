@@ -16,6 +16,9 @@ use app\modules\consultation\models\ConsultationAnnestezyList;
 
 use app\modules\dori\models\DoriList;
 use app\models\SAnaliz;
+use app\models\Registration;
+use app\models\Result;
+use app\models\RegAnalizs;
 /**
  * ConsultationMainController implements the CRUD actions for ConsultationMain model.
  */
@@ -139,19 +142,22 @@ class ConsultationMainController extends Controller
 
 
         // TASHHIS
-        foreach (Yii::$app->request->post('consultation-tashhis') as $key => $value) {
-            $model = new ConsultationMain();
-            $model->reg_id = $id;
-            $model->consultation_type = 'Ташхис';
-            $model->value = ConsultationTashhisList::getName($key);
-            if($model->save()){
-                unset($model);
-            }
-            else{
-                echo 'consultation-tashhis';
-                var_dump($model->errors);die;
+        if(Yii::$app->request->post('consultation-tashhis')){
+            foreach (Yii::$app->request->post('consultation-tashhis') as $key => $value) {
+                $model = new ConsultationMain();
+                $model->reg_id = $id;
+                $model->consultation_type = 'Ташхис';
+                $model->value = ConsultationTashhisList::getName($key);
+                if($model->save()){
+                    unset($model);
+                }
+                else{
+                    echo 'consultation-tashhis';
+                    var_dump($model->errors);die;
+                }
             }
         }
+        
         if(Yii::$app->request->post('tashhis_custom')!=''){
             $model = new ConsultationMain();
             $model->reg_id = $id;
@@ -168,48 +174,54 @@ class ConsultationMainController extends Controller
 
 
         //DORI RECEPT
-        foreach (Yii::$app->request->post('ConsultationDoriRecept') as $key) {
-            if($key['dori_title']!=''){
-                $dmodel = new ConsultationDoriRecept();
-                $dmodel->reg_id = $id;
-                $dmodel->dori_title = DoriList::getName($key['dori_title']);
-                $dmodel->dori_doza = $key['dori_doza'];
-                $dmodel->dori_shakli = $key['dori_shakli'];
-                $dmodel->dori_qabul = $key['dori_qabul'];
-                $dmodel->dori_mahali = $key['dori_mahali'];
-                $dmodel->dori_davomiyligi = $key['dori_davomiyligi'];
-                $dmodel->dori_qayvaqtda = $key['dori_qayvaqtda'];
-                $dmodel->create_date = date("Y-m-d H:i:s");
-                $dmodel->create_userid = Yii::$app->user->id;
-                if($dmodel->save()){
-                    unset($dmodel);
+        if(Yii::$app->request->post('ConsultationDoriRecept')){
+            foreach (Yii::$app->request->post('ConsultationDoriRecept') as $key) {
+                if($key['dori_title']!=''){
+                    $dmodel = new ConsultationDoriRecept();
+                    $dmodel->reg_id = $id;
+                    $dmodel->dori_title = DoriList::getName($key['dori_title']);
+                    $dmodel->dori_doza = $key['dori_doza'];
+                    $dmodel->dori_shakli = $key['dori_shakli'];
+                    $dmodel->dori_qabul = $key['dori_qabul'];
+                    $dmodel->dori_mahali = $key['dori_mahali'];
+                    $dmodel->dori_davomiyligi = $key['dori_davomiyligi'];
+                    $dmodel->dori_qayvaqtda = $key['dori_qayvaqtda'];
+                    $dmodel->create_date = date("Y-m-d H:i:s");
+                    $dmodel->create_userid = Yii::$app->user->id;
+                    if($dmodel->save()){
+                        unset($dmodel);
+                    }
+                    else{
+                        echo 'dori-recept';
+                        var_dump($dmodel->errors);die;
+                    }
                 }
                 else{
-                    echo 'dori-recept';
-                    var_dump($dmodel->errors);die;
+                    break;
                 }
+                
             }
-            else{
-                break;
-            }
-            
         }
+        
 
 
         // ANALIZ
-        foreach (Yii::$app->request->post('ConsultationAnalizs') as $key => $value) {
-            $model = new ConsultationMain();
-            $model->reg_id = $id;
-            $model->consultation_type = 'Анализ';
-            $model->value = SAnaliz::getName($value);
-            if($model->save()){
-                unset($model);
+        if(Yii::$app->request->post('ConsultationAnalizs')){
+            foreach (Yii::$app->request->post('ConsultationAnalizs') as $key => $value) {
+                $model = new ConsultationMain();
+                $model->reg_id = $id;
+                $model->consultation_type = 'Анализ';
+                $model->value = SAnaliz::getName($value);
+                if($model->save()){
+                    unset($model);
+                }
+                else{
+                    echo 'consultation-analiz';
+                    var_dump($model->errors);die;
+                }   
             }
-            else{
-                echo 'consultation-analiz';
-                var_dump($model->errors);die;
-            }   
         }
+        
         if(Yii::$app->request->post('analiz_custom')!=''){
             $model = new ConsultationMain();
             $model->reg_id = $id;
@@ -240,19 +252,22 @@ class ConsultationMainController extends Controller
         }
 
         //OPERATSIYA
-        foreach (Yii::$app->request->post('consultation-operations') as $key => $value) {
-            $model = new ConsultationMain();
-            $model->reg_id = $id;
-            $model->consultation_type = 'Операция';
-            $model->value = ConsultationOperationList::getName($key);
-            if($model->save()){
-                unset($model);
-            }
-            else{
-                echo 'consultation-operations';
-                var_dump($model->errors);die;
+        if(Yii::$app->request->post('consultation-operations')){
+            foreach (Yii::$app->request->post('consultation-operations') as $key => $value) {
+                $model = new ConsultationMain();
+                $model->reg_id = $id;
+                $model->consultation_type = 'Операция';
+                $model->value = ConsultationOperationList::getName($key);
+                if($model->save()){
+                    unset($model);
+                }
+                else{
+                    echo 'consultation-operations';
+                    var_dump($model->errors);die;
+                }
             }
         }
+        
         if(Yii::$app->request->post('operatsiya_custom')!=''){
             $model = new ConsultationMain();
             $model->reg_id = $id;
@@ -269,19 +284,22 @@ class ConsultationMainController extends Controller
 
 
         //ANESTEZIYA
-        foreach (Yii::$app->request->post('consultation-anestezy') as $key => $value) {
-            $model = new ConsultationMain();
-            $model->reg_id = $id;
-            $model->consultation_type = 'Анестезия';
-            $model->value = ConsultationAnnestezyList::getName($key);
-            if($model->save()){
-                unset($model);
-            }
-            else{
-                echo 'consultation-anestezy';
-                var_dump($model->errors);die;
+        if(Yii::$app->request->post('consultation-anestezy')){
+            foreach (Yii::$app->request->post('consultation-anestezy') as $key => $value) {
+                $model = new ConsultationMain();
+                $model->reg_id = $id;
+                $model->consultation_type = 'Анестезия';
+                $model->value = ConsultationAnnestezyList::getName($key);
+                if($model->save()){
+                    unset($model);
+                }
+                else{
+                    echo 'consultation-anestezy';
+                    var_dump($model->errors);die;
+                }
             }
         }
+        
         if(Yii::$app->request->post('anestezy_custom')!=''){
             $model = new ConsultationMain();
             $model->reg_id = $id;
@@ -311,6 +329,32 @@ class ConsultationMainController extends Controller
             }
         }
         
+
+        $reg_model = Registration::findOne($id);
+        $reg_model->change_time = date("Y-m-d H:i:s");
+
+        $reg_analizmodel = RegAnalizs::find()->where(['reg_id'=>$id])->one();
+        if($reg_analizmodel){
+            $analiz_id = $reg_analizmodel->analiz_id;
+        }
+        else{
+            $analiz_id = 385;
+        }
+
+        $result_model = new Result();
+        $result_model->main_id = $id;
+        $result_model->analiz_id = $analiz_id;
+        $result_model->pokaz_id = 1;
+        $result_model->reslut_value = '1';
+        $result_model->result_answer = '1'; 
+        $result_model->create_date = date("Y-m-d H:i:s");
+        $result_model->user_id = Yii::$app->user->id;
+        if($result_model->save()){
+            $a = 1;
+        }
+        else{
+            var_dump($result_model->errors);die;
+        }
 
         return $this->redirect(['/registration/index']);
     }

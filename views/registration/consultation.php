@@ -163,7 +163,7 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
       </div>
       <div class="card-body">
 <?php
-	$analizs = SAnaliz::find()->where(['group_id'=>35,'is_active'=>1])->orderBy(['ord'=>SORT_ASC])->all();
+	$analizs = SAnaliz::find()->where(['group_id'=>36,'is_active'=>1])->orderBy(['ord'=>SORT_ASC])->all(); 
 	foreach ($analizs as $analiz) {
 		echo '
 				<div class="custom-control custom-checkbox">

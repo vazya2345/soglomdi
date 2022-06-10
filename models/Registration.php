@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use app\models\Users;
+use app\models\RegAnalizs;
+use app\models\SAnaliz;
 
 /**
  * This is the model class for table "registration".
@@ -176,6 +178,18 @@ class Registration extends \yii\db\ActiveRecord
         $reg = self::find()->where(['in','user_id',$user_arr])->sum('skidka_reg');
         $res = $amount-$kassa-$reg-$cash-$plastik;
         return $res;
+    }
+
+    public static function isConsultation($id)
+    {
+        $reg_analiz = RegAnalizs::find()->where(['reg_id'=>$id])->one();
+        $analiz = SAnaliz::findOne($reg_analiz->analiz_id);
+        if($analiz->group_id==36){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 }

@@ -433,12 +433,19 @@ class RegistrationController extends Controller
             }
 
             if($i>0){
-                return $this->render('result_view', [
-                    'model' => $model,
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
-                    'analiz_names' => $analiz_names,
-                ]);
+                // PROVERKA NA KONSULTACIYU
+                if(Registration::isConsultation($id)){
+                    $this->redirect(['resultconsultationpdf', 'id'=>$id]);
+                }
+                else{
+                    return $this->render('result_view', [
+                        'model' => $model,
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                        'analiz_names' => $analiz_names,
+                    ]);
+                }
+                
             }
             else{
                 echo "Ушбу хатолик анализлар тўлиқ базага тушмаганини билдиради, илтимос тизим администраторига алоқага чиқинг ERR_REG434";die;
@@ -736,7 +743,7 @@ class RegistrationController extends Controller
                             Reagent::minusCountForAnaliz($analiz_id,$model->id);
                         }
                         else{
-                            var_dump($r_model->errors);die;
+                            var_dump($r_model->errors);
                         }
                     }
                 }
@@ -758,7 +765,7 @@ class RegistrationController extends Controller
             
         }
         
-        $groups = SGroups::find()->where(['active'=>1])->orderBy(['ord'=>SORT_ASC])->all();
+        $groups = SGroups::find()->where(['active'=>1])->andWhere(['<>','id',36])->orderBy(['ord'=>SORT_ASC])->all();
 
 
 
@@ -1356,10 +1363,11 @@ echo "<br>";
                         $r_model->reg_id = $model->id;
                         $r_model->summa = SAnaliz::getPrice($analiz_id);
                         if($r_model->save()){
-                            Reagent::minusCountForAnaliz($analiz_id,$model->id);
+                            $a=1;
+
                         }
                         else{
-                            var_dump($r_model->errors);die;
+                            var_dump($r_model->errors);
                         }
                     }
                 }
@@ -1424,10 +1432,13 @@ echo "<br>";
 
         $model = $this->findModel($id);
 
+        $reg_analiz = RegAnalizs::find()->where(['reg_id'=>$id])->one();
+        $analiz_name = SAnaliz::getName($reg_analiz->analiz_id);
             
             
         return $this->render('print_consultation', [
             'model' => $model,
+            'analiz_name' => $analiz_name,
         ]);
     }
 }

@@ -56,7 +56,12 @@ if($fmodel){
                 // 'attribute'=>'other',
                 'label'=>'Тўланиши керак',
                 'value' => function ($data) {
-                        return $tsum;                    
+                    if(isset($tsum)){
+                        return $tsum;
+                    }
+                    else{
+                        return 0;
+                    }
                 }
             ],
         ],
