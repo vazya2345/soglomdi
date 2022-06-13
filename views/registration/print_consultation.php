@@ -3,8 +3,11 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Client;
+use app\models\Result;
+use app\models\Users;
 use xj\qrcode\QRcode;
 use xj\qrcode\widgets\Text;
+
 
 use app\modules\consultation\models\ConsultationDoriRecept;
 use app\modules\consultation\models\ConsultationMain;
@@ -14,8 +17,15 @@ $this->params['breadcrumbs'][] = $this->title;
 $client_name = Client::getName($model->client_id);
 
 
-
-$res_date = date('Y-m-d H:i:s');
+$resmodel = Result::find()->where(['main_id'=>$model->id])->one();
+if($resmodel){
+    $res_date = $resmodel->create_date;
+    $res_vrach = Users::getNameVrach($resmodel->user_id);
+}
+else{
+    $res_date = date('Y-m-d H:i:s');
+    $res_vrach = 'Маъсул врач';
+}
 
 
 $name = $client_name.' '.date("Y-m-d",strtotime($res_date));
@@ -213,6 +223,11 @@ echo $qr;
         echo "</table>";
     }
 ?>
+
+<div class="row">
+   <p>Консультация берувчи: <b><?=$res_vrach?></b></p>
+</div>
+
 
 
 </div>

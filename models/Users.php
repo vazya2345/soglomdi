@@ -284,5 +284,14 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $result = ArrayHelper::map($emps, 'id', 'name');
         return $result;
     }
+
+    public static function getNameVrach($id)
+    {
+        $model = self::findOne($id);
+        if($model)
+            return $model->lavozim.' '.$model->name;
+        else
+            return 'Топилмади';
+    }
 }
 

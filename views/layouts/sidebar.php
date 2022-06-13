@@ -167,6 +167,8 @@ $name = Users::getMyname();
                             ['label' => 'Дори махали', 'url' => ['/dori/dori-mahali/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
                             ['label' => 'Дори давомийлиги', 'url' => ['/dori/dori-davomiyligi/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
                             ['label' => 'Дори қайвақтда', 'url' => ['/dori/dori-qayvaqtda/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
+                            ['label' => 'Дори шакллари', 'url' => ['/dori/dori-shakli/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
+                            ['label' => 'Дори қабул қилиш', 'url' => ['/dori/dori-qabul/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==10)],
                         ]
                     ],
 

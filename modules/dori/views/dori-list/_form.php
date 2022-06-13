@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use app\modules\dori\models\DoriShakli;
+use app\modules\dori\models\DoriQabul;
 /* @var $this yii\web\View */
 /* @var $model app\modules\dori\models\DoriList */
 /* @var $form yii\widgets\ActiveForm */
@@ -16,9 +17,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'doza')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'shakli')->dropDownList(['Таблетка'=>'Таблетка','Суюклик'=>'Суюклик','Ампула'=>'Ампула']) ?>
+    <?= $form->field($model, 'shakli')->dropDownList(DoriShakli::getAll()) ?>
 
-    <?= $form->field($model, 'qabul')->dropDownList(['Ичиш учун'=>'Ичиш учун','Вена ичига'=>'Вена ичига','Мушак орасига'=>'Мушак орасига']) ?>
+    <?= $form->field($model, 'qabul')->dropDownList(DoriQabul::getAll()) ?>
 
     <?= $form->field($model, 'info')->textInput(['maxlength' => true]) ?>
 
