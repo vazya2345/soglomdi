@@ -334,6 +334,7 @@ class ConsultationMainController extends Controller
         
 
         $reg_model = Registration::findOne($id);
+        $reg_model->status = 4;
         $reg_model->change_time = date("Y-m-d H:i:s");
 
         $reg_analizmodel = RegAnalizs::find()->where(['reg_id'=>$id])->one();

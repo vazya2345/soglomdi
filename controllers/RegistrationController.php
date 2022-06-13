@@ -1427,18 +1427,52 @@ echo "<br>";
         if(!Registration::getIsPay($id)){
             return $this->render('not_pay');  
         }
-        Yii::$app->response->format = 'pdf';
+        
         $this->layout = '//print';
 
         $model = $this->findModel($id);
 
         $reg_analiz = RegAnalizs::find()->where(['reg_id'=>$id])->one();
         $analiz_name = SAnaliz::getName($reg_analiz->analiz_id);
+        $analiz_group_id = SAnaliz::findOne($reg_analiz->analiz_id)->group_id;
+
+        if($analiz_group_id!=36){
+            $this->redirect(['/registration/viewqr', 'group' => SAnaliz::getAdd1($reg_analiz->analiz_id), 'reg_id' => $id]);
+        }
+        else{
+            Yii::$app->response->format = 'pdf';
+            return $this->render('print_consultation', [
+                'model' => $model,
+                'analiz_name' => $analiz_name,
+            ]);    
+        }
             
             
-        return $this->render('print_consultation', [
-            'model' => $model,
-            'analiz_name' => $analiz_name,
+        
+    }
+
+    public function actionHistory($id)
+    {
+
+        $model = $this->findModel($id);
+
+        // $history_models = Registration::find()->where(['client_id'=>$model->client_id])->andWhere(['<>','id',$id])->all();
+
+        $searchModel = new RegistrationSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['client_id'=>$model->client_id]);
+        $dataProvider->query->andWhere(['<>','id',$id]);
+        $dataProvider->setSort([
+            'defaultOrder' => ['id'=>SORT_DESC],
         ]);
+        return $this->render('history', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);   
+            
+        // return $this->render('history', [
+        //     'model' => $model,
+        //     'history_models' => $history_models,
+        // ]);
     }
 }
