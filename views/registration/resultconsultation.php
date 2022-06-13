@@ -208,16 +208,16 @@ $client_model = Client::findOne($model->client_id);
 
 
 <!--  АНАЛИЗ  -->
-<div class="card card-success">
+<div class="card card-success collapsed-card">
     <div class="card-header">
         <h3 class="card-title">Анализ турини танланг ёки киритинг</h3>
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
+                <i class="fas fa-plus"></i>
             </button>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body" style="display: none;">
         <div class="row">
             <div class="col-12">
                 <div class="row">
