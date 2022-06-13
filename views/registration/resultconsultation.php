@@ -34,7 +34,7 @@ $client_model = Client::findOne($model->client_id);
     <p>
         <?= Html::a('Мижоз маълумотларини ўзгартириш', ['client/update', 'id'=>$model->client_id], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Танланган маълумотларини ўзгартириш', ['reg-dopinfo/updatereg', 'reg_id'=>$model->id], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Пробирка рақамини ўзгартириш', ['registration/updatelab', 'id'=>$model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Бемор консултация тарихи', ['registration/history', 'id'=>$model->id], ['class' => 'btn btn-success', 'target'=>'_blank']) ?>
         <?= Html::a('Натижа', ['registration/resultconsultationpdf', 'id'=>$model->id], ['class' => 'btn btn-success']) ?>
     </p>
     <?= DetailView::widget([

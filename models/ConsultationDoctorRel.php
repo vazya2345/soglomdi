@@ -28,6 +28,7 @@ class ConsultationDoctorRel extends \yii\db\ActiveRecord
     {
         return [
             [['reg_id', 'consultation_doctor_id'], 'integer'],
+            [['consultation_doctor_id'], 'required'],
         ];
     }
 

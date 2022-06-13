@@ -189,7 +189,7 @@ $analizs = SAnaliz::find()->where(['is_active'=>1])->all();
       </div>
       <div class="card-body">
 		
-			<?= $form->field($model_consultation_doctor, 'consultation_doctor_id')->dropDownList(['' => 'Танланг...']+$doctors) ?>
+			<?= $form->field($model_consultation_doctor, 'consultation_doctor_id')->dropDownList(['' => 'Танланг...']+$doctors, ['required'=>true]) ?>
 
 		</div>
 	</div>
