@@ -1618,10 +1618,12 @@ public function actionKassa1prev()
             $activeSheet->setCellValueExplicit('K'.$row, Users::getName($rasxod->send_user), \PHPExcel_Cell_DataType::TYPE_STRING);
             if(strlen($rasxod->referal_id)>0){
                 $refmodel = Referals::getByRefnum($rasxod->referal_id);
-                $activeSheet->setCellValueExplicit('L'.$row, $rasxod->referal_id, \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('M'.$row, $refmodel->desc, \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('N'.$row, $refmodel->fio, \PHPExcel_Cell_DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('O'.$row, $refmodel->phone, \PHPExcel_Cell_DataType::TYPE_STRING);
+                if($refmodel){
+                    $activeSheet->setCellValueExplicit('L'.$row, $rasxod->referal_id, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('M'.$row, $refmodel->desc, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('N'.$row, $refmodel->fio, \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $activeSheet->setCellValueExplicit('O'.$row, $refmodel->phone, \PHPExcel_Cell_DataType::TYPE_STRING);    
+                }
             }
             $row++;
         }
