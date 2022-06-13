@@ -6,7 +6,7 @@ $name = Users::getMyname();
 <aside class="main-sidebar sidebar-light-success elevation-4">
     <!-- Brand Logo -->
     <a href="<?=\yii\helpers\Url::home()?>" class="brand-link">
-        <img src="/web/img/logo_barg.png" alt="MTD" class="brand-image img-circle elevation-3"
+        <img src="./img/logo_barg.png" alt="MTD" class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">S/D</span>
     </a>

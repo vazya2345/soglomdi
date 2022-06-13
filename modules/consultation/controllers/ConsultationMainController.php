@@ -138,6 +138,8 @@ class ConsultationMainController extends Controller
 
     public function actionConsultationsave($id)
     {
+        // var_dump(Yii::$app->request->post('ConsultationDoriRecept'));die;
+        // var_dump($_POST);die;
 
 
 
@@ -175,6 +177,7 @@ class ConsultationMainController extends Controller
 
         //DORI RECEPT
         if(Yii::$app->request->post('ConsultationDoriRecept')){
+
             foreach (Yii::$app->request->post('ConsultationDoriRecept') as $key) {
                 if($key['dori_title']!=''){
                     $dmodel = new ConsultationDoriRecept();
@@ -211,7 +214,7 @@ class ConsultationMainController extends Controller
                 $model = new ConsultationMain();
                 $model->reg_id = $id;
                 $model->consultation_type = 'Анализ';
-                $model->value = SAnaliz::getName($value);
+                $model->value = SAnaliz::getName($key);
                 if($model->save()){
                     unset($model);
                 }

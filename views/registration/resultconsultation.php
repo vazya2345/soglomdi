@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use yii\widgets\DetailView;
 use app\models\Client;
 use app\models\SPokazatel;
+use app\models\SGroups;
 use app\models\SAnaliz;
 use app\models\InpTypes;
 use app\models\InpText;
@@ -218,8 +219,51 @@ $client_model = Client::findOne($model->client_id);
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-6">
-                <?= Select2::widget([
+            <div class="col-12">
+                <div class="row">
+<?php
+    $groups = SGroups::find()->where(['active'=>1])->orderBy(['ord'=>SORT_ASC])->all();
+    foreach ($groups as $group) {
+        echo '<div class="col-3">';
+        echo   '<div class="card card-success" id="accordion'.$group->id.'">
+                  <div class="card-header border-0">
+                        <h4 class="card-title w-100">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapse'.$group->id.'" aria-expanded="true">
+                              '.$group->title.'
+                            </a>
+                        </h4>
+                  </div>';
+          
+            echo '<div id="collapse'.$group->id.'" class="collapse show" data-parent="#accordion'.$group->id.'">';
+          
+
+          echo '
+              <div class="card-body">
+                <div>';
+
+        $analizs = SAnaliz::find()->where(['group_id'=>$group->id,'is_active'=>1])->orderBy(['ord'=>SORT_ASC])->all();
+        foreach ($analizs as $analiz) {
+            echo '
+                                                    <div class="custom-control custom-checkbox">
+                                                      <input class="custom-control-input" type="checkbox"  id="customCheckboxanaliz'.$analiz->id.'" alt="'.$analiz->id.'" name=ConsultationAnalizs['.$analiz->id.']>
+                                                      <label for="customCheckboxanaliz'.$analiz->id.'" class="custom-control-label">'.$analiz->title.'</label>
+                                                    </div>
+                                            ';
+        }
+
+        echo '                  </div>
+                                  </div>
+                              </div>
+                            </div>
+                            </div>
+                    
+                ';
+    }
+
+
+
+?>
+                <?php /* Select2::widget([
                     // 'theme' => Select2::THEME_KRAJEE_BS4,
                     'name' => 'ConsultationAnalizs',
                     'data' => SAnaliz::getAll(),
@@ -231,9 +275,12 @@ $client_model = Client::findOne($model->client_id);
                     ],
                     'pluginOptions' => [
                     ],
-                ]);?>
+                ]); */
+
+                ?>
             </div>
-            <div class="col-6">
+        </div>
+            <div class="col-12">
                 <?= Html::textarea('analiz_custom', '', ['id' => 'consultation-analiz-id', 'class' => 'form-control','placeholder' => 'Бошқа анализ турини киритинг...',]) ?>
             </div>
         </div>
@@ -241,6 +288,9 @@ $client_model = Client::findOne($model->client_id);
     </div>
 </div>
 <!--  АНАЛИЗ  -->
+
+
+
 
 <!--  YOTOQ  -->
 <div class="card card-success">
