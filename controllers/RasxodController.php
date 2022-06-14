@@ -183,11 +183,16 @@ class RasxodController extends Controller
                             $ref_model = Referals::getByRefnum($model->referal_id);
                             if($ref_model){
                                 if($ref_model->avans_sum<$model->summa){
+                                    $fq_model->qoldiq += $ref_model->avans_sum;
                                     $ref_model->avans_sum = 0;
+
                                 }
                                 else{
                                     $ref_model->avans_sum = (int)$ref_model->avans_sum - (int)$model->summa;
+                                    $fq_model->qoldiq += $model->summa;
+                                    
                                 }
+                                $fq_model->save(false);
                                 $ref_model->save(false);
                                 // var_dump($ref_model);die;
                             }
