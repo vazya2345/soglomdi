@@ -35,7 +35,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'lavozim',
-            //'other_info',
+            'other_info' => [
+                'attribute'=>'other_info',
+                'filter'=>[1=>'Ха',0=>'Йўқ'],
+                'value' => function ($data) {
+                    $arr = [1=>'Ха',0=>'Йўқ'];
+                    return $arr[$data->other_info];                    
+                }
+            ],
             //'create_date',
 
             ['class' => 'yii\grid\ActionColumn'],

@@ -19,6 +19,8 @@ use app\modules\consultation\models\ConsultationTashhisList;
 use app\modules\consultation\models\ConsultationAnnestezyList;
 use app\modules\consultation\models\ConsultationOperationList;
 
+use app\modules\consultation\models\ConsultationMain;
+use app\modules\consultation\models\ConsultationDoriRecept;
 
 use kartik\select2\Select2;
 // $pokazs = SPokazatel::getPokazs($model->analiz_id);
@@ -79,6 +81,22 @@ $client_model = Client::findOne($model->client_id);
     ]) ?>
     </div>
 </div>
+
+<?php
+if(ConsultationMain::find()->where(['reg_id'=>$model->id])->one()||ConsultationDoriRecept::find()->where(['reg_id'=>$model->id])->one()){
+?>
+<div class="card card-success">
+    <div class="card-body">
+        <?= Html::a('Натижа', ['registration/resultconsultationpdf', 'id'=>$model->id], ['class' => 'btn btn-success']) ?>
+    </div>
+</div>
+
+<?php
+}
+else{
+?>
+
+
 <?= Html::beginForm(['/consultation/consultation-main/consultationsave', 'id' => $model->id], 'post', ['enctype' => 'multipart/form-data']) ?>
 
 
@@ -97,15 +115,34 @@ $client_model = Client::findOne($model->client_id);
             <div class="col-6">
                 <?php
                     $tashhislar = ConsultationTashhisList::find()->all();
+                    $checked_tashhislar = ConsultationMain::getArrayChecked('Ташхис', $model->id);
+
+
+                    
                     foreach ($tashhislar as $key) {
                         echo '<div class="custom-control custom-checkbox">
-                          <input class="custom-control-input" type="checkbox" id="customCheckbox'.$key->id.'" alt="'.$key->title.'" name=consultation-tashhis['.$key->id.']>
+                          <input class="custom-control-input" type="checkbox" id="customCheckbox'.$key->id.'" alt="'.$key->title.'" name=consultation-tashhis['.$key->id.'] ';
+                          if(in_array($key->title, $checked_tashhislar)){
+                            echo 'checked';
+                          }
+                          echo '>
                           <label for="customCheckbox'.$key->id.'" class="custom-control-label">'.$key->title.'</label>
                         </div>';
                     }
                 ?>
             </div>
             <div class="col-6">
+                <?php
+                    if(count($checked_tashhislar)>0){
+                        echo '<b>Танланган ташхислар:</b><br>';
+                        foreach ($checked_tashhislar as $key => $value) {
+                            echo $value.'<br>';
+                        }
+
+                        echo '<br>';
+                    }
+
+                ?>
                 <label>Бошқа ташхис киритиш</label>
                 <?= Html::textarea('tashhis_custom', '', ['id' => 'consultation-yotoq-id', 'class' => 'form-control']) ?>
             </div>
@@ -422,7 +459,9 @@ $client_model = Client::findOne($model->client_id);
     </div>
 </div>
 
-
+<?php
+}
+?>
 <style type="text/css">
     #results div.grid-view div.summary{
         display: none;

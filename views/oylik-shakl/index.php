@@ -6,6 +6,7 @@ use yii\grid\GridView;
 
 use app\models\OylikPeriods;
 use app\models\OylikHodimlar;
+use app\models\OylikUderj;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OylikShaklSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -19,7 +20,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Ойлик шакллантириш', ['shakllantirish'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Аванс шакллантириш', ['avans'], ['class' => 'btn btn-success']) ?>
+        <?php
+            if(OylikUderj::find()->where(['period'=>OylikPeriods::getActivePeriod(), 'title' => '1'])->one()){
+                echo '<button class="btn btn-default disabled">Аванс ушбу давр учун шакллантирилган.</button>';
+            }
+            else{
+                echo Html::a('Аванс шакллантириш', ['avans'], ['class' => 'btn btn-success']);
+            }
+        ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

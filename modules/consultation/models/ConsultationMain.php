@@ -46,4 +46,16 @@ class ConsultationMain extends \yii\db\ActiveRecord
             'value' => 'Қиймати',
         ];
     }
+
+
+    public static function getArrayChecked($type, $reg_id){
+        $result = [];
+        $i=0;
+        $models = self::find()->select('value')->where(['consultation_type'=>$type, 'reg_id'=>$reg_id])->asArray()->all();
+        foreach ($models as $key) {
+            $result[$i] = $key['value'];
+            $i++;
+        }
+        return $result;
+    }
 }

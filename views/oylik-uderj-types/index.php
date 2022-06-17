@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\OylikUderjTypesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ушланмалар турилари';
+$this->title = 'Ойлик ушланмалар турлари';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oylik-uderj-types-index card">
@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'title',
+            'is_rasxod',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

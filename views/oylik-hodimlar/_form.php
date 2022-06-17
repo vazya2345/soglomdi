@@ -20,7 +20,7 @@ use app\models\Filials;
 
     <?= $form->field($model, 'lavozim')->textInput() ?>
 
-    <?= $form->field($model, 'other_info')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'other_info')->dropDownList(['1' => 'Ха', '0' => 'Йўқ']) ?>
 
 
     <div class="form-group">

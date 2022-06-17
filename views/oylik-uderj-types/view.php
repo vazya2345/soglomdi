@@ -7,13 +7,12 @@ use yii\widgets\DetailView;
 /* @var $model app\models\OylikUderjTypes */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Рўйхат', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Руйхат', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="oylik-uderj-types-view card">
     <div class="card-body">
-
     <p>
         <?= Html::a('Ўзгартириш', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Ўчириш', ['delete', 'id' => $model->id], [
@@ -30,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
+            'is_rasxod',
         ],
     ]) ?>
     </div>

@@ -587,6 +587,7 @@ class RegistrationController extends Controller
         $analizs = RegAnalizs::find()->where(['reg_id'=>$id])->all();
         $i = 0;
         $analiz_names = [];
+        $consultation = 0;
         foreach ($analizs as $analiz) {
             Result::checkPokazs($id,$analiz->analiz_id);
             $searchModel[$i] = new ResultSearch();
@@ -594,10 +595,14 @@ class RegistrationController extends Controller
             $dataProvider[$i]->query->andWhere(['main_id'=>$id,'analiz_id'=>$analiz->analiz_id]);
             $analiz_names[$i] = SAnaliz::getName($analiz->analiz_id);
             $dataProvider[$i]->pagination = ['pageSize' => 100];
+
+            if(SAnaliz::getGroup($analiz->analiz_id)==36){
+                $consultation = 1;
+            }
             $i++;
         }
 
-        if(Yii::$app->user->getRole()==10){
+        if(Yii::$app->user->getRole()==10||$consultation==1){
             return $this->render('resultconsultation', [
                 'model' => $model,
                 'searchModel' => $searchModel,
@@ -755,8 +760,8 @@ class RegistrationController extends Controller
                         }
                     }
                 }
-
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['kassatulov', 'id' => $model->id]);
+                // return $this->redirect(['view']);
             }
             else{
                 var_dump($model->errors);die;
@@ -1379,8 +1384,8 @@ echo "<br>";
                         }
                     }
                 }
-
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['kassatulov', 'id' => $model->id]);
+                // return $this->redirect(['view', 'id' => $model->id]);
             }
             else{
                 var_dump($model->errors);die;

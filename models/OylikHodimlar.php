@@ -54,7 +54,7 @@ class OylikHodimlar extends \yii\db\ActiveRecord
             'summa' => 'Оклади',
             'filial_id' => 'Филиал',
             'lavozim' => 'Лавозими',
-            'other_info' => 'Бошка маълумот',
+            'other_info' => 'Аванс оладими?',
             'create_date' => 'Яратилган сана',
         ];
     }

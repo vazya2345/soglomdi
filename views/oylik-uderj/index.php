@@ -5,6 +5,7 @@ use yii\grid\GridView;
 
 use app\models\OylikHodimlar;
 use app\models\OylikUderjTypes;
+use app\models\OylikUderj;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OylikUderjSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -43,7 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'summa',
-            'status',
+            'status' => [
+                'attribute'=>'status',
+                'filter'=>OylikUderj::statusList(),
+                'value' => function ($data) {
+                        return OylikUderj::statusList()[$data->status];                    
+                }
+            ],
             'period',
             //'create_date',
             //'create_userid', 

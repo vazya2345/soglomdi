@@ -17,7 +17,8 @@ class OylikUderjTypesSearch extends OylikUderjTypes
     public function rules()
     {
         return [
-            [['id', 'title'], 'integer'],
+            [['id', 'is_rasxod'], 'integer'],
+            [['title'], 'safe'],
         ];
     }
 
@@ -58,8 +59,10 @@ class OylikUderjTypesSearch extends OylikUderjTypes
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'title' => $this->title,
+            'is_rasxod' => $this->is_rasxod,
         ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title]);
 
         return $dataProvider;
     }

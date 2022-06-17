@@ -182,4 +182,15 @@ class SAnaliz extends \yii\db\ActiveRecord
         }
         return $res;
     }
+
+    public static function getGroup($id)
+    {
+        $model = self::findOne($id);
+        if($model){
+            return $model->group_id;
+        }
+        else{
+            return 0;
+        }
+    }
 }

@@ -26,7 +26,8 @@ class OylikUderjTypes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required'],
+            [['title', 'is_rasxod'], 'required'],
+            [['is_rasxod'], 'integer'],
             [['title'], 'string', 'max' => 500],
         ];
     }
@@ -39,6 +40,7 @@ class OylikUderjTypes extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'title' => 'Номи',
+            'is_rasxod' => 'Чиқим шаклланиши',
         ];
     }
 

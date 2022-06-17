@@ -13,6 +13,8 @@ use app\models\Rasxod;
 
 use app\models\OylikHodimlar;
 use app\models\OylikPeriods;
+use app\models\OylikUderjTypes;
+
 
 /**
  * OylikUderjController implements the CRUD actions for OylikUderj model.
@@ -43,6 +45,9 @@ class OylikUderjController extends Controller
         $searchModel = new OylikUderjSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $dataProvider->query
+            ->orderBy(['id'=>SORT_DESC]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -72,27 +77,31 @@ class OylikUderjController extends Controller
         $model = new OylikUderj();
 
         if ($model->load(Yii::$app->request->post())) {
-            // var_dump(Yii::$app->user->id);die;
+            // var_dump($model);die;
             $model->create_date = date("Y-m-d H:i:s");
             $model->create_userid = Yii::$app->user->id;
             $model->status = 1;
             
             if($model->save()){
+                $oylik_uderjtype_model = OylikUderjTypes::findOne($model->title);
+                if($oylik_uderjtype_model){
+                    if($oylik_uderjtype_model->is_rasxod==1){
+                        $rasxod_model = new Rasxod();
+                        $rasxod_model->filial_id = 1;
+                        $rasxod_model->user_id = Yii::$app->user->id;
+                        $rasxod_model->summa = $model->summa;
+                        $rasxod_model->sum_type = 1;
+                        $rasxod_model->rasxod_type = 5;
+                        $rasxod_model->rasxod_desc = OylikHodimlar::getName($model->oylik_hodimlar_id).'ga oylik hisobidan avtomatik yaratilgan to‘lov '.OylikUderjTypes::getName($model->title); /////
+                        $rasxod_model->rasxod_period = OylikPeriods::getActivePeriod();
+                        $rasxod_model->status = 1;
+                        $rasxod_model->create_date = date("Y-m-d H:i:s");
+                        $rasxod_model->mod_date = date("Y-m-d H:i:s");
 
-                $rasxod_model = new Rasxod();
-                $rasxod_model->filial_id = 1;
-                $rasxod_model->user_id = Yii::$app->user->id;
-                $rasxod_model->summa = $model->summa;
-                $rasxod_model->sum_type = 1;
-                $rasxod_model->rasxod_type = 5;
-                $rasxod_model->rasxod_desc = OylikHodimlar::getName($model->oylik_hodimlar_id).'ga oylik hisobidan avtomatik yaratilgan to‘lov'; /////
-                $rasxod_model->rasxod_period = OylikPeriods::getActivePeriod();
-                $rasxod_model->status = 1;
-                $rasxod_model->create_date = date("Y-m-d H:i:s");
-                $rasxod_model->mod_date = date("Y-m-d H:i:s");
-
-                $rasxod_model->oylik_uderj_id = $model->id;
-                $rasxod_model->save(false);
+                        $rasxod_model->oylik_uderj_id = $model->id;
+                        $rasxod_model->save(false);       
+                    }
+                }
                 
                 return $this->redirect(['view', 'id' => $model->id]);    
             }

@@ -34,12 +34,12 @@ class OylikUderj extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            // [['oylik_hodimlar_id', 'title', 'summa', 'period'], 'required'],
+            [['oylik_hodimlar_id', 'title', 'summa', 'period'], 'required'],
             [['oylik_hodimlar_id', 'summa', 'create_userid', 'status'], 'integer'],
             [['create_date'], 'safe'],
             [['title'], 'string', 'max' => 500],
-            // [['oylik_hodimlar_id'], 'exist', 'skipOnError' => true, 'targetClass' => OylikHodimlar::className(), 'targetAttribute' => ['oylik_hodimlar_id' => 'id']],
-            // [['create_userid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['create_userid' => 'id']],
+            [['oylik_hodimlar_id'], 'exist', 'skipOnError' => true, 'targetClass' => OylikHodimlar::className(), 'targetAttribute' => ['oylik_hodimlar_id' => 'id']],
+            [['create_userid'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['create_userid' => 'id']],
         ];
     }
 
@@ -68,6 +68,14 @@ class OylikUderj extends \yii\db\ActiveRecord
     public function getOylikHodimlar()
     {
         return $this->hasOne(OylikHodimlar::className(), ['id' => 'oylik_hodimlar_id']);
+    }
+
+    public static function statusList(){
+        return [
+            1=>'Яратилди',
+            2=>'Қабул қилинди',
+            3=>'Рад этилди',
+        ];
     }
 
 

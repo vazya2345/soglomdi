@@ -15,6 +15,8 @@ use app\models\OylikPeriods;
 use app\models\OylikUderj;
 use app\models\OylikUderjTypes;
 use app\models\Filials;
+use app\models\Rasxod;
+
 /**
  * OylikShaklController implements the CRUD actions for OylikShakl model.
  */
@@ -207,55 +209,61 @@ class OylikShaklController extends Controller
 
     public function actionAvans()
     {
-        \Yii::$app
-        ->db
-        ->createCommand()
-        ->delete('oylik_shakl', ['period' => OylikPeriods::getActivePeriod(), 'title'=>'Аванс'])
-        ->execute();
-
-        \Yii::$app
-        ->db
-        ->createCommand()
-        ->delete('oylik_uderj', ['period' => OylikPeriods::getActivePeriod(), 'title'=>1])
-        ->execute();
-
-        $hodimlar = OylikHodimlar::find()->all();
-        foreach ($hodimlar as $hodim) {
-            /// OKLAD
-            $shmodel1 = new OylikShakl();
-            $shmodel1->period = OylikPeriods::getActivePeriod();
-            $shmodel1->oylik_hodimlar_id = $hodim->id;
-            $shmodel1->fio = $hodim->fio;
-            $shmodel1->fil_name = Filials::getName($hodim->filial_id);
-            $shmodel1->lavozim = $hodim->lavozim;
-            $shmodel1->title = 'Аванс';
-            $shmodel1->summa = round($hodim->summa*0.4);
-            $shmodel1->shakl_id = 2;
-
-
-
-
-            $umodel = new OylikUderj();
-            $umodel->oylik_hodimlar_id = $hodim->id;
-            $umodel->title = '1';
-            $umodel->summa = $shmodel1->summa;
-            $umodel->period = $shmodel1->period;
-            $umodel->create_date = date("Y-m-d H:i:s");
-            $umodel->create_userid = Yii::$app->user->id;
-
-
-
-
-            if($shmodel1->save()&&$umodel->save()){
-                $a=1;
-            }
-            else{
-                var_dump($umodel->errors);
-                var_dump($shmodel1->errors);die;
-            }
-
-
+        $period = OylikPeriods::getActivePeriod();
+        $model = OylikUderj::find()->where(['period'=>$period, 'title' => '1'])->one();
+        if($model){
+            return $this->redirect(['index']);
         }
-        return $this->redirect(['index']);
+        else{
+            $hodimlar = OylikHodimlar::find()->where(['other_info'=>'1'])->all();
+            foreach ($hodimlar as $hodim) {
+                /// OKLAD
+                // $shmodel1 = new OylikShakl();
+                // $shmodel1->period = $period;
+                // $shmodel1->oylik_hodimlar_id = $hodim->id;
+                // $shmodel1->fio = $hodim->fio;
+                // $shmodel1->fil_name = Filials::getName($hodim->filial_id);
+                // $shmodel1->lavozim = $hodim->lavozim;
+                // $shmodel1->title = OylikUderjTypes::getName(1);
+                // $shmodel1->summa = round($hodim->summa*0.4);
+                // $shmodel1->shakl_id = 2; &&$shmodel1->save()
+
+
+
+
+                $umodel = new OylikUderj();
+                $umodel->oylik_hodimlar_id = $hodim->id;
+                $umodel->title = '1';
+                $umodel->summa = round($hodim->summa*0.4);
+                $umodel->status = 1;
+                $umodel->period = $period;
+                $umodel->create_date = date("Y-m-d H:i:s");
+                $umodel->create_userid = Yii::$app->user->id;
+                if($umodel->save()){
+                        $rasxod_model = new Rasxod();
+                        $rasxod_model->filial_id = 1;
+                        $rasxod_model->user_id = Yii::$app->user->id;
+                        $rasxod_model->summa = $model->summa;
+                        $rasxod_model->sum_type = 1;
+                        $rasxod_model->rasxod_type = 5;
+                        $rasxod_model->rasxod_desc = OylikHodimlar::getName($model->oylik_hodimlar_id).'ga oylik hisobidan avtomatik yaratilgan to‘lov '.OylikUderjTypes::getName($model->title); /////
+                        $rasxod_model->rasxod_period = OylikPeriods::getActivePeriod();
+                        $rasxod_model->status = 1;
+                        $rasxod_model->create_date = date("Y-m-d H:i:s");
+                        $rasxod_model->mod_date = date("Y-m-d H:i:s");
+
+                        $rasxod_model->oylik_uderj_id = $model->id;
+                        $rasxod_model->save(false);       
+                }
+                else{
+                    var_dump($umodel->errors);
+                    var_dump($shmodel1->errors);die;
+                }
+
+
+            }
+            return $this->redirect(['index']);
+        }
+        
     }
 }
