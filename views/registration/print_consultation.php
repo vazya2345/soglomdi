@@ -146,12 +146,12 @@ echo $qr;
         }
         echo "<tr>";
         echo "<td>".$recept->dori_title."</td>";
-        echo "<td>".$recept->dori_doza."</td>";
-        echo "<td>".$recept->dori_shakli."</td>";
-        echo "<td>".$recept->dori_qabul."</td>";
-        echo "<td>".$recept->dori_mahali." махал</td>";
-        echo "<td>".$recept->dori_davomiyligi." кун</td>";
-        echo "<td>".$recept->dori_qayvaqtda."</td>";
+        echo "<td align='center'>".$recept->dori_doza."</td>";
+        echo "<td align='center'>".$recept->dori_shakli."</td>";
+        echo "<td align='center'>".$recept->dori_qabul."</td>";
+        echo "<td align='center'>".$recept->dori_mahali." махал</td>";
+        echo "<td align='center'>".$recept->dori_davomiyligi." кун</td>";
+        echo "<td align='center'>".$recept->dori_qayvaqtda."</td>";
         echo "</tr>";
         $i++;
     }

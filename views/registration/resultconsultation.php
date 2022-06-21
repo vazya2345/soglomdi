@@ -209,10 +209,10 @@ else{
                 <?= Html::input('text', 'ConsultationDoriRecept['.$i.'][dori_doza]', '', ['id' => 'dori_doza_input_'.$i, 'class' => 'form-control']) ?>
             </div>
             <div class="col-1">
-                <?= Html::input('text', 'ConsultationDoriRecept['.$i.'][dori_shakli]', '', ['id' => 'dori_shakli_input_'.$i, 'class' => 'form-control', 'readonly'=>true]) ?>
+                <?= Html::input('text', 'ConsultationDoriRecept['.$i.'][dori_shakli]', '', ['id' => 'dori_shakli_input_'.$i, 'class' => 'form-control']) ?>
             </div>
             <div class="col-2">
-                <?= Html::input('text', 'ConsultationDoriRecept['.$i.'][dori_qabul]', '', ['id' => 'dori_qabul_input_'.$i, 'class' => 'form-control', 'readonly'=>true]) ?>
+                <?= Html::input('text', 'ConsultationDoriRecept['.$i.'][dori_qabul]', '', ['id' => 'dori_qabul_input_'.$i, 'class' => 'form-control']) ?>
             </div>
             <div class="col-1">
                 <?= Html::input('number', 'ConsultationDoriRecept['.$i.'][dori_mahali]', '', ['id' => 'dori_mahali_input_'.$i, 'class' => 'form-control']) ?>
