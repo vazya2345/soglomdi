@@ -43,7 +43,7 @@ class OylikPeriods extends \yii\db\ActiveRecord
 
     public static function getAll()
     {
-        $array = self::find()->all();
+        $array = self::find()->orderBy(['period'=>SORT_DESC])->all();
         $result = ArrayHelper::map($array, 'period', 'period');
         return $result;
     }

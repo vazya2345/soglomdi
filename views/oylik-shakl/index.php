@@ -7,6 +7,8 @@ use yii\grid\GridView;
 use app\models\OylikPeriods;
 use app\models\OylikHodimlar;
 use app\models\OylikUderj;
+use app\models\OylikUderjTypes;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OylikShaklSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -19,7 +21,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <p>
-        <?= Html::a('Ойлик шакллантириш', ['shakllantirish'], ['class' => 'btn btn-success']) ?>
+        <?php
+            if(OylikUderj::find()->where(['period'=>OylikPeriods::getActivePeriod(), 'title' => '4'])->one()){
+                echo '<button class="btn btn-default disabled">Ойлик ушбу давр учун шакллантирилган.</button>';
+            }
+            else{
+                echo Html::a('Ойлик шакллантириш', ['shakllantirish'], ['class' => 'btn btn-success']);
+            }
+        ?>
+
         <?php
             if(OylikUderj::find()->where(['period'=>OylikPeriods::getActivePeriod(), 'title' => '1'])->one()){
                 echo '<button class="btn btn-default disabled">Аванс ушбу давр учун шакллантирилган.</button>';
@@ -33,6 +43,49 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            // 'id',
+
+            'period' => [
+                'attribute'=>'period',
+                'filter'=>OylikPeriods::getAll(),
+            ],
+
+            'oylik_hodimlar_id' => [
+                'attribute'=>'oylik_hodimlar_id',
+                'filter'=>OylikHodimlar::getAll(),
+                'value' => function ($data) {
+                        return OylikHodimlar::getName($data->oylik_hodimlar_id);                    
+                }
+            ],
+            'title' => [
+                'attribute'=>'title',
+                'filter'=>OylikUderjTypes::getAll(),
+                'value' => function ($data) {
+                        return OylikUderjTypes::getName($data->title);                    
+                }
+            ],
+            'summa',
+            'status' => [
+                'attribute'=>'status',
+                'filter'=>OylikUderj::statusList(),
+                'value' => function ($data) {
+                        return OylikUderj::statusList()[$data->status];                    
+                }
+            ],
+            
+            //'create_date',
+            //'create_userid', 
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+    <?php /* GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -66,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             // ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]); */ ?>
 
     </div>
 </div>

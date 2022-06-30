@@ -250,6 +250,12 @@ class RasxodController extends Controller
         $model->status = 3;
         $model->mod_date = date("Y-m-d H:i:s");
 
+        $uderj_model = OylikUderj::findOne($model->oylik_uderj_id);
+        if($uderj_model){
+            $uderj_model->status = 3;
+            $uderj_model->save(false);
+        }
+
         if($model->save()){
             return $this->redirect(['index']);
         }

@@ -1052,6 +1052,7 @@ class RegistrationController extends Controller
                 }
             }
             $model->sum_amount = $sum;
+            $model->sum_debt = $sum;
             $model->change_time = date('Y-m-d H:i:s');
             if($model->save()){
                 return $this->redirect('indexkassa');

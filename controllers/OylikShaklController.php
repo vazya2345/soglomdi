@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use app\models\OylikHodimlar;
 use app\models\OylikPeriods;
 use app\models\OylikUderj;
+use app\models\OylikUderjSearch;
 use app\models\OylikUderjTypes;
 use app\models\Filials;
 use app\models\Rasxod;
@@ -43,16 +44,35 @@ class OylikShaklController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new OylikShaklSearch();
+        $searchModel = new OylikUderjSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->setSort([
-            'defaultOrder' => ['period' => SORT_DESC, 'shakl_id'=>SORT_ASC],
+        $dataProvider->query->where([
+            'status' => 2
         ]);
+        $dataProvider->setSort([
+            'defaultOrder' => ['period' => SORT_DESC, 'id'=>SORT_DESC],
+        ]);
+        // $dataProvider->query
+        //     ->orderBy(['id'=>SORT_DESC]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+
+
+
+        // $searchModel = new OylikShaklSearch();
+        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        // $dataProvider->setSort([
+        //     'defaultOrder' => ['period' => SORT_DESC, 'shakl_id'=>SORT_ASC],
+        // ]);
+
+        // return $this->render('index', [
+        //     'searchModel' => $searchModel,
+        //     'dataProvider' => $dataProvider,
+        // ]);
+
     }
 
     /**
@@ -139,66 +159,50 @@ class OylikShaklController extends Controller
 
     public function actionShakllantirish()
     {
-        \Yii::$app
-        ->db
-        ->createCommand()
-        ->delete('oylik_shakl', ['period' => OylikPeriods::getActivePeriod()])
-        ->execute();
+        $i=0;
+        $period = OylikPeriods::getActivePeriod();
+        $model = OylikUderj::find()->where(['period'=>$period, 'title' => '4'])->one();
+        if($model){
+            return $this->redirect(['index']);
+        }
 
         $hodimlar = OylikHodimlar::find()->all();
         foreach ($hodimlar as $hodim) {
-            /// OKLAD
-            $shmodel1 = new OylikShakl();
-            $shmodel1->period = OylikPeriods::getActivePeriod();
-            $shmodel1->oylik_hodimlar_id = $hodim->id;
-            $shmodel1->fio = $hodim->fio;
-            $shmodel1->fil_name = Filials::getName($hodim->filial_id);
-            $shmodel1->lavozim = $hodim->lavozim;
-            $shmodel1->title = 'Оклад';
-            $shmodel1->summa = $hodim->summa;
-            $shmodel1->shakl_id = 1;
-
-            if($shmodel1->save()){
                 $uderjsum = 0;
-                $uderjs = OylikUderj::find()->where(['oylik_hodimlar_id'=>$hodim->id, 'period'=>$shmodel1->period])->all();
+                $uderjs = OylikUderj::find()->where(['oylik_hodimlar_id'=>$hodim->id, 'period'=>$period])->all();
                 foreach ($uderjs as $uderj) {
-                    $shmodel2 = new OylikShakl();
-                    $shmodel2->period = $shmodel1->period;
-                    $shmodel2->oylik_hodimlar_id = $uderj->oylik_hodimlar_id;
-                    $shmodel2->fio = $hodim->fio;
-                    $shmodel2->fil_name = $shmodel1->fil_name;
-                    $shmodel2->lavozim = $hodim->lavozim;
-                    $shmodel2->title = OylikUderjTypes::getName($uderj->title);
-                    $shmodel2->summa = $uderj->summa;
-                    $uderjsum += $uderj->summa;
-                    $shmodel2->shakl_id = 2;
-                    $shmodel2->save(false);
+                    if($uderj->status==1){
+                        $uderj->status = 3;
+                        if($uderj->save()){
+                            $rasxod_model = Rasxod::find()->where(['oylik_uderj_id'=>$uderj->id, 'status' => 1])->one();
+                            if($rasxod_model){
+                                $rasxod_model->status = 3;
+                                if($rasxod_model->save()){
+                                    continue;
+                                }
+                            }
+                        }
+
+                        if($uderj->title==2){
+                            $uderjsum+=$uderj->summa;
+                        }
+                    }
+                    elseif($uderj->status==2){
+                        $uderjsum+=$uderj->summa;
+                    }
+                    else{
+                        $i++;
+                    }
+
                 }
 
-                /// QOLDIQ
-                $shmodel3 = new OylikShakl();
-                $shmodel3->period = $shmodel1->period;
-                $shmodel3->oylik_hodimlar_id = $hodim->id;
-                $shmodel3->fio = $hodim->fio;
-                $shmodel3->fil_name = $shmodel1->fil_name;
-                $shmodel3->lavozim = $hodim->lavozim;
-                $shmodel3->title = 'Қолдиқ';
-                $shmodel3->summa = $hodim->summa-$uderjsum;
-                $shmodel3->shakl_id = 3;
 
-                if($shmodel3->save()){
-                    $a = 1;
+
+
+
+                if($this->uderjYozish($period, $hodim, '4', round($hodim->summa-$uderjsum))){
+                    $i++;
                 }
-                else{
-                    var_dump($shmodel3->shakl_id."da xato!");die;
-                }
-
-            }
-            else{
-                var_dump($shmodel1->errors);die;
-            }
-
-
         }
 
 
@@ -209,6 +213,7 @@ class OylikShaklController extends Controller
 
     public function actionAvans()
     {
+        $i=0;
         $period = OylikPeriods::getActivePeriod();
         $model = OylikUderj::find()->where(['period'=>$period, 'title' => '1'])->one();
         if($model){
@@ -217,53 +222,54 @@ class OylikShaklController extends Controller
         else{
             $hodimlar = OylikHodimlar::find()->where(['other_info'=>'1'])->all();
             foreach ($hodimlar as $hodim) {
-                /// OKLAD
-                // $shmodel1 = new OylikShakl();
-                // $shmodel1->period = $period;
-                // $shmodel1->oylik_hodimlar_id = $hodim->id;
-                // $shmodel1->fio = $hodim->fio;
-                // $shmodel1->fil_name = Filials::getName($hodim->filial_id);
-                // $shmodel1->lavozim = $hodim->lavozim;
-                // $shmodel1->title = OylikUderjTypes::getName(1);
-                // $shmodel1->summa = round($hodim->summa*0.4);
-                // $shmodel1->shakl_id = 2; &&$shmodel1->save()
-
-
-
-
-                $umodel = new OylikUderj();
-                $umodel->oylik_hodimlar_id = $hodim->id;
-                $umodel->title = '1';
-                $umodel->summa = round($hodim->summa*0.4);
-                $umodel->status = 1;
-                $umodel->period = $period;
-                $umodel->create_date = date("Y-m-d H:i:s");
-                $umodel->create_userid = Yii::$app->user->id;
-                if($umodel->save()){
-                        $rasxod_model = new Rasxod();
-                        $rasxod_model->filial_id = 1;
-                        $rasxod_model->user_id = Yii::$app->user->id;
-                        $rasxod_model->summa = $model->summa;
-                        $rasxod_model->sum_type = 1;
-                        $rasxod_model->rasxod_type = 5;
-                        $rasxod_model->rasxod_desc = OylikHodimlar::getName($model->oylik_hodimlar_id).'ga oylik hisobidan avtomatik yaratilgan to‘lov '.OylikUderjTypes::getName($model->title); /////
-                        $rasxod_model->rasxod_period = OylikPeriods::getActivePeriod();
-                        $rasxod_model->status = 1;
-                        $rasxod_model->create_date = date("Y-m-d H:i:s");
-                        $rasxod_model->mod_date = date("Y-m-d H:i:s");
-
-                        $rasxod_model->oylik_uderj_id = $model->id;
-                        $rasxod_model->save(false);       
+                if($this->uderjYozish($period, $hodim, '1', round($hodim->summa*0.4))){
+                    $i++;
                 }
-                else{
-                    var_dump($umodel->errors);
-                    var_dump($shmodel1->errors);die;
-                }
-
-
             }
             return $this->redirect(['index']);
         }
         
     }
+
+
+    protected function uderjYozish($period, $hodim, $type, $summa)
+    {
+        $umodel = new OylikUderj();
+        $umodel->oylik_hodimlar_id = $hodim->id;
+        $umodel->title = $type;
+        $umodel->summa = $summa;
+        $umodel->status = 1;
+        $umodel->period = $period;
+        $umodel->create_date = date("Y-m-d H:i:s");
+        $umodel->create_userid = Yii::$app->user->id;
+        if($umodel->save()){
+                $rasxod_model = new Rasxod();
+                $rasxod_model->filial_id = 1;
+                $rasxod_model->user_id = Yii::$app->user->id;
+                $rasxod_model->summa = $umodel->summa;
+                $rasxod_model->sum_type = 1;
+                $rasxod_model->rasxod_type = 5;
+                $rasxod_model->rasxod_desc = OylikHodimlar::getName($umodel->oylik_hodimlar_id).'ga oylik hisobidan avtomatik yaratilgan to‘lov '.OylikUderjTypes::getName($umodel->title); /////
+                $rasxod_model->rasxod_period = OylikPeriods::getActivePeriod();
+                $rasxod_model->status = 1;
+                $rasxod_model->create_date = date("Y-m-d H:i:s");
+                $rasxod_model->mod_date = date("Y-m-d H:i:s");
+
+                $rasxod_model->oylik_uderj_id = $umodel->id;
+                
+                if($rasxod_model->save()){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+        }
+        else{
+            return false;
+        }    
+    }
+
+
+
+
 }

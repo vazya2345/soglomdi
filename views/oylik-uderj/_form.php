@@ -37,7 +37,7 @@ use app\models\OylikUderjTypes;
 
 
 
-    <?= $form->field($model, 'title')->dropDownList(OylikUderjTypes::getAll()) ?>
+    <?= $form->field($model, 'title')->dropDownList(OylikUderjTypes::getAllForFrom()) ?>
 
     <?= $form->field($model, 'summa')->textInput() ?>
 

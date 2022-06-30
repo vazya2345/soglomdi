@@ -51,11 +51,26 @@ class OylikUderjTypes extends \yii\db\ActiveRecord
         return $result;
     }
 
+    public static function getAllForFrom()
+    {
+        $array = self::find()->where(['not in', 'id', [1,4]])->all();
+        $result = ArrayHelper::map($array, 'id', 'title');
+        return $result;
+    }
+
     public static function getName($id)
     {
         $model = self::findOne($id);
         if($model){
             return $model->title;
+        }
+    }
+
+    public static function getIsRasxod($id)
+    {
+        $model = self::findOne($id);
+        if($model){
+            return $model->is_rasxod;
         }
     }
 }
