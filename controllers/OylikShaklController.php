@@ -183,7 +183,7 @@ class OylikShaklController extends Controller
                             }
                         }
 
-                        if($uderj->title==2){
+                        if(!OylikUderjTypes::getIsRasxod($uderj->title)){
                             $uderjsum+=$uderj->summa;
                         }
                     }
