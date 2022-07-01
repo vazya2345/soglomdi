@@ -17,7 +17,7 @@ use app\models\OylikUderjSearch;
 use app\models\OylikUderjTypes;
 use app\models\Filials;
 use app\models\Rasxod;
-
+use app\models\Users;
 /**
  * OylikShaklController implements the CRUD actions for OylikShakl model.
  */
@@ -245,7 +245,7 @@ class OylikShaklController extends Controller
         if($umodel->save()){
                 $rasxod_model = new Rasxod();
                 $rasxod_model->filial_id = 1;
-                $rasxod_model->user_id = Yii::$app->user->id;
+                $rasxod_model->user_id = Users::getZavkassa();
                 $rasxod_model->summa = $umodel->summa;
                 $rasxod_model->sum_type = 1;
                 $rasxod_model->rasxod_type = 5;

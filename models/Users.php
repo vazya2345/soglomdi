@@ -293,5 +293,27 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         else
             return 'Топилмади';
     }
+
+    public static function getZavkassa()
+    {
+        $emps = self::find()->where(['role_id'=>6])->one();// filial boyicha filtr
+        if($emps){
+            return $emps->id;
+        }
+        else{
+            return 1;
+        }
+    }
+
+    public static function getAllWithFil()
+    {
+        $array = [];
+        $models = self::find()->orderBy(['add1'=>SORT_ASC])->all();
+        foreach ($models as $model) {
+            $array[$model->id] = $model->name.' - '.Filials::getName($model->add1);
+        }
+
+        return $array;
+    }
 }
 

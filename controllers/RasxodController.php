@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 
 use app\models\OylikUderj;
 use app\models\OylikPeriods;
-
+use app\models\Users;
 /**
  * RasxodController implements the CRUD actions for Rasxod model.
  */
@@ -128,8 +128,12 @@ class RasxodController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->filial_id = Users::getFilial($model->user_id);
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);    
+            }
+            
         }
 
         return $this->render('update', [
