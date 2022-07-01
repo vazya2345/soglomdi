@@ -34,7 +34,7 @@ class OylikUderj extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['oylik_hodimlar_id', 'title', 'summa', 'period'], 'required'],
+            [['title', 'summa', 'period'], 'required'],
             [['oylik_hodimlar_id', 'summa', 'create_userid', 'status'], 'integer'],
             [['create_date'], 'safe'],
             [['title'], 'string', 'max' => 500],
