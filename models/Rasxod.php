@@ -37,7 +37,7 @@ class Rasxod extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['filial_id', 'user_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user', 'referal_id'], 'integer'],
+            [['filial_id', 'user_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user', 'referal_id', 'qabul_hodim_id'], 'integer'],
             [['summa'], 'required'],
             [['rasxod_desc'], 'string'],
             [['rasxod_period'], 'safe'],
@@ -65,6 +65,7 @@ class Rasxod extends \yii\db\ActiveRecord
             'referal_id' => 'Реферал',
             'create_date' => 'Яратилган сана',
             'mod_date' => 'Ўзгарган сана',
+            'qabul_hodim_id' => 'Қабул қилган ходим',
         ];
     }
 

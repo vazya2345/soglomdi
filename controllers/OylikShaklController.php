@@ -18,6 +18,9 @@ use app\models\OylikUderjTypes;
 use app\models\Filials;
 use app\models\Rasxod;
 use app\models\Users;
+use app\models\FilialQoldiq;
+
+
 /**
  * OylikShaklController implements the CRUD actions for OylikShakl model.
  */
@@ -44,6 +47,8 @@ class OylikShaklController extends Controller
      */
     public function actionIndex()
     {
+
+
         $searchModel = new OylikUderjSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->where([
@@ -244,8 +249,8 @@ class OylikShaklController extends Controller
         $umodel->create_userid = Yii::$app->user->id;
         if($umodel->save()){
                 $rasxod_model = new Rasxod();
-                $rasxod_model->filial_id = 1;
-                $rasxod_model->user_id = Users::getZavkassa();
+                $rasxod_model->filial_id = $hodim->filial_id;
+                $rasxod_model->user_id = FilialQoldiq::getFilQozonUser($hodim->filial_id);
                 $rasxod_model->summa = $umodel->summa;
                 $rasxod_model->sum_type = 1;
                 $rasxod_model->rasxod_type = 5;

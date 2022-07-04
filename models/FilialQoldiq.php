@@ -9,6 +9,7 @@ use app\models\MoneySend;
 use app\models\Rasxod;
 use app\models\Payments;
 use app\models\FqSends;
+use app\models\Users;
 
 /**
  * This is the model class for table "filial_qoldiq".
@@ -231,5 +232,23 @@ class FilialQoldiq extends \yii\db\ActiveRecord
         }
 
         
+    }
+
+
+    public static function getFilQozonUser($fil)
+    {
+
+        if($fil!=1){
+            $fqs = self::find()->where(['filial_id'=>$fil])->orderBy(['qoldiq'=>SORT_DESC])->one();
+            if($fqs){
+                return $fqs->kassir_id;
+            }
+            else{
+                return Users::getZavkassa();
+            }
+        }
+        else{
+            return Users::getZavkassa();
+        }
     }
 }

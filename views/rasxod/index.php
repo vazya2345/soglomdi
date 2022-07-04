@@ -108,6 +108,14 @@ for ($i=1; $i <= 12; $i++) {
                 }
             ],
 
+            'qabul_hodim_id'=>[
+                'attribute'=>'qabul_hodim_id',
+                'filter'=> Users::getAll(),
+                'value' => function ($data) {
+                        return Users::getName($data->qabul_hodim_id);                    
+                }
+            ],
+
             'referal_id'=>[
                 'attribute'=>'referal_id',
                 'filter'=> Referals::getAll(),

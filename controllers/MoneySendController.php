@@ -35,7 +35,7 @@ class MoneySendController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {
+    { 
         $searchModel = new MoneySendSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
@@ -44,6 +44,10 @@ class MoneySendController extends Controller
             ->andWhere(['send_user'=>Yii::$app->user->id])
             ->orWhere(['rec_user'=>Yii::$app->user->id])
             ->orderBy(['id'=>SORT_DESC]);    
+        }
+        else{
+            $dataProvider->query
+            ->orderBy(['id'=>SORT_DESC]);   
         }
         
         return $this->render('index', [

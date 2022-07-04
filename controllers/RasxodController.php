@@ -180,6 +180,7 @@ class RasxodController extends Controller
                 if($model->status==1){
                     $fq_model->qoldiq -= $model->summa;
                     $model->status = 2;
+                    $model->qabul_hodim_id = Yii::$app->user->id;
                     $model->mod_date = date("Y-m-d H:i:s");
                     if($fq_model->save()&&$model->save()){
                         if($model->rasxod_type==1){

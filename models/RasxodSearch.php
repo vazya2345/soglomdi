@@ -17,7 +17,7 @@ class RasxodSearch extends Rasxod
     public function rules()
     {
         return [
-            [['id', 'filial_id', 'user_id', 'referal_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user'], 'integer'],
+            [['id', 'filial_id', 'user_id', 'referal_id', 'summa', 'sum_type', 'rasxod_type', 'status', 'send_user', 'qabul_hodim_id'], 'integer'],
             [['rasxod_desc', 'rasxod_period', 'create_date', 'mod_date'], 'safe'],
         ];
     }
@@ -68,6 +68,7 @@ class RasxodSearch extends Rasxod
             'rasxod_period' => $this->rasxod_period,
             'status' => $this->status,
             'send_user' => $this->send_user,
+            'qabul_hodim_id' => $this->qabul_hodim_id,
         ]);
 
         $query->andFilterWhere(['like', 'rasxod_desc', $this->rasxod_desc]);
