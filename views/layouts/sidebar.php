@@ -146,13 +146,13 @@ $name = Users::getMyname();
                         'label' => 'Ойлик хисоблаш',
                         'url' => '#',
                         'icon' => 'dot-circle',
-                        'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1),
+                        'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9),
                         'items' => [
-                            ['label' => 'Ходимлар', 'url' => ['/oylik-hodimlar/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                            ['label' => 'Ушланмалар', 'url' => ['/oylik-uderj/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                            ['label' => 'Шаклланиши', 'url' => ['/oylik-shakl/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                            ['label' => 'Давр', 'url' => ['/oylik-periods/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
-                            ['label' => 'Ушланма турлари', 'url' => ['/oylik-uderj-types/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1)],
+                            ['label' => 'Ходимлар', 'url' => ['/oylik-hodimlar/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9)],
+                            ['label' => 'Ушланмалар', 'url' => ['/oylik-uderj/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9)],
+                            ['label' => 'Шаклланиши', 'url' => ['/oylik-shakl/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9)],
+                            ['label' => 'Давр', 'url' => ['/oylik-periods/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9)],
+                            ['label' => 'Ушланма турлари', 'url' => ['/oylik-uderj-types/index'], 'icon' => 'circle', 'visible' => !Yii::$app->user->isGuest&&(Yii::$app->user->getRole()==1||Yii::$app->user->getRole()==9)],
                         ]
                     ],
 

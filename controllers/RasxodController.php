@@ -253,6 +253,7 @@ class RasxodController extends Controller
         $model = $this->findModel($id);
         
         $model->status = 3;
+        $model->qabul_hodim_id = Yii::$app->user->id;
         $model->mod_date = date("Y-m-d H:i:s");
 
         $uderj_model = OylikUderj::findOne($model->oylik_uderj_id);
