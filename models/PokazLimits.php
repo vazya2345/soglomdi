@@ -175,10 +175,10 @@ class PokazLimits extends \yii\db\ActiveRecord
         }
         else{
             if($indikator_id==$checked){
-                $result.="<label><input type='radio' name=pokaz[".$myid."][".$pokaz_id."] value='".$indikator_id."' checked /> ".$indikator.' - '.PokazLimits::getUztextindikatorvalue($indikator_value)."</label><br>";
+                $result.="<label><input type='radio' name=pokaz[".$myid."][".$pokaz_id."] value='".$indikator_id."' checked  /> ".$indikator.' - '.PokazLimits::getUztextindikatorvalue($indikator_value)."</label><br>";
             }
             else{
-                $result.="<label><input type='radio' name=pokaz[".$myid."][".$pokaz_id."] value='".$indikator_id."' /> ".$indikator.' - '.PokazLimits::getUztextindikatorvalue($indikator_value)."</label><br>";
+                $result.="<label><input type='radio' name=pokaz[".$myid."][".$pokaz_id."] value='".$indikator_id."' checked /> ".$indikator.' - '.PokazLimits::getUztextindikatorvalue($indikator_value)."</label><br>";
             }
         }
         // $result = str_replace('{jinsi}', $jinsi, $result);

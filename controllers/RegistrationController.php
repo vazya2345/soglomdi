@@ -28,6 +28,7 @@ use app\models\Filials;
 use app\models\FilialQoldiq;
 use app\models\ConsultationDoctorRel;
 
+use app\models\SystemErrors;
 
 /**
  * RegistrationController implements the CRUD actions for Registration model.
@@ -748,7 +749,14 @@ class RegistrationController extends Controller
                             Reagent::minusCountForAnaliz($analiz_id,$model->id);
                         }
                         else{
-                            var_dump($r_model->errors);
+                            
+                            $systemerror = new SystemErrors();
+                            $systemerror->err_action = 'registration/new?reganalizinsert';
+                            $systemerror->err_action = $r_model->errors;
+                            $systemerror->create_date = date('Y-m-d H:i:s');
+                            $systemerror->save(false);
+                            $r_model->save(false);
+                            
                         }
                     }
                 }

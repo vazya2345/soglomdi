@@ -88,7 +88,7 @@ class RasxodController extends Controller
 
                 if($model->rasxod_type==5){
                     $oylikuderj_model->load(Yii::$app->request->post());
-                    $oylikuderj_model->title = 1;
+                    $oylikuderj_model->title = 3;
                     $oylikuderj_model->summa = $model->summa;
                     $oylikuderj_model->status = 1;
                     $oylikuderj_model->period = OylikPeriods::getActivePeriod();
