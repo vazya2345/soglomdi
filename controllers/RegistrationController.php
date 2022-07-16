@@ -752,7 +752,7 @@ class RegistrationController extends Controller
                             
                             $systemerror = new SystemErrors();
                             $systemerror->err_action = 'registration/new?reganalizinsert';
-                            $systemerror->err_action = $r_model->errors;
+                            $systemerror->err_msg = $r_model->errors;
                             $systemerror->create_date = date('Y-m-d H:i:s');
                             $systemerror->save(false);
                             $r_model->save(false);

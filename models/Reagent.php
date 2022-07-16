@@ -211,7 +211,7 @@ class Reagent extends \yii\db\ActiveRecord
                 else{       
                         $systemerror = new SystemErrors();
                         $systemerror->err_action = 'registration/new?model=reagent,function=minusCount,str=214';
-                        $systemerror->err_action = "Складда ушбу реагентлар миқдори кўрсатилгандан кам қолган. Бош офисга боғланинг. reagent_id(".self::getName($id).") error(r1)";
+                        $systemerror->err_msg = "Складда ушбу реагентлар миқдори кўрсатилгандан кам қолган. Бош офисга боғланинг. reagent_id(".self::getName($id).") error(r1)";
                         $systemerror->create_date = date('Y-m-d H:i:s');
                         $systemerror->save(false);
                 }
@@ -227,7 +227,7 @@ class Reagent extends \yii\db\ActiveRecord
                     else{
                         $systemerror = new SystemErrors();
                         $systemerror->err_action = 'registration/new?model=reagent,function=minusCount,str=229';
-                        $systemerror->err_action = $regreagent_model->errors;
+                        $systemerror->err_msg = $regreagent_model->errors;
                         $systemerror->create_date = date('Y-m-d H:i:s');
                         $systemerror->save(false);
                     }
@@ -244,7 +244,7 @@ class Reagent extends \yii\db\ActiveRecord
                         else{
                             $systemerror = new SystemErrors();
                             $systemerror->err_action = 'registration/new?model=reagent,function=minusCount,str=246';
-                            $systemerror->err_action = $notif_model->errors;
+                            $systemerror->err_msg = $notif_model->errors;
                             $systemerror->create_date = date('Y-m-d H:i:s');
                             $systemerror->save(false);
                         }
@@ -256,7 +256,7 @@ class Reagent extends \yii\db\ActiveRecord
                 else{
                             $systemerror = new SystemErrors();
                             $systemerror->err_action = 'registration/new?model=reagent,function=minusCount,str=258';
-                            $systemerror->err_action = $reagent->errors;
+                            $systemerror->err_msg = $reagent->errors;
                             $systemerror->create_date = date('Y-m-d H:i:s');
                             $systemerror->save(false);
                 }
@@ -288,7 +288,7 @@ class Reagent extends \yii\db\ActiveRecord
                             else{
                                 $systemerror = new SystemErrors();
                                 $systemerror->err_action = 'registration/new?model=reagent,function=minusCount,str=290';
-                                $systemerror->err_action = "Агар ушбу хабарни кўраётган бўлсангиз тизим администраторига мурожаат қилинг. Реагентлар хисобланишида хато юз берди. Хато коди: ERR_R274".$regreagent_model->errors;
+                                $systemerror->err_msg = "Агар ушбу хабарни кўраётган бўлсангиз тизим администраторига мурожаат қилинг. Реагентлар хисобланишида хато юз берди. Хато коди: ERR_R274".$regreagent_model->errors;
                                 $systemerror->create_date = date('Y-m-d H:i:s');
                                 $systemerror->save(false);
                             }
@@ -296,7 +296,7 @@ class Reagent extends \yii\db\ActiveRecord
                         else{
                                 $systemerror = new SystemErrors();
                                 $systemerror->err_action = 'registration/new?model=reagent,function=minusCount,str=298';
-                                $systemerror->err_action = "Агар ушбу хабарни кўраётган бўлсангиз тизим администраторига мурожаат қилинг. Реагентлар хисобланишида хато юз берди. Хато коди: ERR_R279".$model->errors;
+                                $systemerror->err_msg = "Агар ушбу хабарни кўраётган бўлсангиз тизим администраторига мурожаат қилинг. Реагентлар хисобланишида хато юз берди. Хато коди: ERR_R279".$model->errors;
                                 $systemerror->create_date = date('Y-m-d H:i:s');
                                 $systemerror->save(false);
                         }
@@ -304,7 +304,7 @@ class Reagent extends \yii\db\ActiveRecord
                     else{
                                 $systemerror = new SystemErrors();
                                 $systemerror->err_action = 'registration/new?model=reagent,function=minusCount,str=306';
-                                $systemerror->err_action = "Реагентлар миқдори кўрсатилгандан кам қолган. Тизим администраторига боғланинг. reagent_id(".self::getName($id).' - '.$id.") ERR_R285";
+                                $systemerror->err_msg = "Реагентлар миқдори кўрсатилгандан кам қолган. Тизим администраторига боғланинг. reagent_id(".self::getName($id).' - '.$id.") ERR_R285";
                                 $systemerror->create_date = date('Y-m-d H:i:s');
                                 $systemerror->save(false);
                     }
@@ -312,7 +312,7 @@ class Reagent extends \yii\db\ActiveRecord
                 else{
                                 $systemerror = new SystemErrors();
                                 $systemerror->err_action = 'registration/new?model=reagent,function=minusCount,str=314';
-                                $systemerror->err_action = "Ушбу реагент филиалда кўрсатилмаган. Тизим администраторига боғланинг. reagent_id(".self::getName($id).' - '.$id.") ERR_R315";
+                                $systemerror->err_msg = "Ушбу реагент филиалда кўрсатилмаган. Тизим администраторига боғланинг. reagent_id(".self::getName($id).' - '.$id.") ERR_R315";
                                 $systemerror->create_date = date('Y-m-d H:i:s');
                                 $systemerror->save(false);
                 }
@@ -321,7 +321,7 @@ class Reagent extends \yii\db\ActiveRecord
         else{
                                 $systemerror = new SystemErrors();
                                 $systemerror->err_action = 'registration/new?model=reagent,function=minusCount,str=323';
-                                $systemerror->err_action = "Бундай реагент топилмади. Тизим администраторига боғланинг. reagent_id(".self::getName($id).' - '.$id.") ERR_R324";
+                                $systemerror->err_msg = "Бундай реагент топилмади. Тизим администраторига боғланинг. reagent_id(".self::getName($id).' - '.$id.") ERR_R324";
                                 $systemerror->create_date = date('Y-m-d H:i:s');
                                 $systemerror->save(false);
         }

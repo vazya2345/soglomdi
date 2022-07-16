@@ -209,12 +209,13 @@ class SiteController extends Controller
     {
         $systemerror = new SystemErrors();
         $systemerror->err_action = 'site/testarduino&key='.$key;
-        $systemerror->err_action = 'This is arduino test. Key is '.$key;
+        $systemerror->err_msg = 'This is arduino test. Key is '.$key;
         $systemerror->create_date = date('Y-m-d H:i:s');
         if($systemerror->save()){
             return Yii::$app->response->setStatusCode(200)->send();
         }
         else{
+            var_dump($systemerror->errors);
             return Yii::$app->response->setStatusCode(301)->send();
         }
     }
