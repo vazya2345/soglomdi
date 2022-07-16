@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Payments;
+use app\models\SystemErrors;
 use Fpdf\Fpdf;
 
 class SiteController extends Controller
@@ -202,6 +203,20 @@ class SiteController extends Controller
         $pdf->WriteHTML('avaz');
         return $pdf->Output();
         // return $this->render('test');
+    }
+
+    public function actionTestarduino($key=1)
+    {
+        $systemerror = new SystemErrors();
+        $systemerror->err_action = 'site/testarduino&key='.$key;
+        $systemerror->err_action = 'This is arduino test. Key is '.$key;
+        $systemerror->create_date = date('Y-m-d H:i:s');
+        if($systemerror->save()){
+            return Yii::$app->response->setStatusCode(200)->send();
+        }
+        else{
+            return Yii::$app->response->setStatusCode(301)->send();
+        }
     }
     
 }
